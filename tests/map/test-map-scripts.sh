@@ -127,4 +127,119 @@ echo "$out2" | grep -q "UNCHANGED.*internal"
 echo "$out2" | grep -q "STALE_COCHANGE.*legacy_dead"
 echo "$out2" | grep -q "SCIP_ACTIVE"
 
-echo "PASS: recon-graphs.sh tests passed"
+echo "=== [Task 2.1] Test validate-atlas.sh on valid 6-Tier Atlas ==="
+VALIDATE="$REPO_ROOT/skills/map/scripts/validate-atlas.sh"
+ATLAS="$TMP_REPO/docs/keystone-map"
+mkdir -p "$ATLAS/architecture" "$ATLAS/components" "$ATLAS/flows"
+
+cat << 'EOF' > "$ATLAS/00-INDEX.md"
+# System Context (C4 L1 & RAD-AI E1)
+- Boundary: Deterministic Core (`cmd/server/main.go:6-10`) vs Non-Deterministic AI Adapter.
+- Routing: [Wiring](./architecture/c2-wiring-and-containers.md) | [Data](./architecture/data-dictionary.md)
+EOF
+
+bulk_a_h="$(git -C "$TMP_REPO" ls-tree HEAD bulk_a | awk '{print substr($3,1,12)}')"
+bulk_b_h="$(git -C "$TMP_REPO" ls-tree HEAD bulk_b | awk '{print substr($3,1,12)}')"
+cmd_h="$(git -C "$TMP_REPO" ls-tree HEAD cmd | awk '{print substr($3,1,12)}')"
+internal_h="$(git -C "$TMP_REPO" ls-tree HEAD internal | awk '{print substr($3,1,12)}')"
+legacy_h="$(git -C "$TMP_REPO" ls-tree HEAD legacy_dead | awk '{print substr($3,1,12)}')"
+
+cat << EOF > "$ATLAS/01-coverage-ledger.md"
+# Closed-Loop Coverage Ledger
+| Module | Bucket | Git Hash | Evidence |
+| --- | --- | --- | --- |
+| cmd | CORE_WIRED | $cmd_h | cmd/server/main.go:6-10 |
+| internal | CORE_WIRED | $internal_h | internal/auth/guard.go:2-4 |
+| bulk_a | ADAPTER_CONTRACT | $bulk_a_h | bulk_a/f1.go:1-2 |
+| bulk_b | DYNAMIC_GAP | $bulk_b_h | bulk_b/f1.go:1-2 |
+| legacy_dead | UNWIRED_DEAD | $legacy_h | legacy_dead/unused.go:1-2 |
+
+- C_wiring: 100%
+- C_hotspot: 100%
+EOF
+
+cat << 'EOF' > "$ATLAS/architecture/c2-wiring-and-containers.md"
+# C4 L2 Containers & Trust Boundaries
+- Entrypoint: `cmd/server/main.go:6-10`
+- Link: [Auth Component](../components/comp-auth.md)
+EOF
+
+cat << 'EOF' > "$ATLAS/architecture/data-dictionary.md"
+# Data Dictionary (Data-First Mandate)
+- `Guard` struct in `internal/auth/guard.go:2-2`
+- `Store` struct in `internal/ledger/store.go:2-2`
+EOF
+
+cat << 'EOF' > "$ATLAS/architecture/evolution-and-hotspots.md"
+# Evolution, Hotspots & QOC/ATAM Tradeoff Matrix
+- Co-change: `internal/auth/guard.go:1-4` <-> `internal/ledger/store.go:1-4`
+- ATAM Tradeoff: (+) Deterministic guard verification vs (-) Manual token rotation.
+EOF
+
+cat << 'EOF' > "$ATLAS/components/comp-auth.md"
+# Component: Auth (`internal/auth`)
+- Guard verification at `internal/auth/guard.go:3-4`
+EOF
+
+cat << 'EOF' > "$ATLAS/flows/flow-01-serve.md"
+# Flow 01: Server Bootstrap & Zeller Infection Chain
+1. Trigger: `cmd/server/main.go:7` (`auth.NewGuard()`)
+2. Infected State vs Sane State: Empty `Guard.Secret` vs non-empty secret at `internal/auth/guard.go:2`
+3. Propagation: Passed into `ledger.NewStore(guard)` at `cmd/server/main.go:8`
+4. Observable Failure: Unauthorized ledger access at `internal/ledger/store.go:4`
+- ✅ Happy path: valid token verified
+- ⚠️ Edge case: empty token rejected
+- ❌ Failure path: nil guard panics
+EOF
+
+TRACE_FILE="$TMP_REPO/trace.jsonl"
+cat << 'EOF' > "$TRACE_FILE"
+{"tool":"read_file","path":"cmd/server/main.go"}
+{"tool":"read_file","path":"internal/auth/guard.go"}
+EOF
+
+val_out="$(bash "$VALIDATE" "$ATLAS" "$TMP_REPO" --trace "$TRACE_FILE")"
+echo "$val_out" | grep -q "STATUS: PASSED"
+
+echo "=== [Task 2.2] Test Negative Gate A: Hallucinated line number (main.go:999) ==="
+echo "- Bad ref: \`cmd/server/main.go:999\`" >> "$ATLAS/components/comp-auth.md"
+if bash "$VALIDATE" "$ATLAS" "$TMP_REPO" >/dev/null 2>&1; then
+  echo "FAIL: validate-atlas.sh should have rejected line 999!"
+  exit 1
+fi
+sed -i '$d' "$ATLAS/components/comp-auth.md"
+
+echo "=== [Task 2.3] Test Negative Gate B: Broken relative link ==="
+echo "- Broken: [Missing](./does-not-exist.md)" >> "$ATLAS/00-INDEX.md"
+if bash "$VALIDATE" "$ATLAS" "$TMP_REPO" >/dev/null 2>&1; then
+  echo "FAIL: validate-atlas.sh should have rejected broken relative link!"
+  exit 1
+fi
+sed -i '$d' "$ATLAS/00-INDEX.md"
+
+echo "=== [Task 2.4] Test Negative Gate C: Missing top-level directory in 01-coverage-ledger.md ==="
+grep -v "legacy_dead" "$ATLAS/01-coverage-ledger.md" > "$ATLAS/01-coverage-ledger.md.tmp"
+mv "$ATLAS/01-coverage-ledger.md.tmp" "$ATLAS/01-coverage-ledger.md"
+if bash "$VALIDATE" "$ATLAS" "$TMP_REPO" >/dev/null 2>&1; then
+  echo "FAIL: validate-atlas.sh should have rejected missing legacy_dead directory!"
+  exit 1
+fi
+echo "| legacy_dead | UNWIRED_DEAD | $legacy_h | legacy_dead/unused.go:1-2 |" >> "$ATLAS/01-coverage-ledger.md"
+
+echo "=== [Task 2.5] Test Negative Gate D: Untraced CORE_WIRED module (--trace Issue #584) ==="
+echo '{"tool":"read_file","path":"cmd/server/main.go"}' > "$TRACE_FILE"
+if bash "$VALIDATE" "$ATLAS" "$TMP_REPO" --trace "$TRACE_FILE" >/dev/null 2>&1; then
+  echo "FAIL: validate-atlas.sh should have rejected untraced CORE_WIRED module 'internal'!"
+  exit 1
+fi
+
+echo "=== [Task 2.6] Test Negative Gate E: Line cap overflow (>150 lines in 00-INDEX.md) ==="
+for i in $(seq 1 160); do
+  echo "line $i" >> "$ATLAS/00-INDEX.md"
+done
+if bash "$VALIDATE" "$ATLAS" "$TMP_REPO" >/dev/null 2>&1; then
+  echo "FAIL: validate-atlas.sh should have rejected >150 lines in 00-INDEX.md!"
+  exit 1
+fi
+
+echo "PASS: recon-graphs.sh and validate-atlas.sh tests passed"
