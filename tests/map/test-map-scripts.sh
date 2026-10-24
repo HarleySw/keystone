@@ -242,4 +242,21 @@ if bash "$VALIDATE" "$ATLAS" "$TMP_REPO" >/dev/null 2>&1; then
   exit 1
 fi
 
-echo "PASS: recon-graphs.sh and validate-atlas.sh tests passed"
+echo "=== [Task 3.1] Test Self-Contained Reference Guides (Issues #361 & #584) ==="
+REF_WIRING="$REPO_ROOT/skills/map/references/wiring-and-monorepo-guide.md"
+REF_ATLAS="$REPO_ROOT/skills/map/references/atlas-and-subagent-contracts.md"
+
+[[ -f "$REF_WIRING" ]]
+[[ -f "$REF_ATLAS" ]]
+[[ "$(wc -l < "$REF_WIRING" | tr -d ' ')" -gt 100 ]]
+[[ "$(wc -l < "$REF_ATLAS" | tr -d ' ')" -gt 100 ]]
+
+for kw in "bazel query" "bazel cquery" "bazel aquery" "scip_content_fingerprint" "edge_oracle" "BLOCKED_ORACLE" "CORE_WIRED" "ADAPTER_CONTRACT" "DYNAMIC_GAP" "UNWIRED_DEAD" "Sillito" "Information Foraging"; do
+  grep -qF "$kw" "$REF_WIRING"
+done
+
+for kw in "RAD-AI" "C4-E1" "CLAIM" "EXTRACT" "DOUBT" "RECONCILE" "STOP" "Infected State" "Faded Completion Problem" "Quiz Gate" "Adopt" "Adapt" "Reject" ".cursor/rules/"; do
+  grep -qF "$kw" "$REF_ATLAS"
+done
+
+echo "PASS: recon-graphs.sh, validate-atlas.sh, and reference guide tests passed"
