@@ -88,9 +88,6 @@ If your harness appears below, read its reference file for tool mappings:
 - Antigravity: `references/antigravity-tools.md`
 - Codex: `references/codex-tools.md`
 - Gemini CLI: `references/gemini-tools.md`
-- Pi: `references/pi-tools.md`
-- Hermes Agent: `references/hermes-tools.md`
-- Muse: `references/muse-tools.md`
 
 ## 7. User Instructions Priority
 

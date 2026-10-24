@@ -73,7 +73,7 @@ gemini extensions install https://github.com/HarleySw/keystone
 
 ### OpenCode (v1 & v2)
 
-Add to your `opencode.json` (see [docs/README.opencode.md](docs/README.opencode.md)):
+Add to your `opencode.json` (see [.opencode/INSTALL.md](.opencode/INSTALL.md)):
 
 ```json
 {
@@ -81,27 +81,9 @@ Add to your `opencode.json` (see [docs/README.opencode.md](docs/README.opencode.
 }
 ```
 
-### Pi
+### Codex App / CLI
 
-```bash
-pi install git:github.com/HarleySw/keystone
-```
-
-### Devin CLI / Hermes Agent / Kimi Code / Muse
-
-```bash
-# Devin CLI
-devin plugins install HarleySw/keystone
-
-# Hermes Agent
-hermes plugins install HarleySw/keystone --enable
-
-# Kimi Code (in chat)
-/plugins install https://github.com/HarleySw/keystone
-
-# Muse
-muse plugins install ./keystone && muse plugins approve keystone
-```
+Install via the `.codex-plugin/plugin.json` manifest or `/plugins` search in Codex CLI.
 
 ---
 
@@ -129,14 +111,8 @@ keystone/
 ├── .claude-plugin/          # Claude Code manifest & dev marketplace
 ├── .codex-plugin/           # OpenAI Codex App/CLI manifest
 ├── .cursor-plugin/          # Cursor Agent manifest
-├── .devin-plugin/           # Devin CLI manifest
-├── .hermes-plugin/          # Hermes Agent Python hook & YAML manifest
-├── .kimi-plugin/            # Kimi Code manifest
-├── .muse-plugin/            # Muse manifest & marketplace
 ├── .opencode/               # OpenCode V1/V2 plugin & install guide
-├── .pi/                     # Pi Coding Agent TypeScript extension
 ├── assets/                  # Plugin icons (SVG & PNG)
-├── docs/                    # Harness-specific guides & testing docs
 ├── hooks/                   # Cross-platform SessionStart polyglot hooks
 ├── scripts/                 # Version synchronization & shell linting
 ├── skills/                  # Core Keystone skills (using-keystone, writing-skills)
@@ -156,7 +132,7 @@ bash tests/validate-skills.sh
 # Test SessionStart JSON output across harnesses
 bash tests/hooks/test-session-start.sh
 
-# Check version sync across all 12 manifests
+# Check version sync across all 7 manifests
 bash scripts/bump-version.sh --check
 
 # Lint shell scripts

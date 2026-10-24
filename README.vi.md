@@ -73,7 +73,7 @@ gemini extensions install https://github.com/HarleySw/keystone
 
 ### 5. OpenCode (v1 & v2)
 
-Thêm vào file `opencode.json` (xem chi tiết tại [docs/README.opencode.md](docs/README.opencode.md)):
+Thêm vào file `opencode.json` (xem chi tiết tại [.opencode/INSTALL.md](.opencode/INSTALL.md)):
 
 ```json
 {
@@ -81,24 +81,9 @@ Thêm vào file `opencode.json` (xem chi tiết tại [docs/README.opencode.md](
 }
 ```
 
-### 6. Pi / Devin CLI / Hermes Agent / Kimi Code / Muse
+### 6. OpenAI Codex App / CLI
 
-```bash
-# Pi Coding Agent
-pi install git:github.com/HarleySw/keystone
-
-# Devin CLI
-devin plugins install HarleySw/keystone
-
-# Hermes Agent
-hermes plugins install HarleySw/keystone --enable
-
-# Kimi Code
-/plugins install https://github.com/HarleySw/keystone
-
-# Muse
-muse plugins install ./keystone && muse plugins approve keystone
-```
+Cài đặt qua manifest `.codex-plugin/plugin.json` hoặc tìm trong `/plugins` của Codex CLI.
 
 ---
 
@@ -110,7 +95,7 @@ muse plugins install ./keystone && muse plugins approve keystone
 2. **Ngôn ngữ giao tiếp với Dev (Output của AI):**
    - Quy định cứng trong [`using-keystone`](skills/using-keystone/SKILL.md) là **Phản hồi theo ngôn ngữ của người dùng** (mặc định tối ưu cực mạnh cho Tiếng Việt tự nhiên).
    - Khi dev chat tiếng Việt, mọi bảng trạng thái `✅/⚠️/❌`, sơ đồ luồng ASCII, phân tích đánh đổi và câu hỏi phản biện đều xuất bằng Tiếng Việt chuyên ngành mạch lạc, giữ nguyên thuật ngữ chuẩn (*payload, race condition, idempotency, hook, worktree...*), **cấm tuyệt đối văn phong dịch máy**.
-3. **Tài liệu Repo (`README` & `docs/`):**
+3. **Tài liệu Repo (`README`):**
    - Song ngữ: [README.md](README.md) tiếng Anh cho cộng đồng mã nguồn mở quốc tế và [README.vi.md](README.vi.md) tiếng Việt chi tiết.
 
 ---
@@ -135,7 +120,7 @@ bash tests/validate-skills.sh
 # 2. Kiểm tra đầu ra JSON của hook SessionStart trên Claude, Cursor, Antigravity
 bash tests/hooks/test-session-start.sh
 
-# 3. Kiểm tra đồng bộ version trên toàn bộ 12 file manifest
+# 3. Kiểm tra đồng bộ version trên toàn bộ 7 file manifest
 bash scripts/bump-version.sh --check
 
 # 4. Kiểm tra cú pháp toàn bộ shell script

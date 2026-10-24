@@ -5,19 +5,10 @@
   "type": "module",
   "main": ".opencode/plugins/keystone.js",
   "keywords": [
-    "pi-package",
     "keystone",
     "skills",
     "human-in-command",
     "comprehension-debt",
     "workflow"
-  ],
-  "pi": {
-    "extensions": [
-      "./.pi/extensions/keystone.ts"
-    ],
-    "skills": [
-      "./skills"
-    ]
-  }
+  ]
 }

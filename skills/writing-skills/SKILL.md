@@ -76,4 +76,3 @@ Never deploy an untested skill:
 - [ ] Defines a **Cognitive Verification Gate** to keep the human engineer in command.
 - [ ] Includes a **Red Flags** table countering common rationalizations.
 - [ ] Validated with `bash tests/validate-skills.sh`.
-- [ ] Registered in `.muse-plugin/plugin.json` if adding a new core skill.
