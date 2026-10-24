@@ -1,0 +1,23 @@
+{
+  "name": "keystone",
+  "version": "0.1.0",
+  "description": "Ship at AI speed without Comprehension Debt — The Human-in-Command Agent Skills Ecosystem",
+  "type": "module",
+  "main": ".opencode/plugins/keystone.js",
+  "keywords": [
+    "pi-package",
+    "keystone",
+    "skills",
+    "human-in-command",
+    "comprehension-debt",
+    "workflow"
+  ],
+  "pi": {
+    "extensions": [
+      "./.pi/extensions/keystone.ts"
+    ],
+    "skills": [
+      "./skills"
+    ]
+  }
+}

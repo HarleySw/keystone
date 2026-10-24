@@ -1,0 +1,36 @@
+{
+  "name": "keystone",
+  "version": "0.1.0",
+  "description": "Ship at AI speed without Comprehension Debt — The Human-in-Command Agent Skills Ecosystem.",
+  "author": {
+    "name": "HarleySw",
+    "url": "https://github.com/HarleySw"
+  },
+  "homepage": "https://github.com/HarleySw/keystone",
+  "license": "MIT",
+  "keywords": [
+    "keystone",
+    "skills",
+    "human-in-command",
+    "comprehension-debt",
+    "visual-core",
+    "workflow"
+  ],
+  "skills": "./skills/",
+  "sessionStart": {
+    "skill": "using-keystone"
+  },
+  "skillInstructions": "Kimi Code tool mapping for Keystone skills:\n\n- When a Keystone skill says to ask the user, ask clarifying questions, ask one question at a time, present multiple-choice options, or wait for the user's choice, call Kimi Code's `AskUserQuestion` tool.\n- When a Keystone skill refers to `TodoWrite`, use Kimi Code's `TodoList` tool.\n- When a Keystone skill asks you to dispatch an implementer/reviewer subagent, use Kimi Code's `Agent` tool with `subagent_type: \"coder\"`, `\"explore\"`, or `\"plan\"`.\n- When a Keystone skill refers to the `Skill` tool, use Kimi Code's native `Skill` tool.\n- Use Kimi Code's `Read`, `Write`, `Edit`, `Bash`, `Grep`, `Glob`, `FetchURL`, `WebSearch`, and MCP tools by their actual exposed names.",
+  "interface": {
+    "displayName": "Keystone",
+    "shortDescription": "Human-in-Command agent skills that eliminate Comprehension Debt",
+    "longDescription": "Ship at AI speed without Comprehension Debt. Keystone combines agent execution speed with a Visual Comprehension Core and Cognitive Verification Gates.",
+    "developerName": "HarleySw",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/HarleySw/keystone"
+  }
+}

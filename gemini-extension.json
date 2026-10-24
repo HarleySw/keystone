@@ -1,0 +1,6 @@
+{
+  "name": "keystone",
+  "description": "Ship at AI speed without Comprehension Debt — The Human-in-Command Agent Skills Ecosystem",
+  "version": "0.1.0",
+  "contextFileName": "GEMINI.md"
+}

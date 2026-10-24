@@ -1,0 +1,31 @@
+# Local agent & workspace state
+.worktrees/
+.private-journal/
+.claude/
+.cursor/
+.codex/
+.gemini/
+.superpowers/
+.keystone/
+.agents/
+
+# Local specs, plans, and scratch notes
+docs/superpowers/
+docs/keystone/
+docs/plans/
+specs/
+plans/
+scratch/
+
+# OS & Node/Python artifacts
+.DS_Store
+node_modules/
+evals/
+inspo/
+triage/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ruff_cache/
+*.tmp

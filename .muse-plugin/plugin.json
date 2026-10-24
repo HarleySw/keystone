@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "name": "keystone",
+  "displayName": "Keystone",
+  "version": "0.1.0",
+  "description": "Ship at AI speed without Comprehension Debt — The Human-in-Command Agent Skills Ecosystem",
+  "compat": {
+    "source": "native",
+    "manifestDir": ".muse-plugin"
+  },
+  "capabilities": {
+    "skills": [
+      {
+        "id": "using-keystone",
+        "path": "skills/using-keystone/SKILL.md"
+      },
+      {
+        "id": "writing-skills",
+        "path": "skills/writing-skills/SKILL.md"
+      }
+    ],
+    "commands": [],
+    "hooks": [
+      {
+        "id": "session-start",
+        "event": "SessionStart",
+        "command": [
+          "sh",
+          "hooks/session-start"
+        ],
+        "timeoutMs": 5000
+      }
+    ],
+    "mcpServers": [],
+    "reminders": []
+  }
+}

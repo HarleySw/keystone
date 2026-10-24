@@ -1,0 +1,20 @@
+{
+  "name": "keystone",
+  "description": "Ship at AI speed without Comprehension Debt — The Human-in-Command Agent Skills Ecosystem",
+  "version": "0.1.0",
+  "author": {
+    "name": "HarleySw",
+    "url": "https://github.com/HarleySw"
+  },
+  "homepage": "https://github.com/HarleySw/keystone",
+  "repository": "https://github.com/HarleySw/keystone",
+  "license": "MIT",
+  "keywords": [
+    "keystone",
+    "skills",
+    "human-in-command",
+    "comprehension-debt",
+    "visual-core",
+    "workflows"
+  ]
+}
