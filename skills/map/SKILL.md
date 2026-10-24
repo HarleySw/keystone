@@ -113,7 +113,7 @@ Execute `keystone:map` across 6 lifecycle stages (`PARSE -> TRANSFORM -> VALIDAT
 2. Inspect `.keystone/tmp/recon-raw.json` and the `stdout` tables:
    - **Incremental Mode:** Reuse existing `components/comp-*.md` for modules marked `UNCHANGED`. Re-scan only modules marked `NEW_SCAN`, `STALE_HASH`, or `STALE_COCHANGE`.
    - **Monorepo / Dynamic Edge Escalation:** Read `skills/map/references/wiring-and-monorepo-guide.md` when resolving Bazel (`query`/`cquery`/`aquery`), Nx, Turborepo, SCIP `edge_oracle`, or the 7 Dynamic Edge patterns.
-3. Initialize `docs/keystone-map/01-coverage-ledger.md` with $100\%$ of top-level modules from Step `[1/7]`.
+3. Initialize `docs/keystone-map/01-coverage-ledger.md` with $100\%$ of top-level directories from Step `[1/7]` (and list any root-level core source `blob` entrypoints such as `main.py`/`cli.py` in a sub-table below the directory ledger).
 4. **Socratic Scope Check:** If the user asked an open-ended question on a repository with `> 500` files, present the C4 L2 Container map and Top 5 Hotspots/Flows to confirm priority order before Phase 2 fan-out.
 
 ### Phase 2: Data-First Dissection & Model-Pinned Subagent Fan-Out
@@ -123,6 +123,7 @@ Execute `keystone:map` across 6 lifecycle stages (`PARSE -> TRANSFORM -> VALIDAT
    - Pin `haiku` or `flash` for each Scout Subagent.
    - Assign specific `file:line_start-line_end` slices (using AST function slices from `Step [4/7]` on high-LOC Hotspot files to avoid the `35–45%` Tornhill Unhealthy Code Token Tax).
    - Require every `flows/flow-*.md` to trace **Andreas Zeller's 4-Link Infection Chain** and a `✅/⚠️/❌` Dry-Run table.
+   - **Coordinate Format Rule (Gate 4A):** Always write full repo-relative paths (`pkg/server.py:10-20`), never bare basenames (`server.py:10`), never comma-lists (`:7,11`), and never line-wrap a `path/file.ext:line` token across two lines inside `<76`-char ASCII diagrams.
 
 ### Phase 3: Adversarial Doubt Audit & Deterministic Exit Gate (`goal_gate`)
 1. Execute `CLAIM -> EXTRACT -> DOUBT -> RECONCILE -> STOP` from `skills/map/references/atlas-and-subagent-contracts.md`:
@@ -155,6 +156,7 @@ Execute `keystone:map` across 6 lifecycle stages (`PARSE -> TRANSFORM -> VALIDAT
 ### Red Flags — STOP and Start Over
 - Reading `README.md` or running `tree`/`ls` before running `bash skills/map/scripts/recon-graphs.sh`.
 - Delivering a "quick interim briefing" or stopping after Phase 1 due to executive time pressure.
+- Skipping `recon-graphs.sh` or the 6-Tier Atlas because "this repository is small (only a few files), so I can summarize it directly in chat".
 - Spawning subagents to summarize folders before writing `architecture/data-dictionary.md`.
 - Omitting a top-level directory (including tracked dot-directories like `.claude-plugin` or `.cursor-plugin`) from `01-coverage-ledger.md` because "it looks like tests, scripts, or docs".
 - Claiming the Atlas is complete without running `bash skills/map/scripts/validate-atlas.sh` and seeing `STATUS: PASSED`.
@@ -165,6 +167,7 @@ Execute `keystone:map` across 6 lifecycle stages (`PARSE -> TRANSFORM -> VALIDAT
 | Excuse / Forbidden Rationalization | Enforced Reality Check |
 | :--- | :--- |
 | *"Let me read `README.md` and run `tree` first to get an overview."* | **STOP.** `README.md` suffers from architectural drift and `tree` floods context with surface folders. Run `bash skills/map/scripts/recon-graphs.sh` first. |
+| *"This repo only has a few files (or we have a 4-minute deadline); I'll just read the files and reply in chat."* | **STOP.** Chat-only summaries miss Git Co-Change coupling, skip 4-bucket dead/dynamic auditing, and vanish after the turn. Always run `recon-graphs.sh`, write the 6-Tier Atlas, and pass `validate-atlas.sh`. |
 | *"This repo is huge; I will spawn 8 default-model subagents to summarize each folder."* | **STOP.** Folder-based prose summaries sever cross-module execution flows and burn token budgets. Build Graph 1 + Graph 2 first, pin `haiku`/`flash`, and hand off via files on disk. |
 | *"I already understand the call flow; I can skip `architecture/data-dictionary.md`."* | **STOP.** Flowcharts without data tables keep engineers in mystification (Fred Brooks's Law). Complete `data-dictionary.md` with state invariants before tracing flows. |
 | *"Static analysis shows zero callers for this package; I will ignore it completely."* | **STOP.** Static call graphs are a Precision Budget and miss DI, reflection, and event buses. Cross-check Git Hotspots and DI registries before classifying as `UNWIRED_DEAD` in `01-coverage-ledger.md`. |

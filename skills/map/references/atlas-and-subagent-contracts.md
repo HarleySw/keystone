@@ -32,9 +32,10 @@ NEVER emit a single monolithic architecture file. Split output across the 6-Tier
    - Use `PascalCase` for system/component names, `camelCase` for IDs, and `_Ext` suffix for external dependencies.
    - Draw explicit **Trust Boundaries** and **RAD-AI `E1` Boundaries** separating `[Deterministic]` code from `[Non-Deterministic AI/ML]` components.
    - Label every directed arrow with `Who -> To Whom -> Why -> Protocol`.
-2. **Pointers Over Copies:**
+2. **Pointers Over Copies (`file:line` Precision):**
    - NEVER paste multi-line implementation bodies into Markdown.
    - Anchor every claim to `path/to/file.ext:line_start-line_end (SymbolName)` plus its 1-line type/function signature.
+   - **Strict Coordinate Formatting (Gate 4A):** ALWAYS write the full repo-relative path on every citation (`tui_gateway/server.py:600-601`); NEVER abbreviate to a bare basename (`server.py:600`) even on repeated mentions in the same sentence, NEVER use comma-separated line lists (`:7,11,25`), and NEVER line-wrap a `path/to/file.ext:line` token across two lines inside a `<76`-char ASCII diagram.
 3. **Zero Zombie Nouns (Helen Sword / Strunk & White):**
    - Ban nominalizations ("the execution of", "the initialization of"). Use active verbs and strict imperatives (`MUST`, `NEVER`).
 
