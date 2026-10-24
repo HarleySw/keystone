@@ -43,6 +43,13 @@ for skill_md in "$REPO_ROOT"/skills/*/SKILL.md; do
     fi
   done < <(grep -oE 'skills/[a-z0-9-]+/(scripts|references)/[A-Za-z0-9_.-]+' "$skill_md" | sort -u || true)
 
+  # Check ASCII box diagram lines (< 76 chars) inside fenced text/ascii blocks
+  long_ascii="$(awk '/^```(text|ascii)/ {in_fence=1; next} /^```/ {in_fence=0; next} in_fence && length($0) >= 76 { print NR ":" length($0) }' "$skill_md")"
+  if [[ -n "$long_ascii" ]]; then
+    echo "  [FAIL] $rel: ASCII diagram line >= 76 chars ($long_ascii)"
+    FAILURES=$((FAILURES + 1))
+  fi
+
   echo "  [PASS] $rel ($line_count lines)"
 done
 

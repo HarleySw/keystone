@@ -52,7 +52,7 @@ def run_cmd(args, cwd=None):
             errors="replace",
             check=False,
         )
-        return res.returncode, res.stdout.replace("\r\n", "\n")
+        return res.returncode, res.stdout.replace("\r\n", "\n").replace("\x00", "")
     except Exception:
         return 1, ""
 
@@ -245,8 +245,11 @@ def main():
         short_hash = obj_hash[:12]
         status = "NEW_SCAN"
         if ledger_text:
-            # Check if row for obj_path has matching hash
-            row_re = re.compile(rf"\b{re.escape(obj_path)}\b.*?\b([0-9a-f]{{7,40}})\b")
+            # Check if table row for obj_path has matching hash (supporting dot-prefixed entries)
+            row_re = re.compile(
+                rf"^\|[^|\n]*?[|`\s]{re.escape(obj_path)}[|`\s/].*?\b([0-9a-f]{{7,40}})\b",
+                re.MULTILINE,
+            )
             m_row = row_re.search(ledger_text)
             if m_row:
                 recorded_hash = m_row.group(1)
@@ -255,8 +258,6 @@ def main():
                 else:
                     status = "STALE_HASH"
                     stale_modules.add(obj_path)
-            elif short_hash in ledger_text or obj_hash[:7] in ledger_text:
-                status = "UNCHANGED"
         top_entries.append({
             "path": obj_path,
             "type": obj_type,

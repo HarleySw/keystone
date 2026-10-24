@@ -141,7 +141,7 @@ def main():
         for d in top_dirs:
             # Must have a line mentioning directory d, a valid bucket, and a 7-40 hex git hash
             pattern = re.compile(
-                rf"^.*\b{re.escape(d)}\b.*?\b(CORE_WIRED|ADAPTER_CONTRACT|DYNAMIC_GAP|UNWIRED_DEAD)\b.*?\b([0-9a-f]{{7,40}})\b.*$",
+                rf"^.*(?<![A-Za-z0-9_.-]){re.escape(d)}(?![A-Za-z0-9_.-]).*?\b(CORE_WIRED|ADAPTER_CONTRACT|DYNAMIC_GAP|UNWIRED_DEAD)\b.*?\b([0-9a-f]{{7,40}})\b.*$",
                 re.MULTILINE,
             )
             m = pattern.search(ledger_text)
@@ -153,10 +153,15 @@ def main():
                 core_wired_modules.append(d)
 
         m_wiring = re.search(r"C_wiring\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)%", ledger_text)
-        if m_wiring and float(m_wiring.group(1)) < 100.0:
+        if not m_wiring:
+            failures.append("Gate 3 (Coverage Ledger): Missing required 'C_wiring: 100%' metric in 01-coverage-ledger.md")
+        elif float(m_wiring.group(1)) < 100.0:
             failures.append(f"Gate 3 (Coverage Ledger): C_wiring is {m_wiring.group(1)}% (must be 100%)")
+
         m_hotspot = re.search(r"C_hotspot\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)%", ledger_text)
-        if m_hotspot and float(m_hotspot.group(1)) < 95.0:
+        if not m_hotspot:
+            failures.append("Gate 3 (Coverage Ledger): Missing required 'C_hotspot: >=95%' metric in 01-coverage-ledger.md")
+        elif float(m_hotspot.group(1)) < 95.0:
             failures.append(f"Gate 3 (Coverage Ledger): C_hotspot is {m_hotspot.group(1)}% (must be >= 95%)")
 
     # -----------------------------------------------------------------------

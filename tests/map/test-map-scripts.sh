@@ -19,7 +19,8 @@ trap 'rm -rf "$TMP_REPO"' EXIT
 git -C "$TMP_REPO" init -q
 git -C "$TMP_REPO" config user.email "architect@example.com"
 git -C "$TMP_REPO" config user.name "Architect"
-mkdir -p "$TMP_REPO/cmd/server" "$TMP_REPO/internal/auth" "$TMP_REPO/internal/ledger" "$TMP_REPO/legacy_dead"
+mkdir -p "$TMP_REPO/cmd/server" "$TMP_REPO/internal/auth" "$TMP_REPO/internal/ledger" "$TMP_REPO/legacy_dead" "$TMP_REPO/.cursor-plugin"
+echo '{"name":"test"}' > "$TMP_REPO/.cursor-plugin/plugin.json"
 
 cat << 'EOF' > "$TMP_REPO/cmd/server/main.go"
 package main
@@ -55,6 +56,11 @@ EOF
 
 git -C "$TMP_REPO" add .
 git -C "$TMP_REPO" commit -q -m "feat: initial architecture"
+
+# Verify single-commit tagless repo succeeds immediately (Review Focus #1)
+single_out="$(bash "$RECON" "$TMP_REPO")"
+echo "$single_out" | grep -q "KEYSTONE:MAP PHASE 1"
+echo "$single_out" | grep -q "cmd/server/main.go"
 
 # Commit 2: Cross-boundary co-change between internal/auth and internal/ledger (<=20 files)
 echo "// co-change 1" >> "$TMP_REPO/internal/auth/guard.go"
@@ -106,11 +112,13 @@ echo "// cochange cmd-legacy" >> "$TMP_REPO/cmd/server/main.go"
 echo "// cochange cmd-legacy" >> "$TMP_REPO/legacy_dead/unused.go"
 git -C "$TMP_REPO" commit -am "feat: couple cmd and legacy_dead" -q
 
-# Update ledger with new legacy_dead hash but OLD cmd_hash so cmd is STALE_HASH and legacy_dead becomes STALE_COCHANGE
+# Update ledger with new legacy_dead hash, dot-prefixed .cursor-plugin hash, and OLD cmd_hash
 new_legacy_hash="$(git -C "$TMP_REPO" ls-tree HEAD legacy_dead | awk '{print substr($3,1,12)}')"
+dot_hash="$(git -C "$TMP_REPO" ls-tree HEAD .cursor-plugin | awk '{print substr($3,1,12)}')"
 cat << EOF > "$TMP_REPO/docs/keystone-map/01-coverage-ledger.md"
 | Module | Bucket | Git Hash |
 | --- | --- | --- |
+| .cursor-plugin | ADAPTER_CONTRACT | deadbeef1234 |
 | cmd | CORE_WIRED | $cmd_hash |
 | internal | CORE_WIRED | $internal_hash |
 | legacy_dead | UNWIRED_DEAD | $new_legacy_hash |
@@ -122,6 +130,7 @@ cat << 'EOF' > "$TMP_REPO/index.scip"
 EOF
 
 out2="$(bash "$RECON" "$TMP_REPO")"
+echo "$out2" | grep -q "STALE_HASH.*\.cursor-plugin"
 echo "$out2" | grep -q "STALE_HASH.*cmd"
 echo "$out2" | grep -q "UNCHANGED.*internal"
 echo "$out2" | grep -q "STALE_COCHANGE.*legacy_dead"
@@ -148,6 +157,7 @@ cat << EOF > "$ATLAS/01-coverage-ledger.md"
 # Closed-Loop Coverage Ledger
 | Module | Bucket | Git Hash | Evidence |
 | --- | --- | --- | --- |
+| .cursor-plugin | ADAPTER_CONTRACT | $dot_hash | .cursor-plugin/plugin.json:1-1 |
 | cmd | CORE_WIRED | $cmd_h | cmd/server/main.go:6-10 |
 | internal | CORE_WIRED | $internal_h | internal/auth/guard.go:2-4 |
 | bulk_a | ADAPTER_CONTRACT | $bulk_a_h | bulk_a/f1.go:1-2 |
@@ -232,6 +242,15 @@ if bash "$VALIDATE" "$ATLAS" "$TMP_REPO" --trace "$TRACE_FILE" >/dev/null 2>&1; 
   echo "FAIL: validate-atlas.sh should have rejected untraced CORE_WIRED module 'internal'!"
   exit 1
 fi
+
+echo "=== [Task 2.5b] Test Negative Gate: Missing C_wiring/C_hotspot metrics in 01-coverage-ledger.md ==="
+grep -v "C_wiring" "$ATLAS/01-coverage-ledger.md" > "$ATLAS/01-coverage-ledger.md.tmp"
+mv "$ATLAS/01-coverage-ledger.md.tmp" "$ATLAS/01-coverage-ledger.md"
+if bash "$VALIDATE" "$ATLAS" "$TMP_REPO" >/dev/null 2>&1; then
+  echo "FAIL: validate-atlas.sh should have rejected missing C_wiring metric!"
+  exit 1
+fi
+echo "- C_wiring: 100%" >> "$ATLAS/01-coverage-ledger.md"
 
 echo "=== [Task 2.6] Test Negative Gate E: Line cap overflow (>150 lines in 00-INDEX.md) ==="
 for i in $(seq 1 160); do
