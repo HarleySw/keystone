@@ -170,4 +170,4 @@ Replace the Quiz Gate with the **Context-Fit & Harvest Matrix**:
    - NEVER bypass `<GuardSymbol>` (`<file:line>`); enforce `<invariant>`.
    - MUST inspect co-change partner `<partner_file>` whenever modifying `<source_file>`.
    ```
-2. Update `./AGENTS.md` (and symlinked `CLAUDE.md`/`GEMINI.md`) with a **`<= 15`-line pointer block** pointing to `docs/keystone-map/00-INDEX.md` and `01-coverage-ledger.md`.
+2. Update `./AGENTS.md` (and symlinked `CLAUDE.md`/`GEMINI.md`) with a **`<= 15`-line pointer block** wrapped in `<!-- keystone-map:start -->` and `<!-- keystone-map:end -->` pointing to `docs/keystone-map/00-INDEX.md` and `01-coverage-ledger.md`.

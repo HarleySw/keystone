@@ -135,6 +135,7 @@ echo "$out2" | grep -q "STALE_HASH.*cmd"
 echo "$out2" | grep -q "UNCHANGED.*internal"
 echo "$out2" | grep -q "STALE_COCHANGE.*legacy_dead"
 echo "$out2" | grep -q "SCIP_ACTIVE"
+jq -e '.oracles.scip_status and .oracles.scip_content_fingerprint and .oracles.edge_oracle_stats' "$TMP_REPO/.keystone/tmp/recon-raw.json" >/dev/null
 
 echo "=== [Task 2.1] Test validate-atlas.sh on valid 6-Tier Atlas ==="
 VALIDATE="$REPO_ROOT/skills/map/scripts/validate-atlas.sh"
@@ -261,6 +262,24 @@ if bash "$VALIDATE" "$ATLAS" "$TMP_REPO" >/dev/null 2>&1; then
   exit 1
 fi
 
+echo "=== [Task 2.6b] Test Negative Gate F: ./AGENTS.md pointer block > 15 lines ==="
+git -C "$TMP_REPO" checkout -- "$ATLAS/00-INDEX.md" 2>/dev/null || true
+cat << 'EOF' > "$ATLAS/00-INDEX.md"
+# System Context (C4 L1 & RAD-AI E1)
+- Boundary: Deterministic Core (`cmd/server/main.go:6-10`) vs Non-Deterministic AI Adapter.
+- Routing: [Wiring](./architecture/c2-wiring-and-containers.md) | [Data](./architecture/data-dictionary.md)
+EOF
+{
+  echo "<!-- keystone-map:start -->"
+  for i in $(seq 1 16); do echo "pointer line $i"; done
+  echo "<!-- keystone-map:end -->"
+} > "$TMP_REPO/AGENTS.md"
+if bash "$VALIDATE" "$ATLAS" "$TMP_REPO" >/dev/null 2>&1; then
+  echo "FAIL: validate-atlas.sh should have rejected >15 line pointer block in AGENTS.md!"
+  exit 1
+fi
+rm -f "$TMP_REPO/AGENTS.md"
+
 echo "=== [Task 3.1] Test Self-Contained Reference Guides (Issues #361 & #584) ==="
 REF_WIRING="$REPO_ROOT/skills/map/references/wiring-and-monorepo-guide.md"
 REF_ATLAS="$REPO_ROOT/skills/map/references/atlas-and-subagent-contracts.md"
@@ -274,8 +293,16 @@ for kw in "bazel query" "bazel cquery" "bazel aquery" "scip_content_fingerprint"
   grep -qF "$kw" "$REF_WIRING"
 done
 
-for kw in "RAD-AI" "C4-E1" "CLAIM" "EXTRACT" "DOUBT" "RECONCILE" "STOP" "Infected State" "Faded Completion Problem" "Quiz Gate" "Adopt" "Adapt" "Reject" ".cursor/rules/"; do
+for kw in "RAD-AI" "C4-E1" "CLAIM" "EXTRACT" "DOUBT" "RECONCILE" "STOP" "Infected State" "Faded Completion Problem" "Quiz Gate" "Adopt" "Adapt" "Reject" ".cursor/rules/" "keystone-map:start"; do
   grep -qF "$kw" "$REF_ATLAS"
+done
+
+for rf in "$REF_WIRING" "$REF_ATLAS"; do
+  long_ref_ascii="$(awk '/^```(text|ascii)/ {in_f=1; next} /^```/ {in_f=0; next} in_f && length($0) >= 76 { print NR ":" length($0) }' "$rf")"
+  if [[ -n "$long_ref_ascii" ]]; then
+    echo "FAIL: $rf has ASCII diagram line >= 76 chars ($long_ref_ascii)"
+    exit 1
+  fi
 done
 
 echo "PASS: recon-graphs.sh, validate-atlas.sh, and reference guide tests passed"

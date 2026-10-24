@@ -193,14 +193,20 @@ def main():
     root_tree = root_tree.strip() or "NO_TREE"
 
     _, ls_files_out = run_cmd(["git", "ls-files"], cwd=target_dir)
-    tracked_files = [f.strip() for f in ls_files_out.splitlines() if f.strip()]
+    tracked_files = [
+        f.strip()
+        for f in ls_files_out.splitlines()
+        if f.strip() and not f.strip().startswith((".keystone/", ".superpowers/"))
+    ]
 
     # Step 6B Pre-calculation: Cross-Boundary Co-Change (needed for STALE_COCHANGE propagation)
     _, log_cochange = run_cmd(
         ["git", "log", "--no-merges", "-M", "--diff-filter=M", "-n", "300", "--name-only", "--pretty=format:---COMMIT---"],
         cwd=target_dir,
     )
-    lock_re = re.compile(r"(\.lock$|package-lock\.json$|pnpm-lock\.yaml$|go\.sum$|\.min\.js$|\.svg$|\.png$)")
+    lock_re = re.compile(
+        r"(^\.keystone/|^\.superpowers/|\.lock$|package-lock\.json$|pnpm-lock\.yaml$|go\.sum$|\.min\.js$|\.svg$|\.png$|\.sqlite$|\.cache\.v1$)"
+    )
     cochange_pairs = {}
     mod_cochange_neighbors = {}
     curr_batch = []
@@ -242,6 +248,8 @@ def main():
         if len(parts) < 4:
             continue
         _mode, obj_type, obj_hash, obj_path = parts
+        if obj_path in (".keystone", ".superpowers"):
+            continue
         short_hash = obj_hash[:12]
         status = "NEW_SCAN"
         if ledger_text:
@@ -642,6 +650,10 @@ def main():
         "ast_matched_occurrences": matched_oracle,
         "recall": round(matched_oracle / len(scip_occurrences), 4) if scip_occurrences else None,
     }
+
+    oracles["scip_status"] = scip_status
+    oracles["scip_content_fingerprint"] = scip_fingerprint
+    oracles["edge_oracle_stats"] = edge_oracle_stats
 
     raw_payload = {
         "repo_root": str(target_dir),

@@ -129,6 +129,21 @@ def main():
         if len(lines) > cap:
             failures.append(f"Gate 2 (Line Budget): '{rel}' has {len(lines)} lines (exceeds cap of {cap})")
 
+    agents_md = repo_root / "AGENTS.md"
+    if agents_md.is_file():
+        agents_txt = agents_md.read_text(encoding="utf-8", errors="replace").replace("\r\n", "\n")
+        m_ptr = re.search(
+            r"<!--\s*keystone-map:start\s*-->(.*?)<!--\s*keystone-map:end\s*-->",
+            agents_txt,
+            re.DOTALL,
+        )
+        if m_ptr:
+            ptr_lines = [ln for ln in m_ptr.group(1).strip().splitlines()]
+            if len(ptr_lines) > 15:
+                failures.append(
+                    f"Gate 2 (Line Budget): './AGENTS.md' keystone-map pointer block has {len(ptr_lines)} lines (exceeds cap of 15)"
+                )
+
     # -----------------------------------------------------------------------
     # GATE 3: 100% DENOMINATOR COVERAGE & 4-BUCKET ACCOUNTING
     # -----------------------------------------------------------------------
@@ -244,7 +259,7 @@ def main():
         else:
             trace_content = trace_file.read_text(encoding="utf-8", errors="replace")
             for cw_mod in core_wired_modules:
-                if cw_mod not in trace_content:
+                if not re.search(rf"(?<![A-Za-z0-9_-]){re.escape(cw_mod)}(?:[/\\\"\'\s]|$)", trace_content):
                     failures.append(
                         f"Gate 6 (Trace Audit - Issue #584): CORE_WIRED module '{cw_mod}' was never read in execution trace '{trace_file.name}'"
                     )
