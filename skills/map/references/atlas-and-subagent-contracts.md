@@ -156,7 +156,7 @@ To eliminate Subagent Confirmation Bias, execute this 5-step adversarial loop in
    - **Q2 (Failure Path / Zeller Infection):** If `<dependency>` fails at `file:line`, how does the infected state propagate or roll back?
    - **Q3 (Cross-Boundary Co-Change):** Based on `evolution-and-hotspots.md`, modifying `<file_A>` requires checking which coupled `<file_B>` across module boundaries?
 
-### Mode B: External Repo Scouting / Pattern Harvesting ("Xỉa" Mode)
+### Mode B: External Repo Scouting / Pattern Harvesting
 Replace the Quiz Gate with the **Context-Fit & Harvest Matrix**:
 `| Pattern / Mechanism (Source file:line) | Decision (Adopt / Adapt / Reject) | Target Project Adaptation & Rationale |`
 

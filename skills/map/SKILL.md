@@ -26,7 +26,7 @@ NEVER start by reading `README.md`, running `tree`, or spawning folder-summarizi
   - Finding Composition Roots, dependency injection wiring, or integration seams before modifying code.
   - Tracing how an existing subsystem or feature works end-to-end without a bug stacktrace or git diff.
   - Auditing `UNWIRED_DEAD` vs. `DYNAMIC_GAP` modules with $100\%$ denominator coverage.
-  - Harvesting architectural patterns ("Xỉa") from an external open-source repository.
+  - Harvesting architectural patterns from an external open-source repository.
 - **Do NOT use when:**
   - Debugging a specific runtime crash, stacktrace, panic, or failing test (`trace`).
   - Explaining a single isolated `< 30`-line function or regex line-by-line (`decode`).
@@ -82,7 +82,7 @@ Execute `keystone:map` across 6 lifecycle stages (`PARSE -> TRANSFORM -> VALIDAT
 |                                  v                                     |
 |  [Phase 5: Cognitive Apprenticeship Gate & Tier-6 Rule Export]         |
 |  - Onboarding/Modify: Faded Completion Problem + 3-Question Quiz Gate  |
-|  - External Scouting ("Xia"): Context-Fit & Harvest Matrix             |
+|  - External Scouting: Context-Fit & Pattern Harvest Matrix             |
 |  - Export .cursor/rules/<domain>.mdc + ./AGENTS.md <=15-line pointer   |
 +========================================================================+
 ```
@@ -145,7 +145,7 @@ Execute `keystone:map` across 6 lifecycle stages (`PARSE -> TRANSFORM -> VALIDAT
 ### Phase 5: Cognitive Apprenticeship Gate & Executable Rule Export
 1. **Select Mode Based on User Intent:**
    - **Mode A (Onboarding / Pre-Modification):** Present 1 **Faded Completion Problem** (flow diagram with 1–2 blanked `[ ??? ]` state transitions + `file:line` hint) followed by the **3-Question Quiz Gate** (State Invariant, Failure Path, Cross-Boundary Co-Change).
-   - **Mode B (External Repo Scouting / "Xỉa" Pattern Harvesting):** Present the **Context-Fit & Harvest Matrix** (`Adopt` / `Adapt` / `Reject`) mapped to the target codebase.
+   - **Mode B (External Repo Scouting / Pattern Harvesting):** Present the **Context-Fit & Harvest Matrix** (`Adopt` / `Adapt` / `Reject`) mapped to the target codebase.
 2. **Tier 6 Executable Knowledge Export (When Authorized for Local Repo):**
    - Export domain invariants and Co-Change rules to `.cursor/rules/<domain>.mdc` (`alwaysApply: false`, `globs: ["<domain>/**"]`, `< 500` words) and update the `<= 15`-line `<!-- keystone-map:start -->` pointer block in `./AGENTS.md`.
 
