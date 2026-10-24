@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 #
-# Validate all Keystone skills for YAML frontmatter and ASCII diagram width (<76 chars).
+# Validate all Keystone skills for YAML frontmatter, <500 line cap,
+# and existence of referenced scripts/ and references/ files (Tier 1 Structural CI).
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 FAILURES=0
 
-echo "Validating Keystone skills..."
+echo "Validating Keystone skills (Tier 1 Structural Check)..."
 
 for skill_md in "$REPO_ROOT"/skills/*/SKILL.md; do
   rel="${skill_md#"$REPO_ROOT"/}"
@@ -27,7 +28,22 @@ for skill_md in "$REPO_ROOT"/skills/*/SKILL.md; do
     FAILURES=$((FAILURES + 1))
   fi
 
-  echo "  [PASS] $rel"
+  line_count="$(wc -l < "$skill_md" | tr -d '[:space:]')"
+  if [[ "$line_count" -ge 500 ]]; then
+    echo "  [FAIL] $rel: Exceeds 500-line cap ($line_count lines)"
+    FAILURES=$((FAILURES + 1))
+  fi
+
+  # Check that any referenced skills/<name>/(scripts|references)/... paths exist on disk
+  while IFS= read -r ref_path; do
+    [[ -z "$ref_path" ]] && continue
+    if [[ ! -f "$REPO_ROOT/$ref_path" ]]; then
+      echo "  [FAIL] $rel: Referenced file '$ref_path' does not exist on disk (Issue #361/#584 guard)"
+      FAILURES=$((FAILURES + 1))
+    fi
+  done < <(grep -oE 'skills/[a-z0-9-]+/(scripts|references)/[A-Za-z0-9_.-]+' "$skill_md" | sort -u || true)
+
+  echo "  [PASS] $rel ($line_count lines)"
 done
 
 if [[ "$FAILURES" -gt 0 ]]; then

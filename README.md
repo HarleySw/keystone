@@ -92,6 +92,7 @@ Install via the `.codex-plugin/plugin.json` manifest or `/plugins` search in Cod
 | Skill | Category | Purpose |
 | :--- | :--- | :--- |
 | **`using-keystone`** | Bootstrap | Loaded automatically at `SessionStart`. Establishes skill invocation rules, the **Visual Comprehension Core**, **Cognitive Verification Gates**, and **Hybrid Language Rules**. |
+| **`map`** | Architecture Recon | Multi-graph codebase dissection (`recon-graphs.sh` + `validate-atlas.sh`), 6-Phase PageRank ~1K token skeletonizer, and 6-Tier C4 + arc42 + RAD-AI Architecture Atlas with $100\%$ coverage auditing. |
 | **`writing-skills`** | Meta | TDD-adapted guide for creating, pressure-testing, and validating new Keystone skills using Imperative English and zero zombie nouns. |
 
 ---

@@ -1,0 +1,50 @@
+{
+  "skill": "map",
+  "version": "1.0.0",
+  "positive": [
+    {
+      "prompt": "I just onboarded to this unfamiliar monorepo, where is the composition root and how is the architecture wired together?",
+      "top_k": 1
+    },
+    {
+      "prompt": "Dissect and map this repository into a C4 and arc42 architecture atlas with 100% coverage ledger and git hotspots.",
+      "top_k": 1
+    },
+    {
+      "prompt": "Trace how the payment settlement subsystem works end-to-end across modules without a git diff and locate its wiring points.",
+      "top_k": 1
+    },
+    {
+      "prompt": "Explore this open-source repository to harvest architectural patterns and build a dual-graph wiring and co-change atlas.",
+      "top_k": 1
+    },
+    {
+      "prompt": "Audit which packages in this codebase are core wired versus dead unwired modules using static build graphs and git churn.",
+      "top_k": 1
+    }
+  ],
+  "negative": [
+    {
+      "prompt": "Debug this NullPointerException panic stacktrace crashing at line 42 due to a race condition and deadlock.",
+      "owner": "trace"
+    },
+    {
+      "prompt": "Decode and explain this 20-line bitwise regex math expression function snippet line by line.",
+      "owner": "decode"
+    },
+    {
+      "prompt": "Write an implementation spec RFC and API schema proposal before coding our new webhook retry feature.",
+      "owner": "design"
+    },
+    {
+      "prompt": "Create a new Keystone SKILL.md file following TDD RED GREEN REFACTOR skill authoring rules.",
+      "owner": "writing-skills"
+    }
+  ],
+  "expectations": [
+    "Runs bash skills/map/scripts/recon-graphs.sh before reading README.md",
+    "Reads skills/map/references/wiring-and-monorepo-guide.md or atlas-and-subagent-contracts.md",
+    "Populates docs/keystone-map/01-coverage-ledger.md with 100% top-level module coverage across 4 buckets",
+    "Executes bash skills/map/scripts/validate-atlas.sh and requires exit code 0"
+  ]
+}
