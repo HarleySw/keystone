@@ -106,7 +106,8 @@ NON_CODE_KINDS = {
     "package", "module", "import", "unknown", "heredoc", "section",
     "chapter", "subsection", "subsubsection", "l4subsection", "target",
     "key", "string", "array", "object", "number", "boolean",
-    "property", "anonmember", "variable",
+    "property", "anonmember", "variable", "constant", "local", "var",
+    "field", "enumerator", "externvar", "macro", "alias", "namespace",
 }
 
 
@@ -226,9 +227,9 @@ def main():
         if f.strip() and not f.strip().startswith((".keystone/", ".superpowers/"))
     ]
 
-    # Step 6B Pre-calculation: Cross-Boundary Co-Change (needed for STALE_COCHANGE propagation)
+    # Step 6B Pre-calculation: Cross-Boundary Co-Change & Author Fractal Metadata in 1 pass
     _, log_cochange = run_cmd(
-        ["git", "log", "--no-merges", "-M", "--diff-filter=M", "-n", "300", "--name-only", "--pretty=format:---COMMIT---"],
+        ["git", "log", "--no-merges", "-M", "--diff-filter=M", "-n", "300", "--name-only", "--pretty=format:---COMMIT---|%cs|%ae"],
         cwd=target_dir,
     )
     lock_re = re.compile(
@@ -236,10 +237,24 @@ def main():
     )
     cochange_pairs = {}
     mod_cochange_neighbors = {}
+    mod_last_touch = {}
+    mod_authors = {}
     curr_batch = []
+    curr_date = ""
+    curr_author = ""
 
-    def process_batch(batch):
+    def process_batch(batch, c_date, c_author):
         clean = sorted(set(f for f in batch if not lock_re.search(f)))
+        touched_mods = set()
+        for f in clean:
+            if "/" in f:
+                top_m = f.split("/")[0]
+                touched_mods.add(top_m)
+        for tm in touched_mods:
+            if c_date and tm not in mod_last_touch:
+                mod_last_touch[tm] = c_date
+            if c_author:
+                mod_authors.setdefault(tm, []).append(c_author)
         if 1 < len(clean) <= 20:
             for i in range(len(clean)):
                 for j in range(i + 1, len(clean)):
@@ -256,12 +271,15 @@ def main():
                             mod_cochange_neighbors.setdefault(top2, set()).add(top1)
 
     for ln in log_cochange.splitlines():
-        if ln == "---COMMIT---":
-            process_batch(curr_batch)
+        if ln.startswith("---COMMIT---|"):
+            process_batch(curr_batch, curr_date, curr_author)
             curr_batch = []
+            meta_parts = ln.split("|", 2)
+            curr_date = meta_parts[1].strip() if len(meta_parts) > 1 else ""
+            curr_author = meta_parts[2].strip() if len(meta_parts) > 2 else ""
         elif ln.strip():
             curr_batch.append(ln.strip())
-    process_batch(curr_batch)
+    process_batch(curr_batch, curr_date, curr_author)
 
     # Step 1: Content-Addressable Git Tree Ledger & Incremental Staleness
     ledger_path = atlas_dir / "01-coverage-ledger.md"
@@ -334,29 +352,52 @@ def main():
         except Exception:
             pass
 
-    # Step 3: Composition Roots & Entrypoints
-    comp_re = re.compile(
-        r"(func\s+main\s*\(|if\s+__name__\s*==\s*['\"]__main__['\"]|fn\s+main\s*\(|"
-        r"public\s+static\s+void\s+main|NestFactory\.create|FastAPI\(|express\(|"
-        r"http\.ListenAndServe|fx\.New\(|wire\.Build\(|cobra\.Command|createServer\(|registerCommand\()"
+    # Step 3: Composition Roots & Entrypoints (fast git grep with Python fallback)
+    comp_pattern = (
+        r"(func[[:space:]]+main[[:space:]]*\(|if[[:space:]]+__name__[[:space:]]*==[[:space:]]*['\"]__main__['\"]|"
+        r"fn[[:space:]]+main[[:space:]]*\(|public[[:space:]]+static[[:space:]]+void[[:space:]]+main|"
+        r"NestFactory\.create|FastAPI\(|express\(|http\.ListenAndServe|fx\.New\(|wire\.Build\(|"
+        r"cobra\.Command|createServer\(|registerCommand\()"
     )
     composition_roots = []
-    for rel_f in tracked_files:
-        if any(p in rel_f for p in ("test", "vendor/", "node_modules/", ".md", "skills/map/")):
-            continue
-        fpath = target_dir / rel_f
-        if not fpath.is_file():
-            continue
-        try:
-            for idx, line in enumerate(fpath.read_text(encoding="utf-8", errors="replace").splitlines(), start=1):
-                if comp_re.search(line):
-                    composition_roots.append({
-                        "file": rel_f,
-                        "line": idx,
-                        "snippet": line.strip()[:120],
-                    })
-        except Exception:
-            pass
+    rc_grep, grep_out = run_cmd(["git", "grep", "-nI", "-E", comp_pattern], cwd=target_dir)
+    if rc_grep in (0, 1) and grep_out:
+        for gln in grep_out.splitlines():
+            gparts = gln.split(":", 2)
+            if len(gparts) == 3 and gparts[1].isdigit():
+                rel_f, idx_s, snip = gparts[0], gparts[1], gparts[2]
+                if any(p in rel_f for p in ("test", "vendor/", "node_modules/", ".md", "skills/map/", ".keystone/")):
+                    continue
+                composition_roots.append({
+                    "file": rel_f,
+                    "line": int(idx_s),
+                    "snippet": snip.strip()[:120],
+                })
+                if len(composition_roots) >= 40:
+                    break
+
+    # Pre-calculate Step 5 Churn Stats early so Hotspots feed AST candidate selection
+    _, tags_out = run_cmd(
+        ["git", "tag", "-l", "--sort=-creatordate", "--format=%(refname:short) | %(creatordate:short) | %(subject)"],
+        cwd=target_dir,
+    )
+    release_tags = [ln.strip() for ln in tags_out.splitlines() if ln.strip()][:10]
+
+    _, numstat_out = run_cmd(
+        ["git", "log", "--no-merges", "--diff-filter=M", "-n", "300", "--pretty=format:", "--numstat"],
+        cwd=target_dir,
+    )
+    churn_stats = {}
+    for ln in numstat_out.splitlines():
+        parts = ln.split("\t")
+        if len(parts) == 3 and parts[0].isdigit() and parts[1].isdigit():
+            adds, dels, fpath = int(parts[0]), int(parts[1]), parts[2].strip()
+            if lock_re.search(fpath):
+                continue
+            st = churn_stats.setdefault(fpath, {"commits": 0, "adds": 0, "dels": 0})
+            st["commits"] += 1
+            st["adds"] += adds
+            st["dels"] += dels
 
     # Step 4 & Step 7: SQLite Tag Cache (.repomap.tags.cache.v1) + 6-Phase PageRank Skeletonizer
     cache_dir = target_dir / ".keystone" / "cache"
@@ -399,17 +440,54 @@ def main():
         if len(parts) == 4:
             mode, blob_h, _stage, rpath = parts
             file_blobs[rpath] = blob_h[:12]
-            if mode == "100755":
+            if mode == "100755" and not rpath.startswith((".keystone/", ".superpowers/")):
                 exec_files.append(rpath)
 
-    file_loc = {}
-    all_tags = []
-    use_ctags = oracles["universal-ctags"]["available"]
-    ctags_bin = oracles["universal-ctags"]["path"]
-
+    # Select priority candidate files for AST/PageRank when repository has > 250 files
+    priority_set = (
+        {c["file"] for c in composition_roots}
+        | set(exec_files[:40])
+        | set(sorted(churn_stats.keys(), key=lambda k: -churn_stats[k]["commits"])[:80])
+    )
+    ast_candidates = []
     for rel_f in tracked_files:
         if lock_re.search(rel_f):
             continue
+        if rel_f in priority_set:
+            ast_candidates.append(rel_f)
+    for rel_f in tracked_files:
+        if len(ast_candidates) >= 220:
+            break
+        if rel_f in priority_set or lock_re.search(rel_f) or rel_f.lower().endswith(NON_CODE_EXTS):
+            continue
+        if any(p in rel_f for p in ("tests/", "contributors/", "node_modules/", "vendor/", "website/")):
+            continue
+        ast_candidates.append(rel_f)
+    if len(tracked_files) <= 220:
+        ast_candidates = [f for f in tracked_files if not lock_re.search(f)]
+
+    # Bulk load cached SQLite tags in 1 query
+    cur.execute("SELECT rel_fname, blob_hash, line, end_line, name, kind, role, signature FROM tags")
+    cached_by_key = {}
+    for r in cur.fetchall():
+        cached_by_key.setdefault((r[0], r[1]), []).append({
+            "rel_fname": r[0],
+            "line": r[2],
+            "end_line": r[3],
+            "name": r[4],
+            "kind": r[5],
+            "role": r[6],
+            "signature": r[7],
+        })
+
+    file_loc = {}
+    file_contents = {}
+    all_tags = []
+    uncached_files = []
+    use_ctags = oracles["universal-ctags"]["available"]
+    ctags_bin = oracles["universal-ctags"]["path"]
+
+    for rel_f in ast_candidates:
         fpath = target_dir / rel_f
         if not fpath.is_file():
             continue
@@ -418,76 +496,85 @@ def main():
         except Exception:
             continue
         file_loc[rel_f] = len(content.splitlines())
+        file_contents[rel_f] = content
         blob_h = file_blobs.get(rel_f) or hashlib.sha1(content.encode("utf-8", errors="ignore")).hexdigest()[:12]
+        if (rel_f, blob_h) in cached_by_key:
+            all_tags.extend(cached_by_key[(rel_f, blob_h)])
+        else:
+            uncached_files.append((rel_f, fpath, blob_h, content))
 
-        cur.execute(
-            "SELECT rel_fname, line, end_line, name, kind, role, signature FROM tags WHERE rel_fname=? AND blob_hash=?",
-            (rel_f, blob_h),
-        )
-        cached_rows = cur.fetchall()
-        if cached_rows:
-            for r in cached_rows:
-                all_tags.append({
-                    "rel_fname": r[0],
-                    "line": r[1],
-                    "end_line": r[2],
-                    "name": r[3],
-                    "kind": r[4],
-                    "role": r[5],
-                    "signature": r[6],
-                })
-            continue
+    # Batch run ctags in a single subprocess across all uncached code files
+    ctags_by_file = {}
+    if use_ctags and uncached_files:
+        ctags_targets = [
+            str(fpath) for rel_f, fpath, _bh, _c in uncached_files if not rel_f.lower().endswith(NON_CODE_EXTS)
+        ]
+        if ctags_targets:
+            try:
+                proc = subprocess.run(
+                    [ctags_bin, "--output-format=json", "--fields=+neKzSr", "--extras=+r", "-L", "-", "-f", "-"],
+                    input="\n".join(ctags_targets),
+                    cwd=str(target_dir),
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    universal_newlines=True,
+                    timeout=15,
+                )
+                if proc.returncode == 0 and proc.stdout:
+                    for cln in proc.stdout.splitlines():
+                        try:
+                            obj = json.loads(cln)
+                            if obj.get("_type") != "tag":
+                                continue
+                            kind_val = obj.get("kind", "sym").lower()
+                            if kind_val in NON_CODE_KINDS:
+                                continue
+                            raw_path = obj.get("path", "")
+                            try:
+                                rel_p = Path(raw_path).resolve().relative_to(target_dir).as_posix()
+                            except Exception:
+                                rel_p = raw_path
+                            ln_no = int(obj.get("line", 1))
+                            end_no = int(obj.get("end", ln_no))
+                            sig = obj.get("signature", "")
+                            tref = obj.get("typeref", "").replace("typename:", "")
+                            pat = obj.get("pattern", "").strip("/^$")
+                            full_sig = f"{obj.get('kind', 'sym')} {obj.get('name', '')}{sig}"
+                            if tref:
+                                full_sig += f" -> {tref}"
+                            elif pat:
+                                full_sig = pat.strip()[:140]
+                            ctags_by_file.setdefault(rel_p, []).append({
+                                "rel_fname": rel_p,
+                                "line": ln_no,
+                                "end_line": end_no,
+                                "name": obj.get("name", ""),
+                                "kind": kind_val,
+                                "role": obj.get("roles", "def"),
+                                "signature": full_sig,
+                            })
+                        except Exception:
+                            pass
+            except Exception:
+                pass
 
-        cur.execute("DELETE FROM tags WHERE rel_fname=?", (rel_f,))
-        extracted = []
-        if use_ctags and not rel_f.lower().endswith(NON_CODE_EXTS):
-            rc, c_out = run_cmd(
-                [ctags_bin, "--output-format=json", "--fields=+neKzSr", "--extras=+r", "-f", "-", str(fpath)],
-                cwd=target_dir,
-            )
-            if rc == 0 and c_out.strip():
-                for cln in c_out.splitlines():
-                    try:
-                        obj = json.loads(cln)
-                        if obj.get("_type") != "tag":
-                            continue
-                        kind_val = obj.get("kind", "sym").lower()
-                        if kind_val in NON_CODE_KINDS:
-                            continue
-                        ln_no = int(obj.get("line", 1))
-                        end_no = int(obj.get("end", ln_no))
-                        sig = obj.get("signature", "")
-                        tref = obj.get("typeref", "").replace("typename:", "")
-                        pat = obj.get("pattern", "").strip("/^$")
-                        full_sig = f"{obj.get('kind', 'sym')} {obj.get('name', '')}{sig}"
-                        if tref:
-                            full_sig += f" -> {tref}"
-                        elif pat:
-                            full_sig = pat.strip()[:140]
-                        extracted.append({
-                            "rel_fname": rel_f,
-                            "line": ln_no,
-                            "end_line": end_no,
-                            "name": obj.get("name", ""),
-                            "kind": kind_val,
-                            "role": obj.get("roles", "def"),
-                            "signature": full_sig,
-                        })
-                    except Exception:
-                        pass
-        # Always merge fallback imports/defs so cross-file links are captured even when ctags skips import paths
-        fb_tags = extract_symbols_fallback(rel_f, content)
-        seen_keys = {(t["line"], t["name"], t["role"]) for t in extracted}
-        for ft in fb_tags:
-            if (ft["line"], ft["name"], ft["role"]) not in seen_keys:
-                extracted.append(ft)
-
-        for t in extracted:
-            cur.execute(
-                "INSERT INTO tags VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (rel_f, str(fpath), t["line"], t["end_line"], t["name"], t["kind"], t["role"], t["signature"], blob_h),
-            )
-            all_tags.append(t)
+    rows_to_insert = []
+    if uncached_files:
+        cur.executemany("DELETE FROM tags WHERE rel_fname=?", [(u[0],) for u in uncached_files])
+        for rel_f, fpath, blob_h, content in uncached_files:
+            extracted = list(ctags_by_file.get(rel_f, []))
+            fb_tags = extract_symbols_fallback(rel_f, content)
+            seen_keys = {(t["line"], t["name"], t["role"]) for t in extracted}
+            for ft in fb_tags:
+                if (ft["line"], ft["name"], ft["role"]) not in seen_keys:
+                    extracted.append(ft)
+            for t in extracted:
+                rows_to_insert.append(
+                    (rel_f, str(fpath), t["line"], t["end_line"], t["name"], t["kind"], t["role"], t["signature"], blob_h)
+                )
+                all_tags.append(t)
+        if rows_to_insert:
+            cur.executemany("INSERT INTO tags VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", rows_to_insert)
 
     # Phase 2 & 3: Dependency Graph + Weighted PageRank (10 iterations, d=0.85)
     defs_by_name = {}
@@ -516,13 +603,8 @@ def main():
             if target_f != src:
                 out_edges[src].add(target_f)
 
-    # Also scan symbol references across files for accurate call/reference edges
-    for rel_f in nodes:
-        fpath = target_dir / rel_f
-        try:
-            txt = fpath.read_text(encoding="utf-8", errors="replace")
-        except Exception:
-            continue
+    # Scan symbol references across already-loaded file_contents
+    for rel_f, txt in file_contents.items():
         words = set(re.findall(r"\b[A-Za-z_][A-Za-z0-9_]{2,}\b", txt))
         for w in words:
             if w in defs_by_name:
@@ -564,15 +646,22 @@ def main():
         pr = next_pr
 
     # Phase 4 & 5: Signature Elision & Binary-Search Token Budgeting (~1,000 tokens = ~4,000 chars)
-    def_tags = []
+    raw_def_tags = []
     seen_def_lines = set()
     for t in all_tags:
         if t["role"] == "def" and t["kind"].lower() not in NON_CODE_KINDS:
             line_key = (t["rel_fname"], t["line"])
             if line_key not in seen_def_lines:
                 seen_def_lines.add(line_key)
-                def_tags.append(t)
-    def_tags.sort(key=lambda t: (-pr.get(t["rel_fname"], 0.0), t["rel_fname"], t["line"]))
+                raw_def_tags.append(t)
+    raw_def_tags.sort(key=lambda t: (-pr.get(t["rel_fname"], 0.0), t["rel_fname"], t["line"]))
+    def_tags = []
+    per_file_counts = {}
+    for t in raw_def_tags:
+        rf = t["rel_fname"]
+        if per_file_counts.get(rf, 0) < 6:
+            per_file_counts[rf] = per_file_counts.get(rf, 0) + 1
+            def_tags.append(t)
 
     def format_tag(t):
         rank_val = pr.get(t["rel_fname"], 0.0)
@@ -600,32 +689,15 @@ def main():
         for t in def_tags[:best_k]
     ]
 
-    # Step 5: Graph 2A — Release Tags & Top 20 True Churn Hotspots
-    _, tags_out = run_cmd(
-        ["git", "tag", "-l", "--sort=-creatordate", "--format=%(refname:short) | %(creatordate:short) | %(subject)"],
-        cwd=target_dir,
-    )
-    release_tags = [ln.strip() for ln in tags_out.splitlines() if ln.strip()][:10]
-
-    _, numstat_out = run_cmd(
-        ["git", "log", "--no-merges", "--diff-filter=M", "-n", "500", "--pretty=format:", "--numstat"],
-        cwd=target_dir,
-    )
-    churn_stats = {}
-    for ln in numstat_out.splitlines():
-        parts = ln.split("\t")
-        if len(parts) == 3 and parts[0].isdigit() and parts[1].isdigit():
-            adds, dels, fpath = int(parts[0]), int(parts[1]), parts[2].strip()
-            if lock_re.search(fpath):
-                continue
-            st = churn_stats.setdefault(fpath, {"commits": 0, "adds": 0, "dels": 0})
-            st["commits"] += 1
-            st["adds"] += adds
-            st["dels"] += dels
-
+    # Step 5: Graph 2A — Top 20 True Churn Hotspots (using pre-calculated churn_stats)
     hotspots = []
     for fpath, st in churn_stats.items():
         loc = file_loc.get(fpath, 0)
+        if loc == 0 and (target_dir / fpath).is_file():
+            try:
+                loc = len((target_dir / fpath).read_text(encoding="utf-8", errors="replace").splitlines())
+            except Exception:
+                loc = 0
         hotspots.append({
             "file": fpath,
             "commits": st["commits"],
@@ -650,9 +722,13 @@ def main():
     # Step 6: Module Code Age & Author Fractal Value F = 1 - sum((c_i / C)^2)
     module_fractal = []
     for mod in top_dirs:
-        _, last_dt = run_cmd(["git", "log", "-1", "--format=%cs", "--", mod], cwd=target_dir)
-        _, authors_out = run_cmd(["git", "log", "--no-merges", "--format=%ae", "--", mod], cwd=target_dir)
-        authors = [a.strip() for a in authors_out.splitlines() if a.strip()]
+        last_dt = mod_last_touch.get(mod, "")
+        authors = mod_authors.get(mod, [])
+        if not authors:
+            _, last_dt_out = run_cmd(["git", "log", "-1", "--format=%cs", "--", mod], cwd=target_dir)
+            last_dt = last_dt_out.strip()
+            _, authors_out = run_cmd(["git", "log", "--no-merges", "-n", "100", "--format=%ae", "--", mod], cwd=target_dir)
+            authors = [a.strip() for a in authors_out.splitlines() if a.strip()]
         total_c = len(authors)
         if total_c == 0:
             fractal_f = 0.0
@@ -666,7 +742,7 @@ def main():
             top_pct = int(round((max(counts.values()) / total_c) * 100))
         module_fractal.append({
             "module": mod,
-            "last_touch": last_dt.strip() or "N/A",
+            "last_touch": last_dt or "N/A",
             "commits": total_c,
             "top_owner_pct": f"{top_pct}%",
             "fractal_value": fractal_f,

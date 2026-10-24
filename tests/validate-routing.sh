@@ -67,6 +67,10 @@ def main():
         "trace": "trace debug stacktrace crash nullpointerexception panic race condition deadlock breakpoint root cause bug fix exception error line",
         "decode": "decode explain single function regex snippet algorithm line by line bitwise math expression 20 lines",
         "design": "design write implementation spec rfc adr api schema proposal before coding new feature architecture plan",
+        "rescue": "rescue refactor tangled legacy god function technical debt characterization tests strangler fig seam cleanup",
+        "guard": "guard security audit pull request diff owasp sql injection xss vulnerability hardcoded secrets auth bypass review",
+        "forge": "forge execute approved implementation plan task by task red green refactor unit tests build feature",
+        "ship": "ship release changelog verify ci gates bump semantic version open production pull request deploy merge",
     }
 
     for skill_md in sorted((repo_root / "skills").glob("*/SKILL.md")):
