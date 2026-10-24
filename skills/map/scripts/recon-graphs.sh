@@ -98,7 +98,21 @@ def print_doctor():
     print("===========================================================================")
 
 
+NON_CODE_EXTS = (
+    ".json", ".md", ".mdx", ".txt", ".yaml", ".yml", ".toml",
+    ".svg", ".png", ".jpg", ".gif", ".csv", ".html", ".css",
+)
+NON_CODE_KINDS = {
+    "package", "module", "import", "unknown", "heredoc", "section",
+    "chapter", "subsection", "subsubsection", "l4subsection", "target",
+    "key", "string", "array", "object", "number", "boolean",
+    "property", "anonmember", "variable",
+}
+
+
 def extract_symbols_fallback(rel_path, content):
+    if rel_path.lower().endswith(NON_CODE_EXTS):
+        return []
     tags = []
     lines = content.splitlines()
     if rel_path.endswith(".py"):
@@ -137,6 +151,7 @@ def extract_symbols_fallback(rel_path, content):
         r"(func|type|struct|interface|class|def|fn|pub\s+fn|pub\s+struct|pub\s+enum|pub\s+trait|function)\s+"
         r"(?:\([^)]+\)\s*)?([A-Za-z_][A-Za-z0-9_]*)"
     )
+    sh_fn_pat = re.compile(r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*\(\)\s*\{")
     imp_pat = re.compile(
         r"""(?:import\s+.*?from\s+['"]([^'"]+)['"]|^\s*import\s+['"]([^'"]+)['"]|^\s*["']([a-zA-Z0-9_./-]+/[a-zA-Z0-9_./-]+)["']|^\s*use\s+([a-zA-Z0-9_:]+)|^\s*from\s+([a-zA-Z0-9_.]+)\s+import)"""
     )
@@ -152,6 +167,18 @@ def extract_symbols_fallback(rel_path, content):
                 "role": "def",
                 "signature": line.strip()[:140],
             })
+        elif rel_path.endswith((".sh", ".bash", ".js", ".ts")):
+            m_sh = sh_fn_pat.search(line)
+            if m_sh and m_sh.group(1) not in ("if", "for", "while", "switch", "catch"):
+                tags.append({
+                    "rel_fname": rel_path,
+                    "line": idx,
+                    "end_line": idx,
+                    "name": m_sh.group(1),
+                    "kind": "func",
+                    "role": "def",
+                    "signature": line.strip()[:140],
+                })
         for m_imp in imp_pat.finditer(line):
             imp_target = next((g for g in m_imp.groups() if g), None)
             if imp_target:
@@ -413,7 +440,7 @@ def main():
 
         cur.execute("DELETE FROM tags WHERE rel_fname=?", (rel_f,))
         extracted = []
-        if use_ctags:
+        if use_ctags and not rel_f.lower().endswith(NON_CODE_EXTS):
             rc, c_out = run_cmd(
                 [ctags_bin, "--output-format=json", "--fields=+neKzSr", "--extras=+r", "-f", "-", str(fpath)],
                 cwd=target_dir,
@@ -423,6 +450,9 @@ def main():
                     try:
                         obj = json.loads(cln)
                         if obj.get("_type") != "tag":
+                            continue
+                        kind_val = obj.get("kind", "sym").lower()
+                        if kind_val in NON_CODE_KINDS:
                             continue
                         ln_no = int(obj.get("line", 1))
                         end_no = int(obj.get("end", ln_no))
@@ -439,7 +469,7 @@ def main():
                             "line": ln_no,
                             "end_line": end_no,
                             "name": obj.get("name", ""),
-                            "kind": obj.get("kind", "sym"),
+                            "kind": kind_val,
                             "role": obj.get("roles", "def"),
                             "signature": full_sig,
                         })
@@ -463,7 +493,7 @@ def main():
     defs_by_name = {}
     defs_by_dir = {}
     for t in all_tags:
-        if t["role"] == "def" and t["kind"] not in ("package", "module", "import", "unknown"):
+        if t["role"] == "def" and t["kind"].lower() not in NON_CODE_KINDS:
             defs_by_name.setdefault(t["name"], set()).add(t["rel_fname"])
             parent_dir = os.path.dirname(t["rel_fname"])
             if parent_dir:
@@ -534,10 +564,14 @@ def main():
         pr = next_pr
 
     # Phase 4 & 5: Signature Elision & Binary-Search Token Budgeting (~1,000 tokens = ~4,000 chars)
-    def_tags = [
-        t for t in all_tags
-        if t["role"] == "def" and t["kind"] not in ("package", "module", "import", "unknown")
-    ]
+    def_tags = []
+    seen_def_lines = set()
+    for t in all_tags:
+        if t["role"] == "def" and t["kind"].lower() not in NON_CODE_KINDS:
+            line_key = (t["rel_fname"], t["line"])
+            if line_key not in seen_def_lines:
+                seen_def_lines.add(line_key)
+                def_tags.append(t)
     def_tags.sort(key=lambda t: (-pr.get(t["rel_fname"], 0.0), t["rel_fname"], t["line"]))
 
     def format_tag(t):

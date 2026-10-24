@@ -43,7 +43,7 @@ NEVER emit a single monolithic architecture file. Split output across the 6-Tier
 ## 2. Standardized File Templates (`docs/keystone-map/`)
 
 ### 2.1. `00-INDEX.md` (Tier 1 — `<= 150` Lines)
-- **arc42 §1–§3 & C4 Level 1 (System Context):** ASCII/Mermaid System Context diagram showing human actors, the system box, and `_Ext` systems.
+- **arc42 §1–§3 & C4 Level 1 (System Context):** `<76`-char ASCII System Context diagram showing human actors, the system box, and `_Ext` systems.
 - **RAD-AI `E1` Boundary Table:** Explicitly classify subsystems as `Deterministic` (exact state transitions, idempotent I/O) vs. `Non-Deterministic` (LLM prompts, embedding stores, probabilistic routers, temperature/fallback policies).
 - **Progressive Disclosure Routing Table:** Relative Markdown links (`[Component](./components/comp-auth.md)`) to all Tier 2–5 files.
 

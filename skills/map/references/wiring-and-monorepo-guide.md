@@ -118,7 +118,7 @@ pnpm list -r --depth -1 --json
 
 ## 5. Closed-Loop 4-Bucket Coverage Accounting
 
-Every top-level source directory or package in the immutable denominator $N_{\text{total}}$ (`git ls-tree -d --name-only HEAD` + Build Graph packages) MUST appear in `docs/keystone-map/01-coverage-ledger.md` under exactly one bucket:
+Every tracked top-level directory (`git ls-tree -d --name-only HEAD`, including dot-directories except `.keystone` and `.superpowers`) and Build Graph package in the immutable denominator $N_{\text{total}}$ MUST appear in `docs/keystone-map/01-coverage-ledger.md` under exactly one bucket:
 
 - `CORE_WIRED`: Reachable from a Composition Root. Requires 100% data-model and control-flow dissection (`components/comp-*.md` + `flows/flow-*.md`) and verified Read tool call trace.
 - `ADAPTER_CONTRACT`: External SDKs, peripheral CLI/UI wrappers, or thin transport adapters. Extract public interface signatures and I/O schemas only.

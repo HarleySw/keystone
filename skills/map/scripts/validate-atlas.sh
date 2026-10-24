@@ -167,13 +167,13 @@ def main():
             elif m.group(1) == "CORE_WIRED":
                 core_wired_modules.append(d)
 
-        m_wiring = re.search(r"C_wiring\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)%", ledger_text)
+        m_wiring = re.search(r"C_wiring[`*\s]*[:=|][`*\s]*(?:>=\s*)?([0-9]+(?:\.[0-9]+)?)%", ledger_text)
         if not m_wiring:
             failures.append("Gate 3 (Coverage Ledger): Missing required 'C_wiring: 100%' metric in 01-coverage-ledger.md")
         elif float(m_wiring.group(1)) < 100.0:
             failures.append(f"Gate 3 (Coverage Ledger): C_wiring is {m_wiring.group(1)}% (must be 100%)")
 
-        m_hotspot = re.search(r"C_hotspot\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)%", ledger_text)
+        m_hotspot = re.search(r"C_hotspot[`*\s]*[:=|][`*\s]*(?:>=\s*)?([0-9]+(?:\.[0-9]+)?)%", ledger_text)
         if not m_hotspot:
             failures.append("Gate 3 (Coverage Ledger): Missing required 'C_hotspot: >=95%' metric in 01-coverage-ledger.md")
         elif float(m_hotspot.group(1)) < 95.0:
