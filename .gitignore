@@ -9,10 +9,8 @@
 .keystone/
 .agents/
 
-# Local specs, plans, and scratch notes
-docs/superpowers/
-docs/keystone/
-docs/plans/
+# Local docs, specs, plans, and scratch notes
+docs/
 specs/
 plans/
 scratch/
