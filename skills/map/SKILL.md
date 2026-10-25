@@ -81,8 +81,47 @@ NEVER copy claims from `README.md` or outdated wikis without verifying them agai
    - Inspect recent release tags (`git tag -l --sort=-v:refname`), True Churn Hotspots (passing only AST function slices `file:line_start-line_end` to subagents rather than whole `> 500`-LOC files), Author Fractal Value $F$, and Cross-Boundary Co-Change pairs (`A <-> B`).
    - On incremental re-runs (`UNCHANGED` / `STALE_HASH` / `STALE_COCHANGE`), regenerate only dirty modules and their Co-Change partners.
 
+## Mandatory Chat Response Contract (What to Present to the User After `/map` Completes)
+
+Never end `/map` by merely dumping a list of generated file names and line counts. Always present a **4-Part Onboarding & Guided Reading Briefing** in chat (localized 100% to the user's language, obeying `keystone:using-keystone`):
+
+### 1. System Big Picture, Architecture Diagram & Module Coverage Summary
+- **Plain-language macro purpose:** State in 3 bite-sized bullets (`Real-world role`, `Ownership & delegation boundaries`, `Key design challenge & Core approach`) what the repository does and how it is architected—with zero code symbols in the 3 prose bullets.
+- **C4 L1/L2 `< 76`-Char ASCII Architecture & Trust Boundary Diagram:** Draw the runtime containers, external dependencies, and `RAD-AI E1` boundary (`Deterministic` vs. `Non-Deterministic AI`).
+- **4-Bucket Module Coverage Summary (`✅` / `⚠️` / `❌`):** Summarize which top-level directories are `CORE_WIRED` `✅`, `ADAPTER_CONTRACT` `✅`, `DYNAMIC_GAP` `⚠️`, or `UNWIRED_DEAD` `❌`, plus any critical `⚠️` latent bugs or architectural traps discovered during recon.
+
+### 2. Guided Source-Code Reading Order ("Where to Start Reading in the Codebase")
+Give the newly onboarded engineer a numbered **4-Step Source-Code Reading Path** with clickable `[`filename:line`](path#Lline)` links, explaining **which source file to open first, what to look for inside it, and why**:
+1. **Step 1 — Read the Core Data Structures & Schemas first ("Tables Before Flowcharts"):** Link to the primary model/schema files (`[`path/to/schema:line`](...)`) and state which 1–3 structs/tables define the domain state and invariants.
+2. **Step 2 — Read the Composition Root & Bootstrap Wiring:** Link to the exact entry-point file (`[`path/to/main:line`](...)`) and explain how it loads config, binds dependencies, and mounts routes/commands/workers.
+3. **Step 3 — Trace the Primary Spine Execution Flow:** Link to the main controller/service/handler (`[`path/to/service:line`](...)`) and explain the end-to-end happy path in 1–2 sentences.
+4. **Step 4 — Inspect High-Churn Hotspots, Co-Change Pairs & `⚠️` Traps:** Link to the top Git hotspot and any `⚠️` defect/tech-debt coordinate (`[`path/to/hotspot:line`](...)`) so the engineer knows where fragile business rules and coupled files live before editing code.
+
+### 3. Task-Oriented Atlas & Code Navigation Map ("Which `.md` Report & Source File to Read for Each Goal")
+Provide an actionable routing guide pairing **each developer goal** (`**bold:**` parent bullet) with `*Read Atlas guide:*` (clickable link to the generated `docs/keystone-map/*.md` file + what it explains) and `*Inspect / touch source code:*` (clickable `[`filename:line`](path#Lline)` links):
+- **When you want a 5-minute macro overview & full module audit (`100%` coverage):**
+  - *Read Atlas guide:* [`docs/keystone-map/00-INDEX.md`](docs/keystone-map/00-INDEX.md) for the C4 L1 context map and [`docs/keystone-map/01-coverage-ledger.md`](docs/keystone-map/01-coverage-ledger.md) for the 4-bucket directory ledger (`✅`/`⚠️`/`❌`).
+- **When you need to understand core data tables, structs, and state transition rules before coding:**
+  - *Read Atlas guide:* [`docs/keystone-map/architecture/data-dictionary.md`](docs/keystone-map/architecture/data-dictionary.md) for subgoal-commented schemas, `✅`/`❌` state lifecycles, and safety invariants.
+  - *Inspect source code:* `[`path/to/schema:line`](...)`.
+- **When you want to see how the app boots, wires DI/middlewares, or registers CLI/API entry points:**
+  - *Read Atlas guide:* [`docs/keystone-map/architecture/c2-wiring-and-containers.md`](docs/keystone-map/architecture/c2-wiring-and-containers.md) for the C4 L2 container diagram and Composition Root code dissection.
+  - *Inspect source code:* `[`path/to/main:line`](...)`.
+- **When you want to understand or modify a specific end-to-end business flow (`<Flow Name>`):**
+  - *Read Atlas guide:* [`docs/keystone-map/flows/flow-01-<name>.md`](docs/keystone-map/flows/flow-01-<name>.md) for the 6-Section code walkthrough, `Visual Dry-Run` vertical cards, live debugger `breakpoint`, and `"Where to Touch"` modification recipes.
+  - *Inspect / touch source code:* `[`path/to/entry:line`](...)` and `[`path/to/service:line`](...)`.
+- **When you want to dive into a specific domain subsystem (`<Component Name>`):**
+  - *Read Atlas guide:* [`docs/keystone-map/components/comp-<domain>.md`](docs/keystone-map/components/comp-<domain>.md) for C4 L3 component boundaries, public contracts, and component-level traps.
+  - *Inspect source code:* `[`path/to/component:line`](...)`.
+- **When you are preparing to refactor or open a PR and need to check Co-Change blast radius & architectural tradeoffs:**
+  - *Read Atlas guide:* [`docs/keystone-map/architecture/evolution-and-hotspots.md`](docs/keystone-map/architecture/evolution-and-hotspots.md) for Git churn hotspots, Author Fractal Value $F$, `A <-> B` Co-Change rules, and `QOC`/`ATAM` tradeoffs (`❌ Rejected` vs. `✅ Chosen`).
+
+### 4. Closing Next-Step Offer (Handoff to `keystone:flow`)
+End with 1 natural sentence asking which specific business flow or subsystem the engineer wants to dissect next in chat using `keystone:flow` (or whether to export the discovered invariants and Co-Change rules into `AGENTS.md` and `.cursor/rules/*.mdc`).
+
 ## Red Flags — STOP and Fix Before Sending
 
+- **Finishing `/map` with a bare file/line-count dump instead of the Guided Reading Briefing:** Never end `/map` by only listing generated files (`00-INDEX.md (75 lines)...`). Always include the **4-Step Source-Code Reading Order** and the **Task-Oriented Atlas & Code Navigation Map ("Read file X to do Y")** with clickable links.
 - **Skipping Phase 0 Recon or `validate-atlas.sh`:** Reading `README.md` or running `tree` before `bash skills/map/scripts/recon-graphs.sh`, or claiming Mode B completion without `bash skills/map/scripts/validate-atlas.sh` printing `STATUS: PASSED`.
 - **Language mismatch or dry telegraphic style in `docs/keystone-map/*.md`:** Writing chat in the user's language (e.g., Vietnamese) while leaving `docs/keystone-map/*.md` in English, or dumping bare symbol tables instead of applying `keystone:using-keystone`'s Shared Clarity Core (`Concrete Actor + Strong Action Verb`, `< 76`-char subgoal-commented code blocks with enclosing signatures, pre-decoded APIs, `Contrastive Why`, and Conversational Vertical Dry-Run cards).
 - **Imposing artificial line caps on Group 2 dissection/ledger files or cramming multiple flows into 1 file:** Truncating `flows/flow-*.md`, `components/comp-*.md`, `architecture/*.md`, or `01-coverage-ledger.md` to hit an arbitrary line limit, or cramming multiple independent business flows into a single `flow-*.md` file instead of `1 File = 1 End-to-End Flow` via `keystone:flow`.
