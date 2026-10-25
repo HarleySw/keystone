@@ -65,11 +65,14 @@ def main():
     # Load actual skills from skills/*/SKILL.md plus canonical virtual owner profiles for planned sibling skills
     skill_docs = {
         "trace": "trace debug stacktrace crash nullpointerexception panic race condition deadlock breakpoint root cause bug fix exception error line",
-        "decode": "decode explain single function regex snippet algorithm line by line bitwise math expression 20 lines",
-        "design": "design write implementation spec rfc adr api schema proposal before coding new feature architecture plan",
+        "decode": "decode explain single function regex snippet algorithm line by line bitwise math expression 20 lines git diff commit patch quiz gate",
+        "design": "design write implementation spec rfc adr api schema proposal before coding new feature architecture plan naive approach proposed tradeoff localstorage compatibility",
+        "forge": "forge execute approved implementation plan task by task red green refactor unit tests build feature active learning boilerplate todo human exercise",
+        "brief": "brief tech lead manager pm meeting defense explain business rules hidden invariants edge case drill questions after vibe coding",
+        "audit": "audit large pull request pr 500 loc risk tiers reviewer fatigue concurrency race condition deadlock swallowed exception o n2 cross file contract break",
+        "shield": "shield blast radius callers reverse dependencies rdeps boundary unit test lock co-change coupled files agents.md cursor rules",
         "rescue": "rescue refactor tangled legacy god function technical debt characterization tests strangler fig seam cleanup",
         "guard": "guard security audit pull request diff owasp sql injection xss vulnerability hardcoded secrets auth bypass review",
-        "forge": "forge execute approved implementation plan task by task red green refactor unit tests build feature",
         "ship": "ship release changelog verify ci gates bump semantic version open production pull request deploy merge",
     }
 
@@ -113,8 +116,8 @@ def main():
             failures.append(f"{ef.relative_to(repo_root)}: Skill '{skill_name}' missing SKILL.md")
             continue
 
-        positives = data.get("positive", [])
-        negatives = data.get("negative", [])
+        positives = data.get("positive") or data.get("positives") or []
+        negatives = data.get("negative") or data.get("negatives") or []
         pos_hits = 0
         for p in positives:
             prompt = p["prompt"] if isinstance(p, dict) else str(p)

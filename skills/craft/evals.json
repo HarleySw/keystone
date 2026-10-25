@@ -1,0 +1,74 @@
+{
+  "skill": "craft",
+  "version": "0.1.0",
+  "positive": [
+    {
+      "prompt": "Create a new Keystone SKILL.md file following TDD RED GREEN REFACTOR skill authoring rules and the Shared Clarity Engine.",
+      "top_k": 1
+    },
+    {
+      "prompt": "Refactor and standardize our Keystone skill instructions and authoring template to enforce learn-from-code register and Micro-Cap rules.",
+      "top_k": 1
+    },
+    {
+      "prompt": "Write evals.json positive and pairwise negative routing benchmarks and pressure-test a new skill in the Keystone ecosystem.",
+      "top_k": 1
+    },
+    {
+      "prompt": "Update a Keystone SKILL.md frontmatter description and anti-rationalization Red Flags section before running validate-skills.sh.",
+      "top_k": 1
+    },
+    {
+      "prompt": "Design and author a new Keystone meta-skill with 5-stage skill crafting pipeline and anti-collision routing table.",
+      "top_k": 1
+    },
+    {
+      "prompt": "Audit and fix our SKILL.md authoring guidelines so agents stop over-translating developer terms or truncating code explanations.",
+      "top_k": 1
+    }
+  ],
+  "negative": [
+    {
+      "prompt": "Dissect and map this entire monorepo into a C4 and arc42 architecture atlas with 100% coverage ledger and git hotspots.",
+      "owner": "map"
+    },
+    {
+      "prompt": "Trace how the payment webhook checkout business flow works step-by-step end-to-end across files and show the where to touch modification playbook.",
+      "owner": "flow"
+    },
+    {
+      "prompt": "Debug this NullPointerException panic stacktrace crashing at line 42 due to a race condition and deadlock.",
+      "owner": "trace"
+    },
+    {
+      "prompt": "Decode and explain this 20-line bitwise regex math expression function snippet line by line.",
+      "owner": "decode"
+    },
+    {
+      "prompt": "Write an implementation spec RFC and API schema proposal before coding our new webhook retry feature.",
+      "owner": "design"
+    },
+    {
+      "prompt": "Refactor and rescue this tangled 800-line legacy god function using characterization tests and strangler fig seams.",
+      "owner": "rescue"
+    },
+    {
+      "prompt": "Audit this pull request diff for OWASP SQL injection vulnerabilities, hardcoded secrets, and auth bypasses.",
+      "owner": "guard"
+    },
+    {
+      "prompt": "Execute the approved implementation plan task by task using strict red-green-refactor unit tests.",
+      "owner": "forge"
+    },
+    {
+      "prompt": "Prepare the release changelog, verify CI gates, bump semantic version, and open the production pull request.",
+      "owner": "ship"
+    }
+  ],
+  "expectations": [
+    "Verifies anti-collision routing boundaries against all sibling Keystone skills",
+    "Enforces Micro-Cap, Not Macro-Cap with zero arbitrary total line caps on SKILL.md or deep explanations",
+    "Embeds the Keystone Shared Clarity Engine (learn-from-code register, <76-char lines, Vertical Case Walkthroughs)",
+    "Validates with bash tests/validate-skills.sh, bash tests/validate-routing.sh, and bash scripts/bump-version.sh --check"
+  ]
+}

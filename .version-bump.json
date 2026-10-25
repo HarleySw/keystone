@@ -8,9 +8,10 @@
     { "path": ".codex-plugin/plugin.json", "field": "version" },
     { "path": "gemini-extension.json", "field": "version" },
     { "path": "skills/using-keystone/SKILL.md", "field": "version" },
-    { "path": "skills/writing-skills/SKILL.md", "field": "version" },
+    { "path": "skills/craft/SKILL.md", "field": "version" },
     { "path": "skills/map/SKILL.md", "field": "version" },
     { "path": "skills/flow/SKILL.md", "field": "version" },
+    { "path": "skills/craft/evals.json", "field": "version" },
     { "path": "skills/map/evals.json", "field": "version" },
     { "path": "skills/flow/evals.json", "field": "version" }
   ],

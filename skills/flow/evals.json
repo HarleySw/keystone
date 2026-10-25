@@ -62,7 +62,7 @@
     },
     {
       "prompt": "Create a new Keystone SKILL.md file following TDD RED GREEN REFACTOR skill authoring rules.",
-      "owner": "writing-skills"
+      "owner": "craft"
     }
   ],
   "expectations": [

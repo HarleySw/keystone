@@ -106,7 +106,7 @@ Cài đặt qua manifest `.codex-plugin/plugin.json` hoặc tìm trong `/plugins
 | :--- | :--- | :--- |
 | **[`using-keystone`](skills/using-keystone/SKILL.md)** | Bootstrap | Tự động kích hoạt ở đầu mỗi phiên (`SessionStart`). Thiết lập luật gọi skill, **Lõi Hiển thị Trực quan**, **Cổng Kiểm chứng Nhận thức**, và **Luật Ngôn ngữ**. |
 | **[`map`](skills/map/SKILL.md)** | Architecture Recon | Giải phẫu mã nguồn đa đồ thị (`recon-graphs.sh` + `validate-atlas.sh`), nén khung xương PageRank ~1K token, xuất bản đồ 6 tầng chuẩn C4 + arc42 + RAD-AI kèm sổ cái kiểm toán độ phủ $100\%$. |
-| **[`writing-skills`](skills/writing-skills/SKILL.md)** | Meta-Skill | Quy chuẩn TDD để viết, kiểm thử áp lực (pressure-test) và đóng gói các skill mới trong hệ sinh thái Keystone. |
+| **[`craft`](skills/craft/SKILL.md)** | Meta-Skill | Quy chuẩn TDD để thiết kế, kiểm thử áp lực (pressure-test) và đóng gói các skill trong hệ sinh thái Keystone. |
 
 ---
 

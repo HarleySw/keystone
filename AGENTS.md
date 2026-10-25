@@ -16,6 +16,6 @@ Every contribution must uphold three invariants:
    - Run `bash tests/hooks/test-session-start.sh`
    - Run `bash scripts/bump-version.sh --check`
 2. **Skill Changes Require TDD Evaluation:**
-   - Follow `keystone:writing-skills` (RED baseline failure -> GREEN minimal skill -> REFACTOR counter-rationalizations).
+   - Follow `keystone:craft` (RED baseline failure -> GREEN minimal skill -> REFACTOR counter-rationalizations).
 3. **Human-in-Command Review:**
    - A human engineer must review and understand the complete diff before opening a PR.

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Validate all Keystone skills for YAML frontmatter, <500 line cap,
+# Validate all Keystone skills for YAML frontmatter, <76-char ASCII diagrams,
 # and existence of referenced scripts/ and references/ files (Tier 1 Structural CI).
 set -euo pipefail
 
@@ -29,8 +29,8 @@ for skill_md in "$REPO_ROOT"/skills/*/SKILL.md; do
   fi
 
   line_count="$(wc -l < "$skill_md" | tr -d '[:space:]')"
-  if [[ "$line_count" -ge 500 ]]; then
-    echo "  [FAIL] $rel: Exceeds 500-line cap ($line_count lines)"
+  if [[ "$line_count" -eq 0 ]]; then
+    echo "  [FAIL] $rel: Empty SKILL.md"
     FAILURES=$((FAILURES + 1))
   fi
 
