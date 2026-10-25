@@ -95,8 +95,11 @@ digraph KeystoneCraft {
 4. **Subagent Economics & File-Based Handoffs:**
    - When a skill dispatches parallel subagents (e.g., `map` or `audit`), require **Model Tier Pinning** (`haiku` / `flash` for bounded file-slice scouts; `sonnet` / `pro` for read-only verification and synthesis), pass exact `file:line_start-line_end` AST slices rather than whole `> 500`-line files, and pass `USER_LANGUAGE` explicitly so subagents write output files directly in the user's language.
 
-### Stage 3: Mandatory Injection of the "Keystone Shared Clarity Engine" (`learn-from-code` Register)
-Every Keystone skill that explains code, architecture, bugs, or designs MUST reference `keystone:using-keystone` and enforce the 4 discipline groups below without exception:
+### Stage 3: Mandatory 3-Layer Injection of the "Keystone Shared Clarity Engine" (`learn-from-code` Register)
+Every Keystone skill that explains code, architecture, bugs, or designs MUST enforce `keystone:using-keystone` through **3 redundant layers** inside its `SKILL.md` (so standalone invocations and subagents never miss the register):
+- **Layer 1 (Phase 0 Explicit Load Step):** Include an explicit step 1 in `Phase 0` / `Step 1` instructing the agent: *"If `skills/using-keystone/SKILL.md` is not already loaded in your current context (e.g., in a standalone or subagent run), call `read_file` on `skills/using-keystone/SKILL.md` before drafting any output."*
+- **Layer 2 (Inline Language, Syntax & Visual Clarity Rules):** Embed the 3 discipline groups below (`3.1`, `3.2`, `3.3`) directly inside the target `SKILL.md` so the rules are present even if a subagent only reads that single file.
+- **Layer 3 (Pre-Output Clarity & Register Verification Gate):** Place an explicit 6-point verification checklist right before saving `.md` files or sending the chat response.
 
 #### Group 3.1 — Language & Everyday Spoken Developer Register Discipline
 1. **Match the User's Language Automatically Across Chat AND 100% of Generated `.md` Files:**
@@ -249,15 +252,26 @@ validation script or cognitive verification gate.>
 +========================================================================+
 |        KEYSTONE:<NAME> EXECUTION PIPELINE (< 76 CHARS WIDE)            |
 +========================================================================+
-|  [Phase 1: Deterministic Recon / Grounding]                            |
+|  [Phase 1: Load using-keystone + Deterministic Recon / Grounding]      |
 |                                  |                                     |
 |                                  v                                     |
 |  [Phase 2: Core Analysis / Artifact Generation (learn-from-code style)]|
 |                                  |                                     |
 |                                  v                                     |
-|  [Phase 3: Verification Gate / Crisp Chat Handoff]                     |
+|  [Phase 3: Pre-Output Clarity Verification Gate & Crisp Chat Handoff]  |
 +========================================================================+
 ```
+
+### Phase 1: Load Clarity Engine & Deterministic Recon
+1. **Load `using-keystone` First:** If `skills/using-keystone/SKILL.md` is not already loaded in your current context (e.g., standalone or subagent run), call `read_file` on `skills/using-keystone/SKILL.md` before drafting any text.
+2. **Deterministic Recon:** <Grep / Glob / AST / Git commands and targeted source reads.>
+
+## Inline `using-keystone` / `learn-from-code` Language, Syntax & Visual Clarity Rules
+
+<Embed Group 3.1 (Language & Natural Code-Switching), Group 3.2 (Section 1
+Plain-Language, Pre-Decoding, Subgoal Comments, Contrastive Why + Vertical
+Case Walkthroughs), and Group 3.3 (< 76-char width cap, clickable
+filename:line links, zero HTML/Mermaid) directly inside SKILL.md.>
 
 ## Output Contract (`learn-from-code` Clarity Engine)
 
@@ -265,6 +279,14 @@ validation script or cognitive verification gate.>
 naming real tools directly, < 76-char subgoal-commented code blocks (// 1.),
 Why the code is written this way, Step-by-step Vertical Case Walkthroughs
 (✅/⚠️/❌), and Crisp Chat Handoff if files are saved to disk.>
+
+## Pre-Output Clarity & Register Verification Gate (Run Before Saving or Sending)
+
+- [ ] **Check 1 (Matched Language & Zero Jargon):** 100% of headers, prose, and `//` comments match the user's language with zero `<Local> (<English>):` headers and zero academic jargon (`RAD-AI E1`, `QOC/ATAM`, `Zeller`).
+- [ ] **Check 2 (Everyday Developer Terms Preserved):** Universal terms (`CI`, `pipeline`, `monorepo`, `package`, `target`, `wheel`, `script`, `dict`, `shell`, `CLI`, `terminal`, `agent`, `build`, `test`, `unit test`, `commit`) are preserved in English.
+- [ ] **Check 3 (Section 1 Hygiene):** Section 1 prose has zero file paths, function names, or local variable names, and names real tools (`Bazel`, `Buildkite`, `Git`) directly without riddles.
+- [ ] **Check 4 (Sentence Mechanics):** Every sentence uses `Concrete Actor + Strong Action Verb` and `Old-Before-New` chaining (zero `->` prose chains, zero zombie nouns).
+- [ ] **Check 5 (Code & Visual Width `< 76` Chars):** Every line inside code blocks, `//` comments, and ASCII diagrams is `< 76` characters, keeps enclosing signatures, and is followed by `Why the code is written this way` + `Vertical Case Walkthrough` cards (`✅`/`❌`).
 
 ## Red Flags — STOP and Fix Before Sending
 
