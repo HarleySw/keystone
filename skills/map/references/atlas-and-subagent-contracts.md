@@ -1,12 +1,12 @@
-# Keystone Map — Multi-File Atlas Templates, Subagent Contracts & Golden 6-Section Flow Anatomy
+# Keystone Map & Flow — Multi-File Atlas Templates, Subagent Contracts & Golden 6-Section Flow Anatomy
 
-Use this reference when executing **Mode A (Single-Pass 6-Section Flow Deep-Dive)**, **Mode B (Multi-File Repository Atlas in `docs/keystone-map/`)**, and **Mode C (Starter Agent Contract in `AGENTS.md` & `.cursor/rules/*.mdc`)**.
+Use this reference when executing **`keystone:map` (Unified 4-Step Repository Atlas & `AGENTS.md` Lock-In)** and **`keystone:flow` (Single-Pass 6-Section Deep Flow Anatomy)**.
 
 ---
 
-## 1. 6-Tier Progressive Disclosure Atlas Specification (`docs/keystone-map/` — Mode B)
+## 1. 6-Tier Progressive Disclosure Atlas Specification (`docs/keystone-map/`)
 
-NEVER emit a single monolithic architecture file when documenting an entire repository in Mode B. Split output across the 6-Tier Progressive Disclosure hierarchy combining **C4 Model (L1–L3 + Dynamic)**, **arc42 (§1–§11)**, **RAD-AI (2026) Extensions (`E1` AI Boundary Delineation & `C4-E1` AI Component Stereotypes)**, and the **6-Section Onboarding & Flow Anatomy (`learn-from-code` Clarity Engine)**.
+NEVER emit a single monolithic architecture file when documenting an entire repository in `keystone:map`. Split output across the 6-Tier Progressive Disclosure hierarchy combining **C4 Model (L1–L3 + Dynamic)**, **arc42 (§1–§11)**, **RAD-AI (2026) Extensions (`E1` AI Boundary Delineation & `C4-E1` AI Component Stereotypes)**, and the **6-Section Onboarding & Flow Anatomy (`keystone:using-keystone` Clarity Engine)**.
 
 ```text
 +========================================================================+
