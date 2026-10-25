@@ -92,6 +92,8 @@ if echo "$out" | grep -q "bulk_a/f1.go <-> bulk_b/f1.go"; then
 fi
 [[ -f "$TMP_REPO/.keystone/tmp/recon-raw.json" ]]
 [[ -f "$TMP_REPO/.keystone/cache/repomap.tags.cache.v1" ]]
+[[ -f "$TMP_REPO/.keystone/.gitignore" ]]
+grep -qx '\*' "$TMP_REPO/.keystone/.gitignore"
 
 echo "=== [Task 1.3] Test Incremental Staleness (UNCHANGED / STALE_HASH / STALE_COCHANGE) & SCIP Oracle ==="
 mkdir -p "$TMP_REPO/docs/keystone-map"
@@ -307,6 +309,14 @@ done
 val_out_6sec="$(bash "$VALIDATE" "$ATLAS" "$TMP_REPO")"
 echo "$val_out_6sec" | grep -q "STATUS: PASSED"
 rm -f "$ATLAS/flows/flow-02-webhook.md"
+
+echo "=== [Task 2.8] Test Two-Tier Storage (docs/keystone/map + .keystone/map/01-coverage-ledger.md) ==="
+mkdir -p "$TMP_REPO/docs/keystone" "$TMP_REPO/.keystone/map"
+cp -R "$ATLAS" "$TMP_REPO/docs/keystone/map"
+mv "$TMP_REPO/docs/keystone/map/01-coverage-ledger.md" "$TMP_REPO/.keystone/map/01-coverage-ledger.md"
+val_out_twotier="$(cd "$TMP_REPO" && bash "$VALIDATE")"
+echo "$val_out_twotier" | grep -q "STATUS: PASSED"
+rm -rf "$TMP_REPO/docs/keystone" "$TMP_REPO/.keystone/map"
 
 echo "=== [Task 3.1] Test Self-Contained Reference Guides (Issues #361 & #584) ==="
 REF_WIRING="$REPO_ROOT/skills/map/references/wiring-and-monorepo-guide.md"

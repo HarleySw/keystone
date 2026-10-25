@@ -6,7 +6,7 @@
 >
 > 🌐 **Ngôn ngữ:** [English](README.md) | [Tiếng Việt](README.vi.md)
 
-Nếu `superpowers` tập trung để AI tự động sản xuất code và các bộ `agent-skills` thông thường tập trung vào rào chắn quy trình SDLC, thì **Keystone** là viên đá đỉnh vòm giữ người kỹ sư ở vị trí làm chủ (**Human-in-Command**): kết hợp tốc độ thực thi của AI với **Lõi Hiển thị Trực quan** (Bảng chạy thử `✅`/`⚠️`/`❌`, sơ đồ ASCII `<76` ký tự, cấm văn dịch máy) và các **Cổng Kiểm chứng Nhận thức (Cognitive Verification Gates)** để dev hiểu sâu hệ thống, bắt bug tận gốc, không bao giờ "ú ớ" khi bảo vệ thiết kế hay duyệt PR lớn.
+Nếu các bộ công cụ lập trình thông thường chỉ tập trung để AI tự động sản xuất code hoặc dựng rào chắn quy trình SDLC, thì **Keystone** là viên đá đỉnh vòm giữ người kỹ sư ở vị trí làm chủ (**Human-in-Command**): kết hợp tốc độ thực thi của AI với **Lõi Hiển thị Trực quan** (Bảng chạy thử `✅`/`⚠️`/`❌`, sơ đồ ASCII `<76` ký tự, cấm văn dịch máy) và các **Cổng Kiểm chứng Nhận thức (Cognitive Verification Gates)** để dev hiểu sâu hệ thống, bắt bug tận gốc, không bao giờ "ú ớ" khi bảo vệ thiết kế hay duyệt PR lớn.
 
 ---
 

@@ -9,27 +9,30 @@ metadata:
   opencode/autoinvoke: "true"
 ---
 
-# Keystone Map — Macro Repository Onboarding, 100% Coverage Atlas & `AGENTS.md` Lock-In
+# Keystone Map — Macro Repository Onboarding, Two-Tier Architecture Atlas & `AGENTS.md` Lock-In
 
-Build an accurate repository-wide mental model and persistent project memory during Day-1 onboarding by prioritizing **architectural truth over stale `README.md` files**, **100% denominator module accounting (`01-coverage-ledger.md`)**, and **Data-First modeling ("Tables Before Flowcharts")**: run Dual-Graph Recon first, generate the verified multi-file Architecture Atlas in `docs/keystone-map/`, lock the pointer contract into `./AGENTS.md`, and present a **Guided Reading & Task Navigation Briefing** in chat.
+Build an accurate repository-wide mental model and persistent project memory during Day-1 onboarding by prioritizing **architectural truth over stale `README.md` files**, **two-tier file storage (`docs/keystone/map/` for human/agent docs vs. `.keystone/map/01-coverage-ledger.md` for machine audit ledgers)**, and **`learn-from-code`'s 3-second visual comprehension**: run Dual-Graph Recon first, generate the verified multi-file Architecture Atlas in `docs/keystone/map/` written in natural developer language, lock the pointer contract into `./AGENTS.md`, and hand off in chat with a **Crisp Reading & Task Navigation Guide (`<= 15–20` lines, zero duplication of `00-INDEX.md`)**.
+
+**Save human architecture docs to:** `docs/keystone/map/` *(User preferences for location override this default)*
+**Save machine coverage ledger to:** `.keystone/map/01-coverage-ledger.md` *(Auto-ignored via `.keystone/.gitignore`)*
 
 **REQUIRED BACKGROUND:** You MUST obey the Shared Language, Plain-Language Syntax, Code-Explanation, and Visual Comprehension Core in `keystone:using-keystone` across both chat output and 100% of generated `.md` files.
 
-**Announce at start:** `"Using keystone:map to map [target repository] architecture, wiring roots, coverage ledger, and AGENTS.md contract."`
+**Announce at start:** `"Using keystone:map to map [target repository] architecture, entry points, coverage ledger, and AGENTS.md contract."`
 
 <HARD-GATE>
 **Violating the letter of the rules is violating the spirit of the rules.**
-NEVER copy claims from `README.md` or outdated wikis without verifying them against source code. NEVER start by running `tree` or spawning folder-summarizing subagents. Always execute Step 1 (`bash skills/map/scripts/recon-graphs.sh` + targeted source reads) before writing. Every generated `.md` file in `docs/keystone-map/` MUST match the user's language 100% and pass `bash skills/map/scripts/validate-atlas.sh` (`STATUS: PASSED`).
+NEVER copy claims from `README.md` or outdated wikis without verifying them against source code. NEVER start by running `tree` or spawning folder-summarizing subagents. Always execute Step 1 (`bash skills/map/scripts/recon-graphs.sh` + targeted source reads) before writing. Every generated `.md` file in `docs/keystone/map/` MUST match the user's language 100% in natural spoken developer prose (zero textbook translationese, zero academic jargon like `RAD-AI E1` / `QOC` / `Zeller`, zero dual-language parenthetical headers), store the machine audit ledger in `.keystone/map/01-coverage-ledger.md`, and pass `bash skills/map/scripts/validate-atlas.sh` (`STATUS: PASSED`).
 </HARD-GATE>
 
 ## When to Use (Scale-Based Lifecycle Routing)
 
 - **Use `keystone:map` when (Day-1 Repo Onboarding & Macro Architecture Atlas):**
   - Onboarding to an unfamiliar repository or polyglot monorepo (`Bazel`, `Nx`, `Turborepo`, `Cargo`, `Go`) and asking where to start reading or how the architecture is wired together.
-  - Generating a multi-file C4 (L1–L3) + arc42 Architecture Atlas (`docs/keystone-map/`) with a $100\%$ denominator coverage ledger (`CORE_WIRED` `✅`, `ADAPTER_CONTRACT` `✅`, `DYNAMIC_GAP` `⚠️`, `UNWIRED_DEAD` `❌`) and anchoring `./AGENTS.md`.
-  - Running static call-graph, `bazel query`/`cquery`/`aquery`, and Git Hotspot / Co-Change reconnaissance to map container trust boundaries and core data dictionaries, or harvesting architectural patterns from an external repository.
+  - Generating a multi-file Architecture Atlas (`docs/keystone/map/`) backed by a $100\%$ denominator coverage ledger (`.keystone/map/01-coverage-ledger.md`) and anchoring `./AGENTS.md`.
+  - Running static call-graph, `bazel query`/`cquery`/`aquery`, and Git Hotspot / Co-Change reconnaissance to map module boundaries and core data models, or harvesting architectural patterns from an external repository.
 - **Do NOT use `keystone:map` when:**
-  - Tracing a single specific business flow, feature pipeline, webhook, or request lifecycle step-by-step from trigger to persistence (**REQUIRED SUB-SKILL:** Use `keystone:flow`).
+  - Tracing a single specific business flow, feature pipeline, webhook, or request lifecycle step-by-step from trigger to output (**REQUIRED SUB-SKILL:** Use `keystone:flow`).
   - Explaining a single isolated `< 30`-line function/regex/bitwise snippet line-by-line or reviewing a `git diff` with a 2-turn Quiz Gate (`decode`).
   - Debugging a runtime crash, stacktrace, panic, or deadlock (`trace`).
   - Writing a greenfield RFC, ADR, or implementation spec before coding (`design`).
@@ -41,86 +44,66 @@ NEVER copy claims from `README.md` or outdated wikis without verifying them agai
 |        KEYSTONE:MAP UNIFIED 4-STEP ONBOARDING PIPELINE                 |
 +========================================================================+
 |  [Step 1: Dual-Graph Recon (recon-graphs.sh + Glob/Grep)]              |
-|  - Graph 1: Manifests, Composition Roots, Data Schemas, PageRank       |
-|  - Graph 2: Release Tags, Git Hotspots, Cross-Folder Co-Change, F      |
+|  - Graph 1: Manifests, Entry Points / Wiring, Data Models, PageRank    |
+|  - Graph 2: Release Tags, Git Hotspots, Cross-Folder Co-Change         |
 |                                  |                                     |
 |                                  v                                     |
-|  [Step 2: Generate & Verify Atlas (docs/keystone-map/)]                |
-|  - Group 1 (<=150L): 00-INDEX.md (Overview, C4 L1, Reading Roadmap)    |
-|  - Group 2 (0 cap):  01-coverage-ledger.md, architecture/*.md,         |
-|                      components/comp-*.md, flows/flow-XX.md (via flow) |
-|  - Doubt Audit + Pass bash skills/map/scripts/validate-atlas.sh == 0   |
+|  [Step 2: Two-Tier Atlas Generation & Verification]                    |
+|  - Tier 1 (docs/keystone/map/): 00-INDEX.md (<=150L), architecture/*,  |
+|    components/comp-*.md, flows/flow-XX-<name>.md (scaled to repo size) |
+|  - Tier 2 (.keystone/map/):     01-coverage-ledger.md (auto-ignored)   |
+|  - Pass bash skills/map/scripts/validate-atlas.sh == 0                 |
 |                                  |                                     |
 |                                  v                                     |
 |  [Step 3: Lock In Root ./AGENTS.md Pointer Contract (<=15L block)]     |
 |                                  |                                     |
 |                                  v                                     |
-|  [Step 4: Present 4-Part Guided Reading & Task Navigation in Chat]     |
+|  [Step 4: Crisp Chat Handoff (<=15-20L Reading Guide, Zero Duplication)|
 +========================================================================+
 ```
 
 ### Step 1: Architect's Dual-Graph Recon (`recon-graphs.sh`)
-1. Execute `bash skills/map/scripts/recon-graphs.sh "<target_repo_dir>"` (use `--doctor` to check CLI tools; read `skills/map/references/wiring-and-monorepo-guide.md` for Bazel `query`/`cquery`/`aquery`, Nx, Turborepo, SCIP `edge_oracle`, and the 7 Dynamic Edge patterns).
-2. **Graph 1 — Static Wiring, Composition Roots & Data Schemas:**
-   - Read build/package manifests (`package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, `pom.xml`, `CMakeLists.txt`, `BUILD`, `nx.json`) to locate entry points and the **Composition Root** where configs, DB pools, DI containers, middlewares, routers, or workers are wired (`main.go`, `src/main.rs`, `src/index.ts`, `app.module.ts`, `main.py`, `app/layout.tsx`), tailored to the **7 Repo Archetypes** (`Backend Service/API`, `Frontend App`, `Library/SDK`, `CLI Tool`, `Data Pipeline`, `Framework/Harness`, `Monorepo`).
-   - Extract **Core Data Structures & Schemas** (`struct`, `interface`, ORM models, migrations, state stores) into `architecture/data-dictionary.md` before dispatching component or flow scouts.
-3. **Graph 2 — Git Hotspots, Co-Change Coupling & Incremental Staleness:**
-   - Inspect recent release tags (`git tag -l --sort=-v:refname`), True Churn Hotspots (passing only AST function slices `file:line_start-line_end` to subagents rather than whole `> 500`-LOC files), Author Fractal Value $F = 1 - \sum (c_i/C)^2$, and Cross-Boundary Co-Change pairs (`A <-> B`).
-   - **Focused Scoping for Large Repos (`100+` files):** Map the top 5–7 modules in `00-INDEX.md` and audit 100% of top-level directories in `01-coverage-ledger.md`, then focus deep component/flow dissections on the 2–3 core modules most relevant to the user's goal. On incremental re-runs (`UNCHANGED` / `STALE_HASH` / `STALE_COCHANGE`), regenerate only dirty modules and their Co-Change partners.
+1. Execute `bash skills/map/scripts/recon-graphs.sh "<target_repo_dir>"` (creates `.keystone/cache/`, `.keystone/tmp/`, `.keystone/map/`, and `.keystone/.gitignore`; read `skills/map/references/wiring-and-monorepo-guide.md` for Bazel `query`/`cquery`/`aquery`, Nx, Turborepo, and dynamic wiring patterns).
+2. **Graph 1 — Static Wiring, Entry Points & Core Data Models:**
+   - Read build/package manifests (`package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, `MODULE.bazel`, `BUILD.bazel`, `nx.json`) to locate entry points and the **Composition Root** where configs, DB pools, DI containers, middlewares, routers, or CI pipelines are wired.
+   - Extract **Core Data Models & Config Contracts** (`struct`, `interface`, ORM schemas, or step payload dicts) into `docs/keystone/map/architecture/data-dictionary.md` before dispatching component or flow scouts.
+3. **Graph 2 — Git Hotspots, Co-Change Coupling & Proportional Scoping (`Proportion`):**
+   - Inspect recent release tags, frequently modified hotspot files, and Cross-Boundary Co-Change pairs (`A <-> B` files that must be edited together).
+   - **Proportional File Scaling (`Proportion`):** Scale the number of `components/comp-*.md` and `flows/flow-*.md` files to the repository's actual complexity—on small repositories (`< 10` source files), group tightly related small packages into 1–2 concise `components/comp-*.md` files instead of creating separate redundant files for 5-line modules; on large repositories (`100+` files), map the top 5–7 modules in `00-INDEX.md` and deep-dive the 2–3 core modules most relevant to the user's goal.
 
-### Step 2: Generate & Verify Multi-File Repository Atlas (`docs/keystone-map/`)
-Write **every file in `docs/keystone-map/` in the user's exact language** applying `keystone:using-keystone`'s Shared Clarity Core (`Concrete Actor + Strong Action Verb`, zero zombie nouns, zero translationese, monolingual headers, `< 76`-char subgoal-commented code blocks with enclosing signatures, pre-decoded APIs, `Contrastive Why`, and Conversational Vertical Dry-Run cards):
-- **Group 1 — Capped Routing Index (`<= 150` lines):**
-  - `00-INDEX.md` (`<= 150` lines: Section 1 plain-language macro story with zero code symbols in the 3 opening prose bullets, C4 L1 `< 76`-char ASCII Context Diagram, **RAD-AI `E1` Deterministic vs. Non-Deterministic AI Boundary**, Guided Source-Code Reading Order, and Task-Oriented Routing Table).
-- **Group 2 — Uncapped Deep Dissection & Audit Ledger Files (`Micro-Cap, Not Macro-Cap` — Zero Artificial Total Line Cap):**
-  - `01-coverage-ledger.md` (deterministic audit of $100\%$ of top-level directories from `git ls-tree -d --name-only HEAD` using `CORE_WIRED` `✅`, `ADAPTER_CONTRACT` `✅`, `DYNAMIC_GAP` `⚠️`, `UNWIRED_DEAD` `❌`, 12-char Git hash, `C_wiring: 100%`, `C_hotspot >= 95%`, and plain-language role descriptions in the user's language).
-  - `architecture/data-dictionary.md` (Data-First core schemas/structs with `< 76`-char subgoal-commented code blocks, concrete sample values, `✅`/`❌` state lifecycles, and plain-language safety invariants written BEFORE tracing call flows).
-  - `architecture/c2-wiring-and-containers.md` (Composition Roots with pre-decoded bootstrap/DI contracts, `< 76`-char subgoal-commented wiring code, `Contrastive Why`, and C4 L2 Trust Boundaries).
-  - `architecture/evolution-and-hotspots.md` (Git release tags, True Churn Hotspots, Cross-Boundary Co-Change `A <-> B` blast-radius cards, Author Fractal Value $F$, and **QOC + ATAM Tradeoff Matrix `+`/`-`** with `< 76`-char `❌ Rejected` vs. `✅ Chosen` code slices).
-  - `components/comp-<domain>.md` (C4 L3 `< 20` elements with `C4-E1` stereotypes, public contracts, and `< 76`-char code mechanics + Vertical Dry-Run cards).
-  - `flows/flow-<id>-<name>.md` (**1 File = 1 Cohesive End-to-End Business Flow** — **REQUIRED SUB-SKILL:** Use `keystone:flow` to generate the primary spine flow file).
-- Read `skills/map/references/atlas-and-subagent-contracts.md` for Model-Pinned Scout Subagents (`haiku`/`flash`, passing `USER_LANGUAGE` explicitly) and the 5-step Adversarial Doubt Audit (`CLAIM -> EXTRACT -> DOUBT -> RECONCILE -> STOP`). Run `bash skills/map/scripts/validate-atlas.sh` and require exit code `0` (`STATUS: PASSED`).
+### Step 2: Generate & Verify Two-Tier Repository Atlas (`docs/keystone/map/` + `.keystone/map/`)
+Write **every file in `docs/keystone/map/` in the user's exact language** using `keystone:using-keystone`'s natural `learn-from-code` developer style (preserve universal developer terms like `CI`, `pipeline`, `monorepo`, `package`, `target`, `wheel`, `script`, `dict`, `shell`, `terminal`, `agent`, `plugin`, `build`, `test`, `commit`; zero academic buzzwords; zero dual-language parenthetical headers):
+- **Tier 1 (Human & Agent Persistent Docs in `docs/keystone/map/`):**
+  - `00-INDEX.md` (`<= 150` lines): Open with the standardized routing header (`> **For agentic workers:** REQUIRED SUB-SKILL: Use keystone:flow ...`, `**Goal:**`, `**Architecture:**`, `**Tech Stack:**` localized in the user's language), followed by Section 1 `Big Picture` (4 `learn-from-code` bullets naming real tools like `Bazel`/`Buildkite` directly), a `< 76`-char ASCII Architecture Diagram, a 4-Step Source-Code Reading Order, and a Task-Oriented Navigation Guide.
+  - `architecture/data-dictionary.md` (core data structures/configs with `< 76`-char subgoal-commented code blocks, concrete sample values, and plain-language safety rules).
+  - `architecture/c2-wiring-and-containers.md` (`< 76`-char ASCII container diagram, pre-decoded bootstrap/config mechanisms, `< 76`-char subgoal-commented entry-point code, and `Why the code is written this way` + `Case walkthrough`).
+  - `architecture/evolution-and-hotspots.md` (frequently modified files, Cross-Boundary Co-Change files that must be updated together, and `Why choose this design` comparing `❌ Naive approach` vs. `✅ Current design` in `< 76`-char code slices).
+  - `components/comp-<domain>.md` (plain-language purpose, `< 76`-char ASCII component diagram, core code mechanics with subgoal comments, `Why`, `Case walkthrough`, `⚠️ Defect Alert` if any, and where to edit).
+  - `flows/flow-<id>-<name>.md` (**1 File = 1 Cohesive End-to-End Flow** — **REQUIRED SUB-SKILL:** Use `keystone:flow`'s 5-Section `learn-from-code` contract to write each flow file).
+- **Tier 2 (Machine Audit Ledger in `.keystone/map/01-coverage-ledger.md`):**
+  - `.keystone/map/01-coverage-ledger.md` (audit $100\%$ of top-level directories from `git ls-tree -d --name-only HEAD` using `CORE_WIRED` `✅`, `ADAPTER_CONTRACT` `✅`, `DYNAMIC_GAP` `⚠️`, `UNWIRED_DEAD` `❌`, 12-char Git hash, `C_wiring: 100%`, `C_hotspot: 100%`, and plain-language role descriptions + any `⚠️` bugs found). Keeping this ledger in `.keystone/map/` prevents machine audit tokens from cluttering `docs/` or `git status`.
+- Read `skills/map/references/atlas-and-subagent-contracts.md` and run `bash skills/map/scripts/validate-atlas.sh` (`STATUS: PASSED`).
 
 ### Step 3: Final Closing Lock-In — Anchor Root `./AGENTS.md` Pointer Contract
-Read `skills/map/references/agent-contract-template.md` and create or update `./AGENTS.md` (`< 100` lines if new, or a `<= 15`-line `<!-- keystone-map:start -->` pointer block if `./AGENTS.md` already exists, synced to `CLAUDE.md`/`GEMINI.md` without overwriting custom rules) containing verified build/test commands, module boundaries, state invariants, entry points (`filename:line`), and pointers into `docs/keystone-map/` (deferring ongoing post-coding `.cursor/rules/<domain>.mdc` blast-radius rule locking to `keystone:shield` or explicit user request).
+Read `skills/map/references/agent-contract-template.md` and create or update `./AGENTS.md` (`< 100` lines if new, or a `<= 15`-line `<!-- keystone-map:start -->` pointer block if `./AGENTS.md` already exists) containing verified build/test commands, module boundaries, safety rules, entry points (`filename:line`), and pointers into `docs/keystone/map/`.
 
-### Step 4: Mandatory 4-Part Guided Reading & Task Navigation Briefing in Chat
-Never end `/map` by merely dumping a list of generated file names and line counts. Always present a **4-Part Onboarding & Guided Reading Briefing** in chat (localized 100% to the user's language, obeying `keystone:using-keystone`):
+### Step 4: Crisp Chat Handoff (`<= 15–20` Lines — Zero Duplication of `00-INDEX.md` in Chat!)
+Once the `.md` files are saved to `docs/keystone/map/` and validated, **DO NOT copy-paste `00-INDEX.md`, do NOT redraw the ASCII diagram, and do NOT print a long multi-page summary in chat!** Instead, present a **Crisp Chat Handoff (`<= 15–20` lines)** in the user's language:
 
-1. **System Big Picture, Architecture Diagram & Module Coverage Summary:**
-   - **Plain-language macro purpose:** State in 3 bite-sized bullets (`Real-world role`, `Ownership & delegation boundaries`, `Key design challenge & Core approach`) what the repository does and how it is architected—with zero code symbols in the 3 prose bullets.
-   - **C4 L1/L2 `< 76`-Char ASCII Architecture & Trust Boundary Diagram:** Draw the runtime containers, external dependencies, and `RAD-AI E1` boundary (`Deterministic` vs. `Non-Deterministic AI`).
-   - **4-Bucket Module Coverage Summary (`✅` / `⚠️` / `❌`):** Summarize which top-level directories are `CORE_WIRED` `✅`, `ADAPTER_CONTRACT` `✅`, `DYNAMIC_GAP` `⚠️`, or `UNWIRED_DEAD` `❌`, plus any critical `⚠️` latent bugs or architectural traps discovered during recon.
-2. **Guided Source-Code Reading Order ("Where to Start Reading in the Codebase"):**
-   Give the newly onboarded engineer a numbered **4-Step Source-Code Reading Path** with clickable `[`filename:line`](path#Lline)` links, explaining **which source file to open first, what to look for inside it, and why**:
-   - **Step 1 — Read the Core Data Structures & Schemas first ("Tables Before Flowcharts"):** Link to the primary model/schema files (`[`path/to/schema:line`](...)`) and state which 1–3 structs/tables define the domain state and invariants.
-   - **Step 2 — Read the Composition Root & Bootstrap Wiring:** Link to the exact entry-point file (`[`path/to/main:line`](...)`) and explain how it loads config, binds dependencies, and mounts routes/commands/workers.
-   - **Step 3 — Trace the Primary Spine Execution Flow:** Link to the main controller/service/handler (`[`path/to/service:line`](...)`) and explain the end-to-end happy path in 1–2 sentences.
-   - **Step 4 — Inspect High-Churn Hotspots, Co-Change Pairs & `⚠️` Traps:** Link to the top Git hotspot and any `⚠️` defect/tech-debt coordinate (`[`path/to/hotspot:line`](...)`) so the engineer knows where fragile business rules and coupled files live before editing code.
-3. **Task-Oriented Atlas & Code Navigation Map ("Which `.md` Report & Source File to Read for Each Goal"):**
-   Pair **each developer goal** (`**bold:**` parent bullet) with `*Read Atlas guide:*` (clickable link to the generated `docs/keystone-map/*.md` file + what it explains) and `*Inspect / touch source code:*` (clickable `[`filename:line`](path#Lline)` links):
-   - **When you want a 5-minute macro overview & full module audit (`100%` coverage):**
-     - *Read Atlas guide:* [`docs/keystone-map/00-INDEX.md`](docs/keystone-map/00-INDEX.md) for the C4 L1 context map and [`docs/keystone-map/01-coverage-ledger.md`](docs/keystone-map/01-coverage-ledger.md) for the 4-bucket directory ledger (`✅`/`⚠️`/`❌`).
-   - **When you need to understand core data tables, structs, and state transition rules before coding:**
-     - *Read Atlas guide:* [`docs/keystone-map/architecture/data-dictionary.md`](docs/keystone-map/architecture/data-dictionary.md) for subgoal-commented schemas, `✅`/`❌` state lifecycles, and safety invariants.
-     - *Inspect source code:* `[`path/to/schema:line`](...)`.
-   - **When you want to see how the app boots, wires DI/middlewares, or registers CLI/API entry points:**
-     - *Read Atlas guide:* [`docs/keystone-map/architecture/c2-wiring-and-containers.md`](docs/keystone-map/architecture/c2-wiring-and-containers.md) for the C4 L2 container diagram and Composition Root code dissection.
-     - *Inspect source code:* `[`path/to/main:line`](...)`.
-   - **When you want to understand or modify a specific end-to-end business flow (`<Flow Name>`):**
-     - *Read Atlas guide:* [`docs/keystone-map/flows/flow-01-<name>.md`](docs/keystone-map/flows/flow-01-<name>.md) for the 6-Section code walkthrough, `Visual Dry-Run` vertical cards, live debugger `breakpoint`, and `"Where to Touch"` modification recipes.
-     - *Inspect / touch source code:* `[`path/to/entry:line`](...)` and `[`path/to/service:line`](...)`.
-   - **When you want to dive into a specific domain subsystem (`<Component Name>`):**
-     - *Read Atlas guide:* [`docs/keystone-map/components/comp-<domain>.md`](docs/keystone-map/components/comp-<domain>.md) for C4 L3 component boundaries, public contracts, and component-level traps.
-     - *Inspect source code:* `[`path/to/component:line`](...)`.
-   - **When you are preparing to refactor or open a PR and need to check Co-Change blast radius & architectural tradeoffs:**
-     - *Read Atlas guide:* [`docs/keystone-map/architecture/evolution-and-hotspots.md`](docs/keystone-map/architecture/evolution-and-hotspots.md) for Git churn hotspots, Author Fractal Value $F$, `A <-> B` Co-Change rules, and `QOC`/`ATAM` tradeoffs (`❌ Rejected` vs. `✅ Chosen`).
-4. **Closing Next-Step Offer (Handoff to `keystone:flow` or `keystone:decode`):**
-   End with 1 natural sentence asking which specific business flow the engineer wants to dissect next in chat using `keystone:flow` (or which isolated function/diff to inspect with `keystone:decode`).
+1. **Saved Location, 2-Sentence Repo Overview & `⚠️` Bug Alert:**
+   - State that the Architecture Map is saved to [`docs/keystone/map/00-INDEX.md`](docs/keystone/map/00-INDEX.md) and agent rules are locked in [`AGENTS.md`](AGENTS.md).
+   - Summarize in 1–2 plain spoken sentences what the repository does (naming real tools like `Bazel`/`Buildkite`) and highlight any `⚠️` hidden bug(s) discovered during recon in 1 sentence.
+2. **What to Read & Why (`4–6` Bite-Sized Bullets Linking Both `.md` Guides and `file:line` Source Files):**
+   - **To grasp the big picture, ASCII diagram & 4-step reading order:** Open [`00-INDEX.md`](docs/keystone/map/00-INDEX.md) and [`c2-wiring-and-containers.md`](docs/keystone/map/architecture/c2-wiring-and-containers.md).
+   - **To trace or modify [Main Flow 1]:** Read [`flows/flow-01-<name>.md`](docs/keystone/map/flows/flow-01-<name>.md) (starts at [`path/to/entry1:line`](path/to/entry1#Lline)).
+   - **To trace or modify [Main Flow 2]:** Read [`flows/flow-02-<name>.md`](docs/keystone/map/flows/flow-02-<name>.md) (starts at [`path/to/entry2:line`](path/to/entry2#Lline)).
+   - **To check shared configs, package internals & coupled files before editing:** Open [`data-dictionary.md`](docs/keystone/map/architecture/data-dictionary.md), [`components/comp-<domain>.md`](docs/keystone/map/components/comp-<domain>.md), and [`evolution-and-hotspots.md`](docs/keystone/map/architecture/evolution-and-hotspots.md).
+   - **`⚠️` To inspect or fix the hidden bug(s) found during recon:** Check [`path/to/bug:line`](path/to/bug#Lline) (detailed fix in [`flows/flow-01-<name>.md`](docs/keystone/map/flows/flow-01-<name>.md)).
+3. **1-Line Next-Step Question:**
+   - Ask in 1 natural sentence whether the user wants to review the map, fix the `⚠️` bug(s) right away, or dive into a specific task.
 
 ## Red Flags — STOP and Fix Before Sending
 
-- **Finishing `/map` with a bare file/line-count dump instead of the Guided Reading Briefing:** Never end `/map` by only listing generated files (`00-INDEX.md (75 lines)...`). Always include the **4-Step Source-Code Reading Order** and the **Task-Oriented Atlas & Code Navigation Map ("Read file X to do Y")** with clickable links.
-- **Skipping Step 1 Recon, Step 2 `validate-atlas.sh`, or Step 3 `./AGENTS.md` pointer lock-in:** Reading `README.md` or running `tree` before `bash skills/map/scripts/recon-graphs.sh`, claiming completion without `bash skills/map/scripts/validate-atlas.sh` printing `STATUS: PASSED`, or forgetting to anchor `./AGENTS.md` (`<= 15`-line pointer block).
-- **Language mismatch or dry telegraphic style in `docs/keystone-map/*.md`:** Writing chat in the user's language (e.g., Vietnamese) while leaving `docs/keystone-map/*.md` in English, or dumping bare symbol tables instead of applying `keystone:using-keystone`'s Shared Clarity Core.
-- **Imposing artificial line caps on Group 2 dissection/ledger files or cramming multiple flows into 1 file:** Truncating `flows/flow-*.md`, `components/comp-*.md`, `architecture/*.md`, or `01-coverage-ledger.md` to hit an arbitrary line limit, or cramming multiple independent business flows into a single `flow-*.md` file instead of `1 File = 1 End-to-End Flow` via `keystone:flow`.
+- **Copy-pasting `00-INDEX.md` or redrawing the ASCII diagram in Chat:** Once saved to `docs/keystone/map/`, keep the Chat Handoff `<= 15–20` lines.
+- **Over-translating developer terms or leaking machine audit tokens:** Translating `wheel`, `shell`, `agent`, `dict`, `pipeline`, `package`, `target`, `CI`, or `terminal` into stiff textbook nouns, or leaking `CORE_WIRED`, `C_wiring`, `RAD-AI E1`, `QOC/ATAM`, `Zeller`, or 12-char Git hashes outside `.keystone/map/01-coverage-ledger.md`.
+- **Skipping `validate-atlas.sh` or `./AGENTS.md` lock-in.**

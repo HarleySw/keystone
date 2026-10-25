@@ -4,23 +4,25 @@ Use this reference when executing **`keystone:map` (Unified 4-Step Repository At
 
 ---
 
-## 1. 6-Tier Progressive Disclosure Atlas Specification (`docs/keystone-map/`)
+## 1. Two-Tier Progressive Disclosure Atlas Specification (`docs/keystone/map/` + `.keystone/map/`)
 
-NEVER emit a single monolithic architecture file when documenting an entire repository in `keystone:map`. Split output across the 6-Tier Progressive Disclosure hierarchy combining **C4 Model (L1–L3 + Dynamic)**, **arc42 (§1–§11)**, **RAD-AI (2026) Extensions (`E1` AI Boundary Delineation & `C4-E1` AI Component Stereotypes)**, and the **6-Section Onboarding & Flow Anatomy (`keystone:using-keystone` Clarity Engine)**.
+NEVER emit a single monolithic architecture file when documenting an entire repository in `keystone:map`. Split output across a Two-Tier Storage Hierarchy:
+- **Tier 1 (Human & Agent Persistent Docs in `docs/keystone/map/`):** Clean developer documentation written in the user's language (`00-INDEX.md`, `architecture/*.md`, `components/comp-*.md`, `flows/flow-*.md`).
+- **Tier 2 (Machine Audit Workspace in `.keystone/map/01-coverage-ledger.md`):** Auto-ignored via `.keystone/.gitignore` so machine audit tokens (`CORE_WIRED`, `ADAPTER_CONTRACT`, `DYNAMIC_GAP`, `UNWIRED_DEAD`, 12-char Git hashes, `C_wiring: 100%`) never clutter `docs/` or `git status`.
 
 ```text
 +========================================================================+
-|        6-TIER PROGRESSIVE DISCLOSURE ARCHITECTURE ATLAS                |
+|        TWO-TIER PROGRESSIVE DISCLOSURE ARCHITECTURE ATLAS              |
 +========================================================================+
 | Tier | Standardized Path                           | Length Control    |
 +------+---------------------------------------------+-------------------+
 | T0   | ./AGENTS.md (synced to CLAUDE.md/GEMINI.md) | <= 15L ptr (<300L)|
-| T1   | docs/keystone-map/00-INDEX.md               | <= 150 lines      |
-|      | docs/keystone-map/01-coverage-ledger.md     | No macro line cap |
+| T1   | docs/keystone/map/00-INDEX.md               | <= 150 lines      |
+|      | .keystone/map/01-coverage-ledger.md         | Auto-ignored (0L) |
 | T2   | architecture/c2-wiring-and-containers.md    | No macro line cap |
 |      | architecture/data-dictionary.md             | No macro line cap |
 | T3   | architecture/evolution-and-hotspots.md      | No macro line cap |
-| T4   | components/comp-<domain>.md                 | No macro line cap |
+| T4   | components/comp-<domain>.md                 | Scaled to repo    |
 | T5   | flows/flow-<id>-<name>.md                   | 1 flow/file, 0 cap|
 | T6   | .cursor/rules/<domain>.mdc                  | <= 500 words/file |
 +========================================================================+
@@ -32,75 +34,82 @@ NEVER emit a single monolithic architecture file when documenting an entire repo
    - **Group 2 — Deep Dissection, Data Dictionary, Component & Ledger Reports (ZERO Artificial Total Line Caps):** Never impose a total line cap on `flows/flow-XX-<name>.md`, `components/comp-<domain>.md`, `architecture/*.md`, or `01-coverage-ledger.md`. Never truncate code steps, hide core logic behind `...`, skip `Contrastive Why`, or revert to telegraphic `->` prose to fit a line count. Instead, keep files clean via **3 structural rules**:
      1. *Micro-Cap, Not Macro-Cap:* Unlimited total bullets and code steps, but each bullet holds **1 single idea (`1–2` short spoken sentences)** and every line inside code blocks, `//` comments, and ASCII diagrams is **`< 76` characters**.
      2. *Split by Cohesive Business Flow (`1 File = 1 End-to-End Flow`):* Each `flows/flow-XX-<name>.md` file dissects **1 cohesive end-to-end business flow** from trigger to persistence (split distinct flows into `flow-01`, `flow-02`, `flow-03`).
-     3. *Focused Scoping on Large Repos (`100+` files):* Map top 5–7 modules in `00-INDEX.md` and deep-dive the 2–3 core modules or primary spine flows (`9–13` steps for onboarding, `14–18` steps for architectural survey).
-2. **100% User-Language Synchronization Across Every Generated `.md` File:**
-   - Write **every file in `docs/keystone-map/` (`00-INDEX.md`, `01-coverage-ledger.md`, `architecture/*.md`, `components/comp-*.md`, `flows/flow-*.md`) in the exact language the user used in their prompt** (e.g., if the user asked in Vietnamese, write all section headers, bullet labels, explanations, dry-run cards, and inline `//` code comments across all generated `.md` files in natural spoken Vietnamese—never write chat in Vietnamese while leaving `docs/keystone-map/*.md` in English).
-   - **Zero Dual-Language Header Clutter:** Use natural monolingual labels in the user's language; never pair two languages side-by-side (`<Local Label> (<English Label>):`).
-   - Preserve universal developer code-switching terms (`commit`, `race condition`, `deadlock`, `middleware`, `dependency injection`, `router`, `schema`, `atomic`, `breakpoint`, `unit test`, `payload`, `hook`, `state`, `migration`, `idempotency`) and canonical validator tokens (`CORE_WIRED`, `ADAPTER_CONTRACT`, `DYNAMIC_GAP`, `UNWIRED_DEAD`, `C_wiring: 100%`, `C_hotspot: ...%`, `RAD-AI`, `E1`, `QOC`, `ATAM`).
+     3. *Focused Scoping on Large Repos (`100+` files):* Map top 5–7 modules in `00-INDEX.md` and deep-dive the 2–3 core modules or primary spine flows.
+2. **100% User-Language Synchronization & Everyday Spoken Developer Register (`learn-from-code` Style):**
+   - Write **every file in `docs/keystone-map/` (`00-INDEX.md`, `01-coverage-ledger.md`, `architecture/*.md`, `components/comp-*.md`, `flows/flow-*.md`) in the exact language the user used in their prompt** (never write chat in Vietnamese while leaving `docs/keystone-map/*.md` in English).
+   - **Zero Dual-Language Header Clutter & Zero Academic Jargon in Output:** Use natural monolingual developer labels in the user's language; never pair two languages side-by-side (`<Local Label> (<English Label>):`), and **NEVER print academic framework acronyms (`RAD-AI E1`, `C4-E1`, `QOC/ATAM`, `Zeller's Infected State`, `Author Fractal Value F`) in user-facing headers, diagrams, or prose**. Keep machine-validated ledger tokens (`CORE_WIRED`, `ADAPTER_CONTRACT`, `DYNAMIC_GAP`, `UNWIRED_DEAD`, `C_wiring: 100%`, `C_hotspot: ...%`) strictly inside `01-coverage-ledger.md`.
+   - **Preserve Universal Developer Terms (Never Over-Translate into Textbook Calques):** Always preserve `CI/CD`, `pipeline`, `repo`, `monorepo`, `package`, `target`, `wheel`, `script`, `shell`, `CLI`, `terminal`, `dict`, `list`, `array`, `object`, `struct`, `class`, `function`, `module`, `plugin`, `agent`, `binary`, `build`, `test`, `unit test`, `query`, `flag`, `config`, `commit`, `race condition`, `deadlock`, `middleware`, `dependency injection`, `router`, `schema`, `atomic`, `breakpoint`, `payload`, `hook`, `state`, `migration`, `idempotency` in English rather than translating `wheel` as "distribution wheel", `shell` as "outer shell", `agent` as "cloud agent", or `dict` as "dictionary structure".
 3. **Mechanical Plain-Language Syntax & Visual Breathing Room (`learn-from-code` Register):**
-   - **Concrete Actor + Strong Action Verb (`Zero Zombie Nouns`):** Pair a concrete actor (`User`, `Router`, `Settlement service`) with a strong action verb (`overwrites`, `skips`, `blocks`, `prefixes`, `injects`). Ban nominalizations ("the execution of", "the initialization of"), ban translationese and literal metaphor calques (`drop`, `hydrate`, `swallow`), enforce `One Word = One Meaning`, and write complete sentences ending with periods `.` linked by `Old-Before-New` transitions (**NEVER chain prose clauses with `->` arrows**).
+   - **Concrete Actor + Strong Action Verb (`Zero Zombie Nouns`):** Pair a concrete actor (`User`, `Router`, `CI script`) with a strong action verb (`overwrites`, `skips`, `blocks`, `prefixes`, `injects`). Ban nominalizations ("the execution of", "the initialization of"), ban translationese and literal metaphor calques (`drop`, `hydrate`, `swallow`), enforce `One Word = One Meaning`, and write short, complete sentences ending with periods `.` linked by `Old-Before-New` transitions (**NEVER chain prose clauses with `->` arrows**).
    - **Bite-Sized Bullets (`1 Idea = 1 Bullet`, `1–2` short sentences):** Use `**bold:**` for parent item titles and `*italic:*` for child sub-bullet labels (never `***...***`).
    - **Semantic Traffic-Light Icons Only (`✅`, `❌`, `⚠️`):** Ban decorative emojis (`🚀`, `💡`, `✨`, `📌`, `🔥`, `🔌`) across all `.md` files.
 4. **`learn-from-code` Code & Schema Explanation Discipline in Auxiliary `.md` Files:**
    - **76-Character Width Cap:** Keep every line inside code blocks, inline `//` comments, and ASCII diagrams under `76` characters.
-   - **Enclosing Signatures & Subgoal-Labeled Inline Comments (`// 1.`, `// 2a.`):** Always keep the enclosing `struct`/`interface`/`class`/`function` signature (eliding repetitive boilerplate with `...`), put explanations of fields, magic numbers, `??`/`||` fallback chains, and concrete evaluated sample values directly inside `< 76`-char `//` comments in the user's language, add a `< 76`-char `// Anatomy:` legend at the top of snippets with unfamiliar tokens, and include an **ASCII Ruler Diagram** for spatial/slice/offset math.
-   - **Pre-Decode Unfamiliar APIs/Hooks/DI Seams Before Code Blocks:** Introduce unfamiliar framework APIs, DI bindings, hooks, or middlewares right before the code snippet stating (a) what it controls, (b) the exact moment it runs, (c) incoming parameters, and (d) return value/effect.
-   - **Contrastive Why + Conversational Vertical Dry-Run Cards Below Code Snippets:** Follow code mechanics snippets in `components/comp-*.md`, `c2-wiring-and-containers.md`, and `flows/flow-*.md` with **Contrastive Why** (`*italic (Step // 1.):*`) and **Visual Dry-Run** vertical cards (`- **Case 1 — <Title>:**` with `*Input:*`, `*How the code checks it:*`, `*Result:*` in complete spoken sentences with `✅`/`❌`—never cramped 4-column Markdown tables).
-5. **C4 & RAD-AI Diagram Hygiene + Strict Coordinate Formatting (Gate 4A):**
-   - Keep every ASCII diagram `< 20` nodes and `< 76` characters wide, drawing explicit **Trust Boundaries** and **RAD-AI `E1` Boundaries** (`[Deterministic]` vs. `[Non-Deterministic AI/ML]`).
+   - **Enclosing Signatures & Subgoal-Labeled Inline Comments (`// 1.`, `// 2a.`):** Always keep the enclosing `struct`/`interface`/`class`/`function` signature (eliding repetitive boilerplate with `...`), put explanations of fields, magic numbers, `??`/`||` fallback chains, and concrete evaluated sample values directly inside `< 76`-char `//` comments in the user's language, add a `< 76`-char `// Anatomy:` legend only when unfamiliar low-level tokens appear, and include an **ASCII Ruler Diagram** for spatial/slice/offset math.
+   - **Pre-Decode Unfamiliar APIs/Hooks/DI Seams Before Code Blocks:** Introduce unfamiliar framework APIs, CLI queries, DI bindings, hooks, or middlewares right before the code snippet stating (a) what it controls, (b) the exact moment it runs, (c) incoming parameters, and (d) return value/effect.
+   - **Why It's Written This Way + Conversational Vertical Case Walkthroughs Below Code Snippets:** Follow code mechanics snippets in `components/comp-*.md`, `c2-wiring-and-containers.md`, and `flows/flow-*.md` with natural monolingual headers for **Why the code is written this way** (`*italic (Step // 1.):*`) and **Step-by-step case walkthrough** (`- **Case 1 — <Title>:**` with `*Input:*`, `*How the code checks it:*`, `*Result:*` in complete spoken sentences with `✅`/`❌`—never cramped 4-column Markdown tables, and never parenthetical `<Local> (Contrastive Why)` labels).
+5. **Clean ASCII Diagram Hygiene + Strict Coordinate Formatting (Gate 4A):**
+   - Keep every ASCII diagram `< 20` nodes and `< 76` characters wide, using plain developer labels for processes and external services.
    - ALWAYS write the full repo-relative path inside clickable links (`[`tui_gateway/server.py:600`](tui_gateway/server.py#L600)`); NEVER abbreviate to a bare basename (`server.py:600`) inside `docs/keystone-map/` files, NEVER wrap links in outer backticks, NEVER use comma-separated line lists (`:7,11,25`), and NEVER output raw HTML tags or `mermaid` blocks.
 
 ---
 
-## 2. Standardized File Templates (`docs/keystone-map/` — Localized to User's Language)
+## 2. Standardized File Templates (`docs/keystone/map/` — Localized to User's Language in `learn-from-code` Style)
 
 ### 2.1. `00-INDEX.md` (Tier 1, Group 1 Routing Index — `<= 150` Lines)
-- **Section 1 Macro Purpose & Domain Boundaries (100% Plain-Language Concepts):** Open directly with the 4 Section 1 bullets localized to the user's language (`Real-world role`, `Ownership & delegation boundaries`, `Key design challenge & Core approach` with everyday analogy + bite-sized `*italic:*` sub-bullets, and a `< 76`-char `Concrete Input -> Output` code/data example). **Zero file names, function names, struct names, or variable names in the 3 opening prose bullets.**
-- **Subsystem & Entry-Point Map + C4 Level 1 (`< 76`-char ASCII Context Diagram):** Show human actors, the system box, `_Ext` dependencies, and the **RAD-AI `E1` Boundary** (`Deterministic` vs. `Non-Deterministic AI`).
-- **Guided Source-Code Reading Order ("Where to Start Reading in the Repo"):** A numbered 4-step reading path (`1. Data Schemas -> 2. Composition Root -> 3. Main Spine Flow -> 4. Hotspots & Traps`) with clickable `[`path/to/file.ext:line`](../../path/to/file.ext#Lline)` links explaining what to read first and why.
-- **Task-Oriented Progressive Disclosure Routing Guide ("Read File X to Do Goal Y"):** Pair each developer goal (`Understand core data tables`, `Trace bootstrap & DI wiring`, `Modify business flow X`, `Inspect component Y`, `Check Co-Change blast radius before PR`) with relative Markdown links (`[Data Dictionary](./architecture/data-dictionary.md)`, `[Flow 01](./flows/flow-01-main.md)`, `[Auth Component](./components/comp-auth.md)`) and explain what each file helps the developer accomplish.
+- **Standardized Routing Header:** Open `00-INDEX.md` with:
+  ```markdown
+  # [System Name] — Architecture Map
 
-### 2.2. `01-coverage-ledger.md` (Tier 1, Group 2 Audit Ledger — Zero Artificial Line Cap)
+  > **For agentic workers:** REQUIRED SUB-SKILL: Use `keystone:flow` to trace or extend a specific execution flow from this map, or `keystone:shield` before opening a PR.
+
+  **Goal:** [1 sentence in the user's language]
+  **Architecture:** [2-3 sentences in the user's language]
+  **Tech Stack:** [Core tools/languages]
+  ```
+- **Section 1 Big Picture (100% Plain-Language Macro Story):** Open directly with the 4 `learn-from-code` bullets localized to the user's language (`Goal`, `Key design challenge` with brief everyday analogy + bite-sized `*italic:*` sub-bullets, `Core approach`, and a `< 76`-char `Concrete example` showing `Input -> Output`). **Do not paste file paths or local variable names in the 3 opening prose bullets, but ALWAYS name real tools and concepts (`Bazel`, `Buildkite`, `CI pipeline`, `monorepo`, `package`, `wheel`) directly.**
+- **High-Level Architecture Diagram (`< 76`-char ASCII Diagram):** Show how the developer, main folders/packages, and external tools connect using plain everyday labels.
+- **4-Step Source-Code Reading Order ("Which Code File to Read First and Why"):** A numbered 4-step reading path (`1. Core Config & Data Helpers -> 2. Entry Points & Wiring -> 3. Main Execution Flow -> 4. Hidden Traps & Coupled Files`) with clickable `[`path/to/file.ext:line`](path/to/file.ext#Lline)` links explaining what to read first and why.
+- **Task-Oriented Navigation Guide ("Which `.md` Guide & Code File to Open for Each Goal"):** Pair each developer goal (`Understand data structures`, `Trace entry points & wiring`, `Modify Flow 1`, `Modify Flow 2`, `Check coupled files before opening a PR`) with relative Markdown links (`[Data Dictionary](./architecture/data-dictionary.md)`, `[Flow 01](./flows/flow-01-main.md)`) and source file links.
+
+### 2.2. `.keystone/map/01-coverage-ledger.md` (Tier 2 Machine Audit Ledger — Auto-Ignored in Git)
 - **Header Metadata:** `head_commit`, `root_tree_hash`, `scip_status` (`SCIP_ACTIVE` with `scip_content_fingerprint` or `BLOCKED_ORACLE`).
-- **Closed-Loop 4-Bucket Table:** Every top-level directory from `git ls-tree -d --name-only HEAD` MUST appear with its canonical bucket token (`CORE_WIRED` `✅`, `ADAPTER_CONTRACT` `✅`, `DYNAMIC_GAP` `⚠️`, `UNWIRED_DEAD` `❌`), 12-char Git hash, primary `path/to/file.ext:line` evidence, and a concise `Concrete Actor + Strong Action Verb` description in the user's language.
-- **Audit Summary Footer:** `C_wiring: 100%` and `C_hotspot: >= 95%`.
+- **Closed-Loop 4-Bucket Table:** Every top-level directory from `git ls-tree -d --name-only HEAD` MUST appear with its canonical bucket token (`CORE_WIRED` `✅`, `ADAPTER_CONTRACT` `✅`, `DYNAMIC_GAP` `⚠️`, `UNWIRED_DEAD` `❌`), 12-char Git hash, primary `path/to/file.ext:line` evidence, and a concise plain-language role description in the user's language.
+- **Hidden Bugs & Traps (`⚠️`) + Audit Summary Footer:** List any `⚠️` defects or runtime seams found, followed by `C_wiring: 100%` and `C_hotspot: 100%`.
 
-### 2.3. `architecture/data-dictionary.md` (Tier 2, Group 2 Deep Dissection — Zero Artificial Line Cap, Data-First Mandate)
-- Complete BEFORE dispatching flow subagents, applying **Section 2 (`Core Data Structures & State Lifecycles — "Tables Before Flowcharts"`)** rules across the repository in the user's language:
-  - **Core entities & state containers:** Quote focused `< 76`-char code blocks for the primary `struct`/`interface`/table definitions with `[`path/to/file.ext:line`](../..)` links, keeping the enclosing type signature, eliding boilerplate with `...`, and explaining each key field in `< 76`-char inline `//` comments with concrete sample values in the user's language.
-  - **State lifecycle & transitions:** Bite-sized `*italic:*` sub-bullets explaining valid transitions (`✅`) and rejected/locked states (`❌`) in complete spoken sentences.
-  - **Data safety rules (Invariants):** Plain-language safety rules that must hold true whenever any function reads or mutates these structures.
+### 2.3. `architecture/data-dictionary.md` (Tier 2, Group 2 Deep Dissection — Zero Artificial Line Cap)
+- Present the repository's core data structures, config schemas, or payload dicts in the user's language:
+  - **Core structures & config schemas:** Quote focused `< 76`-char code blocks with `[`path/to/file.ext:line`](...)` links, keeping the enclosing signature, eliding boilerplate with `...`, and explaining each key field in `< 76`-char inline `//` comments with concrete sample values.
+  - **How data changes & safety rules:** Bite-sized `*italic:*` sub-bullets explaining valid states (`✅`), rejected cases (`❌`), and plain-language safety rules that must hold true when editing code.
 
 ### 2.4. `architecture/c2-wiring-and-containers.md` (Tier 2, Group 2 Deep Dissection — Zero Artificial Line Cap)
-- Apply **Section 3 & Section 4 (`learn-from-code` Code Mechanics)** to the repository's bootstrap and container wiring in the user's language:
-  - **C4 Level 2 (`< 76`-char ASCII Container & Trust Boundary Diagram):** Runtime processes, databases, queues, and trust boundaries.
-  - **Composition Root Dissection:** Pre-decode unfamiliar bootstrap/DI/router/middleware APIs (4 aspects: what it controls, when it runs, incoming parameters, return effect), quote the `< 76`-char subgoal-commented Composition Root code block (`// 1.`, `// 2a.`), and explain the **Contrastive Why** (`*italic (Step // 1.):*`) behind the initialization order.
+- Apply `learn-from-code` Code Mechanics to the repository's entry points and package wiring in the user's language:
+  - **ASCII Architecture & Wiring Diagram (`< 76` chars):** Runtime processes, packages, and external tools.
+  - **Entry-Point & Wiring Code Walkthrough:** Pre-decode unfamiliar build/DI/config rules (what it controls, when it runs, incoming parameters, return effect), quote the `< 76`-char subgoal-commented wiring code (`// 1.`, `// 2a.`), and explain **Why it is written this way** + **Case walkthrough**.
 
 ### 2.5. `architecture/evolution-and-hotspots.md` (Tier 3, Group 2 Deep Dissection — Zero Artificial Line Cap)
-- Apply **Section 5 & Senior Architectural Takeaway** rules in the user's language:
-  - **Release Tags, Top Churn Hotspots & Author Fractal Value ($F = 1 - \sum (c_i/C)^2 \in [0.00, 1.00]$):** Explain active business hotspots and single-owner silos ($F \to 0.00$) vs. multi-author coordination bottlenecks ($F > 0.60$).
-  - **Cross-Boundary Co-Change (`A <-> B`) & Blast Radius:** Format each logical coupling as a `**bold:**` parent bullet with `*Technical trigger & Coupled files:*` (with concrete sample values and `path/to/file:line`) and `*Impact & Safeguard:*` child sub-bullets.
-  - **QOC + ATAM Architectural Tradeoffs (`+` / `-`):** Explain why the architecture chose its current design over naive alternatives, accompanied by a focused `< 76`-char `❌ Rejected naive approach` vs. `✅ Chosen architecture` code comparison grounded in concrete sample values.
+- Apply `learn-from-code`'s Senior Architectural Takeaways in the user's language (zero `QOC/ATAM` or `Fractal Value` jargon in headers):
+  - **Frequently Modified Files (Hotspots):** Explain which files change most often in Git history and why they are sensitive.
+  - **Coupled Files That Must Change Together (`A <-> B`):** Format each coupled pair as a `**bold:**` parent bullet with `*When it triggers & Coupled files:*` (with concrete sample values and `path/to/file:line`) and `*What breaks if missed & How to update safely:*` child sub-bullets.
+  - **Why Choose This Design (`❌ Naive approach` vs. `✅ Current design`):** Explain why the repo chose its current architecture over simpler alternatives, accompanied by a focused `< 76`-char `❌ Naive approach` vs. `✅ Current design` code comparison with concrete sample values.
 
 ### 2.6. `components/comp-<domain>.md` (Tier 4, Group 2 Deep Dissection — Zero Artificial Line Cap)
-- Write each component file in the user's language using `learn-from-code`'s narrative and code-dissection structure (never a dry symbol dump):
-  1. **Header Metadata & Plain-Language Role:** `tree_hash: <12-char-hash>`, `bucket: CORE_WIRED`, real-world role, ownership/delegation boundaries, and `< 76`-char C4 L3 (`C4-E1`) ASCII diagram (`< 20` elements).
-  2. **Component Data Structures & Public Contract:** Key component types (`< 76`-char commented structs) and entry points (`path/to/file.ext:line`).
-  3. **Core Component Code Mechanics & Visual Dry-Run:** Walk through the component's main engineering decision step(s) with a Pre-Decoded API/Mechanism Contract, `< 76`-char Subgoal-Commented Code Block (`// 1.`, `// 2a.`), **Contrastive Why**, and **Visual Dry-Run** vertical cards (`*Input:*`, `*How the code checks it:*`, `*Result:*` with `✅`/`❌`).
-  4. **Component Sensitivity (`⚠️`) & "Where to Touch" Pointers:** Any unresolved `DYNAMIC_GAP` or latent trap (`❌ Current` vs. `✅ Safer design`) plus quick modification touchpoints.
+- Write each component file in the user's language using `learn-from-code`'s narrative and code-dissection structure:
+  1. **Overview & Component Diagram:** Plain-language goal, how it connects to other folders, and a `< 76`-char ASCII diagram.
+  2. **Core Code Walkthrough:** Pre-decode unfamiliar APIs/rules, quote `< 76`-char Subgoal-Commented Code Blocks (`// 1.`, `// 2a.`), and follow with **Why it is written this way** and **Step-by-step case walkthrough** (`*Input:*`, `*How the code checks it:*`, `*Result:*` with `✅`/`❌`).
+  3. **Hidden Bugs (`⚠️`) & Where to Edit:** Any `⚠️` defect alert (`❌ Current` vs. `✅ Fix`) plus exact `path/to/file.ext:line` touchpoints for common changes.
 
 ### 2.7. `flows/flow-<id>-<name>.md` (Tier 5, Group 2 Deep Dissection — Zero Artificial Line Cap, `1 File = 1 End-to-End Flow`)
-Write each flow file in the user's language for **1 cohesive end-to-end business flow** using the complete **Single-Pass 6-Section Onboarding & Flow Anatomy** (with `✅`, `⚠️`, `❌` traffic-light icons, Conversational Vertical Dry-Run cards, and Andreas Zeller's 4-Link Infection Chain in Section 5):
-1. **Section 1 — System Purpose & Domain Boundaries:** Real-world role, Ownership & delegation boundaries, Key design challenge & Core approach, Concrete Input -> Output example (`< 76` chars, zero code symbols in the 3 prose bullets).
-2. **Section 2 — Core Data Structures & State Lifecycles:** Commented `< 76`-char struct/schema definitions, `✅`/`❌` state transitions, and data safety rules.
-3. **Section 3 — Wiring Root, Entry Points & End-to-End Execution Path:** Composition root + numbered chronological path (max 1 primary symbol per step with `path/to/file.ext:line`).
-4. **Section 4 — Core Code Mechanics & Visual Dry-Run:** Pre-decoded API contracts, `< 76`-char subgoal-commented code blocks (`// 1.`, `// 2a.`), **Contrastive Why**, and **Visual Dry-Run** vertical cards (`*Input:*`, `*How the code checks it:*`, `*Result:*` with `✅`/`❌`).
-5. **Section 5 — Hidden Traps (`⚠️`), Zeller Infection Chain (`Trigger -> Infected State -> Propagation -> Observable Failure`), Co-Change Coupling & Breakpoint:** `⚠️` Defect/Tech-Debt Alert (`❌ Current` vs. `✅ Safer design`), Cross-Boundary Co-Change Blast Radius, and live debugger Breakpoint + CLI test command.
-6. **Section 6 — Developer Modification Playbook ("Where to Touch") & Reusable Patterns:** 2–4 modification recipes + reusable pattern template (`Adopt` / `Adapt` / `Reject` Context-Fit Matrix when scouting external repos).
+Write each flow file in the user's language for **1 cohesive end-to-end flow** using `keystone:flow`'s **Single-Pass 5-Section `learn-from-code` Contract** (monolingual headers, zero academic jargon):
+1. **Section 1 — Big Picture (`Tổng quan`):** `Goal`, `Key design challenge` (with brief everyday analogy + bite-sized sub-bullets), `Core approach`, and `Concrete example` (`< 76` chars, naming real tools directly).
+2. **Section 2 — Main Execution Flow (`Luồng chạy chính`):** 3–6 crisp 1-sentence steps tracing the main spine (`[`path/to/file.ext:line`](...)`, max 1 primary function/script per step).
+3. **Section 3 — Core Code Steps (`Chi tiết từng bước code`):** Pre-decoded API/query contracts, `< 76`-char subgoal-commented code blocks (`// 1.`, `// 2a.`), **Why the code is written this way**, and **Step-by-step case walkthrough** (`*Input:*`, `*How the code checks it:*`, `*Result:*` with `✅`/`❌`).
+4. **Section 4 — Verification & Hidden Risks (`Kiểm chứng & Rủi ro tiềm ẩn`):** `⚠️ Defect Alert` (`*Scenario & symptom:*`, `*Root cause:*`, `*Buggy code & Fix:*` with `❌ Current` vs. `✅ Fix`), `Verified & Quick check` (`breakpoint` + test command), and `Coupled files to update together`.
+5. **Section 5 — Where to Touch & Reusable Techniques (`Điểm cần sửa khi mở rộng & Kỹ thuật tái sử dụng`):** 2–3 modification recipes (`*Where to edit:*`, `*Companion files:*`, `*Safety rule:*` `✅`) + 4-part reusable engineering pattern (`Adopt` / `Adapt` / `Reject` when harvesting external repos).
 
 ---
 
-## 3. Superpowers v6.0 Subagent Economics & File-Based Handoff Contract
+## 3. Subagent Economics & File-Based Handoff Contract
 
 1. **Explicit Model Tier Pinning:**
    - **Scout Subagents (Phase 2):** ALWAYS pin `model: "haiku"` or `model: "flash"`.
@@ -120,25 +129,26 @@ Write each flow file in the user's language for **1 cohesive end-to-end business
    INSTRUCTIONS:
    1. Read ONLY assigned file:line slices and data-dictionary.md.
    2. Write OUTPUT_FILE 100% in USER_LANGUAGE with zero artificial
-      total line cap (prioritize completeness of core mechanics;
-      assign 1 cohesive end-to-end flow per flow-* file; use
-      monolingual headers, zero dual-language parentheticals, and
-      preserve canonical validator tokens).
+      total line cap (assign 1 cohesive end-to-end flow per flow-*
+      file; use natural monolingual headers, zero dual-language
+      parentheticals, and zero academic acronyms like RAD-AI/QOC/Zeller).
    3. Apply the learn-from-code Clarity Engine across the file:
-      - Concrete Actor + Strong Action Verb (zero zombie nouns,
-        zero translationese, Old-Before-New sentences ending with
-        periods '.', zero '->' prose chains).
+      - Preserve everyday developer terms (CI, pipeline, monorepo,
+        package, target, wheel, script, dict, shell, terminal, agent,
+        plugin, build, test, commit) — never over-translate them.
+      - Short spoken sentences (Concrete Actor + Strong Action Verb,
+        Old-Before-New transitions ending with '.', zero '->' prose).
       - Micro-Cap per unit: bite-sized bullets (1–2 sentences,
         **bold:** parent titles, *italic:* child labels), < 76
         chars per code/comment/diagram line, icons (✅, ⚠️, ❌).
-      - Pre-decode unfamiliar APIs/hooks/DI bindings before code.
+      - Pre-decode unfamiliar APIs/queries/hooks before code.
       - Quote < 76-char code blocks (keeping enclosing signatures)
         with Subgoal Comments (// 1., // 2a.) in USER_LANGUAGE.
-      - Follow code blocks with Contrastive Why and Conversational
-        Vertical Dry-Run cards (*Input:*, *How the code checks it:*,
-        *Result:* with ✅/❌ — NEVER 4-column Markdown tables).
+      - Follow code blocks with natural monolingual headers for
+        Why it is written this way and Conversational Vertical Case
+        Walkthroughs (*Input:*, *How the code checks it:*, *Result:*).
    4. Anchor claims to full repo-relative path/to/file.ext:line.
-   5. For flow-* files, use the complete 6-Section Flow Anatomy.
+   5. For flow-* files, use the 5-Section learn-from-code Contract.
    6. Return ONLY: "DONE: <OUTPUT_FILE> (<lines>L, <cites> cites)".
    ```
 

@@ -1,6 +1,6 @@
 # Keystone Map — Root `AGENTS.md` Pointer Contract Template
 
-Use this reference during **Step 3 (Final Closing Lock-In: Anchor `./AGENTS.md`)** of `keystone:map` so future AI sessions automatically know how to build, test, and navigate the repository via `docs/keystone-map/`.
+Use this reference during **Step 3 (Final Closing Lock-In: Anchor `./AGENTS.md`)** of `keystone:map` so future AI sessions automatically know how to build, test, and navigate the repository via `docs/keystone/map/`.
 
 ## 1. Root `./AGENTS.md` Size & Sync Rules
 
@@ -12,12 +12,11 @@ Use this reference during **Step 3 (Final Closing Lock-In: Anchor `./AGENTS.md`)
 
 ```markdown
 <!-- keystone-map:start -->
-## Architecture Atlas & Codebase Navigation (`docs/keystone-map/`)
-- **Overview & Entry Points:** `docs/keystone-map/00-INDEX.md`
-- **100% Coverage Ledger:** `docs/keystone-map/01-coverage-ledger.md`
-- **Data Schemas:** `docs/keystone-map/architecture/data-dictionary.md`
-- **Wiring:** `docs/keystone-map/architecture/c2-wiring-and-containers.md`
-- **Hotspots:** `docs/keystone-map/architecture/evolution-and-hotspots.md`
+## Architecture Atlas & Codebase Navigation (`docs/keystone/map/`)
+- **Overview & Entry Points:** `docs/keystone/map/00-INDEX.md`
+- **Data Schemas:** `docs/keystone/map/architecture/data-dictionary.md`
+- **Wiring:** `docs/keystone/map/architecture/c2-wiring-and-containers.md`
+- **Hotspots & Coupled Files:** `docs/keystone/map/architecture/evolution-and-hotspots.md`
 - **Build & Test:** `<verified build cmd>` | `<verified test cmd>`
 - **Primary Composition Root:** `<path/to/main.ext:line>`
 <!-- keystone-map:end -->

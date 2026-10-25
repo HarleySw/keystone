@@ -50,7 +50,7 @@ def run_git_dirs(repo_root):
         )
         if res.returncode != 0:
             return []
-        ignored = {".github", ".vscode", ".idea", "docs", ".keystone", ".superpowers"}
+        ignored = {".github", ".vscode", ".idea", "docs", ".keystone"}
         return [
             d.strip()
             for d in res.stdout.replace("\r\n", "\n").splitlines()
@@ -73,8 +73,18 @@ def main():
             positional.append(args[i])
             i += 1
 
-    atlas_dir = Path(positional[0] if len(positional) >= 1 else "docs/keystone-map").resolve()
     repo_root = Path(positional[1] if len(positional) >= 2 else ".").resolve()
+    if len(positional) >= 1:
+        atlas_dir = Path(positional[0]).resolve()
+    else:
+        atlas_dir = (
+            (repo_root / "docs" / "keystone-map").resolve()
+            if (repo_root / "docs" / "keystone-map").is_dir() and not (repo_root / "docs" / "keystone" / "map").is_dir()
+            else (repo_root / "docs" / "keystone" / "map").resolve()
+        )
+    keystone_dir = repo_root / ".keystone"
+    if keystone_dir.is_dir() and not (keystone_dir / ".gitignore").is_file():
+        (keystone_dir / ".gitignore").write_text("*\n", encoding="utf-8")
 
     failures = []
     print("===========================================================================")
@@ -93,7 +103,6 @@ def main():
     # -----------------------------------------------------------------------
     required_files = [
         "00-INDEX.md",
-        "01-coverage-ledger.md",
         "architecture/c2-wiring-and-containers.md",
         "architecture/data-dictionary.md",
         "architecture/evolution-and-hotspots.md",
@@ -101,6 +110,17 @@ def main():
     for rel in required_files:
         if not (atlas_dir / rel).is_file():
             failures.append(f"Gate 1 (Structure): Missing mandatory file '{rel}'")
+
+    ledger_candidates = [
+        atlas_dir / "01-coverage-ledger.md",
+        repo_root / ".keystone" / "map" / "01-coverage-ledger.md",
+        repo_root / ".keystone" / "01-coverage-ledger.md",
+    ]
+    ledger_path = next((p for p in ledger_candidates if p.is_file()), None)
+    if ledger_path is None:
+        failures.append(
+            "Gate 1 (Structure): Missing mandatory coverage ledger ('.keystone/map/01-coverage-ledger.md' or '01-coverage-ledger.md')"
+        )
 
     comp_files = sorted((atlas_dir / "components").glob("comp-*.md")) if (atlas_dir / "components").is_dir() else []
     flow_files = sorted((atlas_dir / "flows").glob("flow-*.md")) if (atlas_dir / "flows").is_dir() else []
@@ -147,9 +167,10 @@ def main():
     # -----------------------------------------------------------------------
     # GATE 3: 100% DENOMINATOR COVERAGE & 4-BUCKET ACCOUNTING
     # -----------------------------------------------------------------------
-    ledger_path = atlas_dir / "01-coverage-ledger.md"
+    if ledger_path is not None and ledger_path not in [p for _, p in all_md_files]:
+        all_md_files.append((".keystone/map/01-coverage-ledger.md", ledger_path))
     core_wired_modules = []
-    if ledger_path.is_file():
+    if ledger_path is not None and ledger_path.is_file():
         ledger_text = ledger_path.read_text(encoding="utf-8", errors="replace").replace("\r\n", "\n")
         top_dirs = run_git_dirs(repo_root)
         valid_buckets = ("CORE_WIRED", "ADAPTER_CONTRACT", "DYNAMIC_GAP", "UNWIRED_DEAD")
@@ -224,20 +245,20 @@ def main():
         failures.append("Gate 4A (Coordinate): Zero 'file:line' citations found across the entire Atlas")
 
     # -----------------------------------------------------------------------
-    # GATE 5: REQUIRED SEMANTIC MARKERS (RAD-AI, QOC/ATAM, ZELLER + DRY-RUN)
+    # GATE 5: REQUIRED SEMANTIC & VISUAL CLARITY MARKERS
     # -----------------------------------------------------------------------
     idx_path = atlas_dir / "00-INDEX.md"
     if idx_path.is_file():
         idx_txt = idx_path.read_text(encoding="utf-8", errors="replace")
-        if not any(k in idx_txt for k in ("Deterministic", "RAD-AI", "E1")):
-            failures.append("Gate 5 (Semantics): '00-INDEX.md' missing RAD-AI E1 / 'Deterministic' boundary notation")
+        if not any(k in idx_txt for k in ("./", "architecture/", "flows/", "components/", "Deterministic", "RAD-AI", "E1")):
+            failures.append("Gate 5 (Semantics): '00-INDEX.md' missing navigation links or architecture boundary notation")
 
     evo_path = atlas_dir / "architecture/evolution-and-hotspots.md"
     if evo_path.is_file():
         evo_txt = evo_path.read_text(encoding="utf-8", errors="replace")
-        if not any(k in evo_txt for k in ("QOC", "ATAM", "Tradeoff", "<->")):
+        if not any(k in evo_txt for k in ("<->", "✅", "❌", "QOC", "ATAM", "Tradeoff")):
             failures.append(
-                "Gate 5 (Semantics): 'architecture/evolution-and-hotspots.md' missing QOC/ATAM Tradeoff or Co-Change section"
+                "Gate 5 (Semantics): 'architecture/evolution-and-hotspots.md' missing Co-Change ('<->') or design comparison ('❌'/'✅') markers"
             )
 
     for flow_p in flow_files:
@@ -245,20 +266,16 @@ def main():
         f_txt = flow_p.read_text(encoding="utf-8", errors="replace")
         has_zeller = all(m in f_txt for m in ("Trigger", "Infected", "Propagation", "Observable"))
         italic_subbullets = len(re.findall(r"^\s*-\s*\*[^*\n]+:\*", f_txt, re.MULTILINE))
-        has_six_sec = (
-            (
-                any(k in f_txt for k in ("Contrastive Why", "Visual Dry-Run", "Dry-Run", "*Input:*"))
-                or italic_subbullets >= 3
-            )
-            and any(k in f_txt.lower() for k in ("co-change", "breakpoint", "playbook", "where to touch"))
+        has_flow_clarity = italic_subbullets >= 3 or any(
+            k in f_txt for k in ("Contrastive Why", "Visual Dry-Run", "Dry-Run", "*Input:*")
         )
-        if not (has_zeller or has_six_sec):
+        if not (has_zeller or has_flow_clarity):
             failures.append(
-                f"Gate 5 (Semantics): '{f_rel}' missing flow anatomy markers (require 6-Section Flow Anatomy with vertical dry-run sub-bullets + breakpoint/co-change or Zeller 4-Link markers)"
+                f"Gate 5 (Semantics): '{f_rel}' missing flow anatomy markers (require bite-sized '*italic:*' sub-bullets for Why / Dry-Run / Defect Alert / Where to Touch)"
             )
         for icon in ("✅", "⚠️", "❌"):
             if icon not in f_txt:
-                failures.append(f"Gate 5 (Semantics): '{f_rel}' missing Dry-Run status icon '{icon}'")
+                failures.append(f"Gate 5 (Semantics): '{f_rel}' missing status icon '{icon}'")
 
     # -----------------------------------------------------------------------
     # GATE 6: OPTIONAL EXECUTION TRACE AUDIT (--trace Issue #584)

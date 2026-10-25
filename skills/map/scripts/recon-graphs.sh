@@ -202,8 +202,15 @@ def main():
         return
 
     target_dir = Path(args[0] if len(args) >= 1 else ".").resolve()
-    atlas_arg = args[1] if len(args) >= 2 else "docs/keystone-map"
-    atlas_dir = Path(atlas_arg) if Path(atlas_arg).is_absolute() else (target_dir / atlas_arg)
+    if len(args) >= 2:
+        atlas_arg = args[1]
+        atlas_dir = Path(atlas_arg) if Path(atlas_arg).is_absolute() else (target_dir / atlas_arg)
+    else:
+        atlas_dir = (
+            target_dir / "docs" / "keystone-map"
+            if (target_dir / "docs" / "keystone-map").is_dir() and not (target_dir / "docs" / "keystone" / "map").is_dir()
+            else target_dir / "docs" / "keystone" / "map"
+        )
 
     if not target_dir.is_dir():
         print(f"ERROR: Target directory does not exist: {target_dir}", file=sys.stderr)
@@ -224,7 +231,7 @@ def main():
     tracked_files = [
         f.strip()
         for f in ls_files_out.splitlines()
-        if f.strip() and not f.strip().startswith((".keystone/", ".superpowers/"))
+        if f.strip() and not f.strip().startswith(".keystone/")
     ]
 
     # Step 6B Pre-calculation: Cross-Boundary Co-Change & Author Fractal Metadata in 1 pass
@@ -233,7 +240,7 @@ def main():
         cwd=target_dir,
     )
     lock_re = re.compile(
-        r"(^\.keystone/|^\.superpowers/|\.lock$|package-lock\.json$|pnpm-lock\.yaml$|go\.sum$|\.min\.js$|\.svg$|\.png$|\.sqlite$|\.cache\.v1$)"
+        r"(^\.keystone/|\.lock$|package-lock\.json$|pnpm-lock\.yaml$|go\.sum$|\.min\.js$|\.svg$|\.png$|\.sqlite$|\.cache\.v1$)"
     )
     cochange_pairs = {}
     mod_cochange_neighbors = {}
@@ -282,7 +289,13 @@ def main():
     process_batch(curr_batch, curr_date, curr_author)
 
     # Step 1: Content-Addressable Git Tree Ledger & Incremental Staleness
-    ledger_path = atlas_dir / "01-coverage-ledger.md"
+    ledger_candidates = [
+        target_dir / ".keystone" / "map" / "01-coverage-ledger.md",
+        atlas_dir / "01-coverage-ledger.md",
+        target_dir / "docs" / "keystone-map" / "01-coverage-ledger.md",
+        target_dir / "docs" / "keystone" / "map" / "01-coverage-ledger.md",
+    ]
+    ledger_path = next((p for p in ledger_candidates if p.is_file()), atlas_dir / "01-coverage-ledger.md")
     ledger_text = ledger_path.read_text(encoding="utf-8", errors="replace") if ledger_path.is_file() else ""
     _, ls_tree_out = run_cmd(["git", "ls-tree", "HEAD"], cwd=target_dir)
 
@@ -293,7 +306,7 @@ def main():
         if len(parts) < 4:
             continue
         _mode, obj_type, obj_hash, obj_path = parts
-        if obj_path in (".keystone", ".superpowers"):
+        if obj_path == ".keystone":
             continue
         short_hash = obj_hash[:12]
         status = "NEW_SCAN"
@@ -400,10 +413,16 @@ def main():
             st["dels"] += dels
 
     # Step 4 & Step 7: SQLite Tag Cache (.repomap.tags.cache.v1) + 6-Phase PageRank Skeletonizer
-    cache_dir = target_dir / ".keystone" / "cache"
-    tmp_dir = target_dir / ".keystone" / "tmp"
+    keystone_dir = target_dir / ".keystone"
+    cache_dir = keystone_dir / "cache"
+    tmp_dir = keystone_dir / "tmp"
+    map_state_dir = keystone_dir / "map"
     cache_dir.mkdir(parents=True, exist_ok=True)
     tmp_dir.mkdir(parents=True, exist_ok=True)
+    map_state_dir.mkdir(parents=True, exist_ok=True)
+    gitignore_path = keystone_dir / ".gitignore"
+    if not gitignore_path.is_file():
+        gitignore_path.write_text("*\n", encoding="utf-8")
     db_path = cache_dir / "repomap.tags.cache.v1"
 
     conn = sqlite3.connect(str(db_path))
@@ -440,7 +459,7 @@ def main():
         if len(parts) == 4:
             mode, blob_h, _stage, rpath = parts
             file_blobs[rpath] = blob_h[:12]
-            if mode == "100755" and not rpath.startswith((".keystone/", ".superpowers/")):
+            if mode == "100755" and not rpath.startswith(".keystone/"):
                 exec_files.append(rpath)
 
     # Select priority candidate files for AST/PageRank when repository has > 250 files
