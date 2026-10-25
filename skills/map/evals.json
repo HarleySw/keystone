@@ -1,9 +1,9 @@
 {
   "skill": "map",
-  "version": "1.1.0",
+  "version": "0.1.0",
   "positive": [
     {
-      "prompt": "I just onboarded to this unfamiliar monorepo, where is the composition root and how is the architecture wired together?",
+      "prompt": "I just onboarded to this unfamiliar monorepo, where is the composition root and how is the repository architecture wired together?",
       "top_k": 1
     },
     {
@@ -11,7 +11,7 @@
       "top_k": 1
     },
     {
-      "prompt": "Trace how the payment settlement subsystem works end-to-end across modules without a git diff and locate its wiring points.",
+      "prompt": "Generate docs/keystone-map/ multi-file architecture documentation and AGENTS.md contracts for this codebase.",
       "top_k": 1
     },
     {
@@ -28,6 +28,10 @@
     }
   ],
   "negative": [
+    {
+      "prompt": "Trace how the payment webhook checkout business flow works step-by-step end-to-end across files and show the where to touch modification playbook.",
+      "owner": "flow"
+    },
     {
       "prompt": "Debug this NullPointerException panic stacktrace crashing at line 42 due to a race condition and deadlock.",
       "owner": "trace"

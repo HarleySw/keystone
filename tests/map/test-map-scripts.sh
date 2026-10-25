@@ -280,6 +280,34 @@ if bash "$VALIDATE" "$ATLAS" "$TMP_REPO" >/dev/null 2>&1; then
 fi
 rm -f "$TMP_REPO/AGENTS.md"
 
+echo "=== [Task 2.7] Test 6-Section Flow Anatomy (learn-from-code base) & Uncapped Group 2 Flow (>500 lines) in validate-atlas.sh ==="
+cat << 'EOF' > "$ATLAS/flows/flow-02-webhook.md"
+# 1. System Purpose & Domain Boundaries
+- Real-world role: Validates incoming requests and enforces access control before ledger writes.
+# 2. Core Data Structures & State Lifecycles
+- `Guard` struct in [`internal/auth/guard.go:2`](../../../internal/auth/guard.go#L2) (`✅` valid, `❌` rejected).
+# 3. Wiring Root, Entry Points & End-to-End Execution Path
+- Entry point wired at [`cmd/server/main.go:6`](../../../cmd/server/main.go#L6).
+# 4. Core Code Mechanics
+- Contrastive Why: Blocks unauthorized callers when the guard secret is empty.
+- Visual Dry-Run:
+  - **Case 1 — Valid guard secret configured:**
+    - *Input:* Initialized with a non-empty secret key.
+    - *How the code checks it:* Passes the guard check at [`internal/auth/guard.go:3`](../../../internal/auth/guard.go#L3) (`✅`).
+    - *Result:* Allows ledger write (`✅`).
+# 5. Hidden Traps, Co-Change Coupling & Live Verification
+- ⚠️ Sensitivity Alert at [`internal/ledger/store.go:3`](../../../internal/ledger/store.go#L3).
+- Onboarding Breakpoint: Set `breakpoint` at [`cmd/server/main.go:8`](../../../cmd/server/main.go#L8).
+# 6. Developer Modification Playbook ("Where to Touch") & Reusable Patterns
+- Quick Modification Playbook ("To change X, touch Y"): Edit [`internal/auth/guard.go:2`](../../../internal/auth/guard.go#L2).
+EOF
+for i in $(seq 1 540); do
+  echo "- *Step detail $i:* Bite-sized single-idea sub-bullet." >> "$ATLAS/flows/flow-02-webhook.md"
+done
+val_out_6sec="$(bash "$VALIDATE" "$ATLAS" "$TMP_REPO")"
+echo "$val_out_6sec" | grep -q "STATUS: PASSED"
+rm -f "$ATLAS/flows/flow-02-webhook.md"
+
 echo "=== [Task 3.1] Test Self-Contained Reference Guides (Issues #361 & #584) ==="
 REF_WIRING="$REPO_ROOT/skills/map/references/wiring-and-monorepo-guide.md"
 REF_ATLAS="$REPO_ROOT/skills/map/references/atlas-and-subagent-contracts.md"
@@ -293,7 +321,7 @@ for kw in "bazel query" "bazel cquery" "bazel aquery" "scip_content_fingerprint"
   grep -qF "$kw" "$REF_WIRING"
 done
 
-for kw in "RAD-AI" "C4-E1" "CLAIM" "EXTRACT" "DOUBT" "RECONCILE" "STOP" "Infected State" "Faded Completion Problem" "Quiz Gate" "Adopt" "Adapt" "Reject" ".cursor/rules/" "keystone-map:start"; do
+for kw in "RAD-AI" "C4-E1" "CLAIM" "EXTRACT" "DOUBT" "RECONCILE" "STOP" "Infected State" "Faded Completion Problem" "Quiz Gate" "Adopt" "Adapt" "Reject" ".cursor/rules/" "keystone-map:start" "Micro-Cap, Not Macro-Cap" "1 File = 1 End-to-End Flow"; do
   grep -qF "$kw" "$REF_ATLAS"
 done
 

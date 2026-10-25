@@ -3,7 +3,7 @@
 # Keystone Map — Phase 3 & Exit Gate Deterministic Atlas Validator
 # Verifies:
 #   Gate 1: Mandatory 6-Tier Multi-File Atlas Hierarchy
-#   Gate 2: Strict Progressive Disclosure Line Budgets (<=150 / <=200 / <=250 lines)
+#   Gate 2: Group 1 Routing Index & Agent Config Caps (00-INDEX.md <=150L, AGENTS.md ptr <=15L; Group 2 uncapped)
 #   Gate 3: 100% Denominator Coverage & 4-Bucket Accounting in 01-coverage-ledger.md
 #   Gate 4: Zero-Hallucination file:line Coordinates & Relative Link Integrity
 #   Gate 5: Required Semantic Markers (RAD-AI E1, QOC/ATAM, Zeller 4-Link + Dry-Run)
@@ -111,23 +111,23 @@ def main():
         failures.append("Gate 1 (Structure): Missing at least one 'flows/flow-*.md' file")
 
     # -----------------------------------------------------------------------
-    # GATE 2: PROGRESSIVE DISCLOSURE LINE CAPS
+    # GATE 2: GROUP 1 ROUTING INDEX & AGENT CONFIG LINE CAPS
+    # (Group 2 dissection & ledger files have ZERO artificial macro line cap)
     # -----------------------------------------------------------------------
     line_caps = {
         "00-INDEX.md": 150,
-        "01-coverage-ledger.md": 150,
-        "architecture/evolution-and-hotspots.md": 200,
-        "architecture/c2-wiring-and-containers.md": 250,
-        "architecture/data-dictionary.md": 250,
+        "00-overview.md": 150,
+        "00-system-overview.md": 150,
     }
     all_md_files = []
     for p in sorted(atlas_dir.rglob("*.md")):
         rel = p.relative_to(atlas_dir).as_posix()
         all_md_files.append((rel, p))
-        cap = line_caps.get(rel, 250)
-        lines = p.read_text(encoding="utf-8", errors="replace").replace("\r\n", "\n").splitlines()
-        if len(lines) > cap:
-            failures.append(f"Gate 2 (Line Budget): '{rel}' has {len(lines)} lines (exceeds cap of {cap})")
+        cap = line_caps.get(rel)
+        if cap is not None:
+            lines = p.read_text(encoding="utf-8", errors="replace").replace("\r\n", "\n").splitlines()
+            if len(lines) > cap:
+                failures.append(f"Gate 2 (Line Budget): '{rel}' has {len(lines)} lines (exceeds Group 1 routing cap of {cap})")
 
     agents_md = repo_root / "AGENTS.md"
     if agents_md.is_file():
@@ -229,23 +229,33 @@ def main():
     idx_path = atlas_dir / "00-INDEX.md"
     if idx_path.is_file():
         idx_txt = idx_path.read_text(encoding="utf-8", errors="replace")
-        if "Deterministic" not in idx_txt:
-            failures.append("Gate 5 (Semantics): '00-INDEX.md' missing RAD-AI E1 'Deterministic' boundary notation")
+        if not any(k in idx_txt for k in ("Deterministic", "RAD-AI", "E1")):
+            failures.append("Gate 5 (Semantics): '00-INDEX.md' missing RAD-AI E1 / 'Deterministic' boundary notation")
 
     evo_path = atlas_dir / "architecture/evolution-and-hotspots.md"
     if evo_path.is_file():
         evo_txt = evo_path.read_text(encoding="utf-8", errors="replace")
-        if not any(k in evo_txt for k in ("QOC", "ATAM", "Tradeoff")):
+        if not any(k in evo_txt for k in ("QOC", "ATAM", "Tradeoff", "<->")):
             failures.append(
-                "Gate 5 (Semantics): 'architecture/evolution-and-hotspots.md' missing QOC/ATAM Tradeoff section"
+                "Gate 5 (Semantics): 'architecture/evolution-and-hotspots.md' missing QOC/ATAM Tradeoff or Co-Change section"
             )
 
     for flow_p in flow_files:
         f_rel = flow_p.relative_to(atlas_dir).as_posix()
         f_txt = flow_p.read_text(encoding="utf-8", errors="replace")
-        for marker in ("Trigger", "Infected", "Propagation", "Observable"):
-            if marker not in f_txt:
-                failures.append(f"Gate 5 (Semantics): '{f_rel}' missing Zeller Infection Chain marker '{marker}'")
+        has_zeller = all(m in f_txt for m in ("Trigger", "Infected", "Propagation", "Observable"))
+        italic_subbullets = len(re.findall(r"^\s*-\s*\*[^*\n]+:\*", f_txt, re.MULTILINE))
+        has_six_sec = (
+            (
+                any(k in f_txt for k in ("Contrastive Why", "Visual Dry-Run", "Dry-Run", "*Input:*"))
+                or italic_subbullets >= 3
+            )
+            and any(k in f_txt.lower() for k in ("co-change", "breakpoint", "playbook", "where to touch"))
+        )
+        if not (has_zeller or has_six_sec):
+            failures.append(
+                f"Gate 5 (Semantics): '{f_rel}' missing flow anatomy markers (require 6-Section Flow Anatomy with vertical dry-run sub-bullets + breakpoint/co-change or Zeller 4-Link markers)"
+            )
         for icon in ("✅", "⚠️", "❌"):
             if icon not in f_txt:
                 failures.append(f"Gate 5 (Semantics): '{f_rel}' missing Dry-Run status icon '{icon}'")

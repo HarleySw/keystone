@@ -6,7 +6,13 @@
     { "path": ".claude-plugin/marketplace.json", "field": "plugins.0.version" },
     { "path": ".cursor-plugin/plugin.json", "field": "version" },
     { "path": ".codex-plugin/plugin.json", "field": "version" },
-    { "path": "gemini-extension.json", "field": "version" }
+    { "path": "gemini-extension.json", "field": "version" },
+    { "path": "skills/using-keystone/SKILL.md", "field": "version" },
+    { "path": "skills/writing-skills/SKILL.md", "field": "version" },
+    { "path": "skills/map/SKILL.md", "field": "version" },
+    { "path": "skills/flow/SKILL.md", "field": "version" },
+    { "path": "skills/map/evals.json", "field": "version" },
+    { "path": "skills/flow/evals.json", "field": "version" }
   ],
   "audit": {
     "exclude": [

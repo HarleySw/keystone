@@ -36,19 +36,19 @@ write_json_field() {
 
 read_yaml_field() {
   local file="$1" field="$2"
-  grep -E "^${field}:" "$file" | head -1 | sed -E "s/^${field}:[[:space:]]*//" | tr -d '"' | tr -d "'"
+  grep -E "^[[:space:]]*${field}:" "$file" | head -1 | sed -E "s/^[[:space:]]*${field}:[[:space:]]*//" | tr -d '"' | tr -d "'"
 }
 
 write_yaml_field() {
   local file="$1" field="$2" value="$3"
-  sed -i -E "s/^(${field}:[[:space:]]*).*/\1${value}/" "$file"
+  sed -i -E "s/^([[:space:]]*${field}:[[:space:]]*).*/\1\"${value}\"/" "$file"
 }
 
 read_manifest_field() {
   local file="$1"
   case "$file" in
     *.json) read_json_field "$@" ;;
-    *.yaml) read_yaml_field "$@" ;;
+    *.yaml|*.md) read_yaml_field "$@" ;;
     *)
       echo "error: unsupported manifest format: $file" >&2
       return 1
@@ -60,7 +60,7 @@ write_manifest_field() {
   local file="$1"
   case "$file" in
     *.json) write_json_field "$@" ;;
-    *.yaml) write_yaml_field "$@" ;;
+    *.yaml|*.md) write_yaml_field "$@" ;;
     *)
       echo "error: unsupported manifest format: $file" >&2
       return 1

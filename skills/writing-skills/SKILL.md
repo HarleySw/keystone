@@ -1,6 +1,12 @@
 ---
 name: writing-skills
 description: Use when creating new skills, editing existing skills, or verifying skills work before deployment in the Keystone ecosystem
+license: MIT
+metadata:
+  author: keystone-ecosystem
+  version: "0.1.0"
+  opencode/slash: "true"
+  opencode/autoinvoke: "true"
 ---
 
 # Writing Keystone Skills
