@@ -15,7 +15,7 @@ Author, refactor, pressure-test, and validate skills in the **Keystone** ecosyst
 
 **REQUIRED BACKGROUND:** You MUST obey `keystone:using-keystone` when authoring any skill or communicating with the user.
 
-**Announce at start:** `"Using keystone:craft to design, author, or validate [target skill name]."`
+**Announce at start (Localized to the user's language):** Briefly state in the user's active language that you are using `keystone:craft` (e.g., *"Using `keystone:craft` to design, author, or validate [target skill]."* in English, or *"Dùng `keystone:craft` để thiết kế, viết hoặc kiểm định skill [tên skill]."* in Vietnamese).
 
 <HARD-GATE>
 **Violating the letter of the rules is violating the spirit of the rules.**

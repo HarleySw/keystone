@@ -31,7 +31,7 @@ If there is even a 1% chance a skill applies to your task, you MUST invoke the s
    - **Adaptive Structure-Free Code & Concept Explanation (`keystone:explain`):** Explaining any code snippet, function, algorithm, callback, hook, architectural concept, or technical question directly in chat with 3-second visual comprehension while freely adapting the response structure and length to the user's exact question.
    - **Micro Function / Commit Diff Decoder (`keystone:decode`):** Reviewing a `git diff` / commit or explaining an isolated snippet with a mandatory 2-turn Quiz Gate (`Sections 1–5` in Turn 1, `Sections 6–8` in Turn 2).
 2. Load the matching skill via your platform's skill mechanism (or `read_file` on `SKILL.md` where native `Skill` tool is absent).
-3. Announce `"Using [skill-name] to [purpose]"` and follow its checklist in order.
+3. Briefly announce in the user's active language that you are using the skill (e.g., *"Using `keystone:<name>` to [purpose]"* or *"Dùng `keystone:<name>` để [mục đích]"*) and follow its checklist in order.
 
 ## 2. Language & Developer Register Rules (Applies to Chat AND 100% of Generated `.md` Files)
 

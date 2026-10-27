@@ -18,7 +18,7 @@ Build an accurate repository-wide mental model and persistent project memory dur
 
 **REQUIRED BACKGROUND:** You MUST obey the Shared Language, Plain-Language Syntax, Code-Explanation, and Visual Comprehension Core in `keystone:using-keystone` across both chat output and 100% of generated `.md` files.
 
-**Announce at start:** `"Using keystone:map to map [target repository] architecture, entry points, coverage ledger, and AGENTS.md contract."`
+**Announce at start (Localized to the user's language):** Briefly state in the user's active language that you are using `keystone:map` (e.g., *"Using `keystone:map` to map [target repository] architecture."* in English, or *"Dùng `keystone:map` để khảo sát và lập bản đồ kiến trúc cho [dự án]."* in Vietnamese).
 
 <HARD-GATE>
 **Violating the letter of the rules is violating the spirit of the rules.**
