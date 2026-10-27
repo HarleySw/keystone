@@ -4,7 +4,7 @@
 >
 > 🌐 **Languages:** [English](README.md) | [Tiếng Việt](README.vi.md)
 
-While traditional agent frameworks focus on autonomous code generation or rigid SDLC guardrails, **Keystone** is the capstone that keeps the software engineer in command (**Human-in-Command**). It combines AI execution speed with a **Visual Comprehension Core** (`✅/⚠️/❌` dry-run tables, compact `<76`-char ASCII diagrams, zero machine-translated prose) and **Cognitive Verification Gates** so engineers deeply understand their system, catch root-cause bugs early, and never hesitate when defending designs or reviewing large PRs.
+While traditional agent frameworks focus on autonomous code generation or rigid SDLC guardrails, **Keystone** is the capstone that keeps the software engineer in command (**Human-in-Command**). It combines AI execution speed with a **Visual Comprehension Core** (`✅/⚠️/❌` status signals, conversational vertical dry-run walkthroughs, compact `<76`-char ASCII diagrams, zero machine-translated prose) and **Cognitive Verification Gates** so engineers deeply understand their system, catch root-cause bugs early, and never hesitate when defending designs or reviewing large PRs.
 
 ---
 
@@ -17,16 +17,20 @@ While traditional agent frameworks focus on autonomous code generation or rigid 
 [SessionStart Bootstrap: using-keystone]
        │
        ├──► 1. Visual Comprehension Core
-       │       ├── Dry-Run Status Tables (✅ Pass / ⚠️ Edge / ❌ Block)
-       │       └── Compact ASCII Diagrams (<76 chars wide)
+       │       ├── Vertical Case Walkthroughs (✅ Pass / ⚠️ Edge / ❌ Block)
+       │       └── Compact ASCII Diagrams & Rulers (<76 chars wide)
        │
-       ├──► 2. Cognitive Verification Gates
+       ├──► 2. Two-Tier Storage & Crisp Chat Handoff
+       │       ├── Human/Agent Docs: docs/keystone/map/ & docs/keystone/flows/
+       │       └── Machine Audit Ledgers: .keystone/ (self-ignoring .gitignore)
+       │
+       ├──► 3. Cognitive Verification Gates
        │       ├── Pre-Implementation Trade-off Gate
-       │       └── Post-Implementation 3-Bullet Mental Model Check
+       │       └── Pre-Output Clarity & Register Verification Gate
        │
-       └──► 3. Hybrid Language Engine
+       └──► 4. Hybrid Language Engine
                ├── Skill Source: Imperative English (~25% token savings)
-               └── Engineer Output: Native, domain-accurate language
+               └── Engineer Output: Everyday spoken developer language
 ```
 
 ### Comparison: Why Keystone?
@@ -34,15 +38,28 @@ While traditional agent frameworks focus on autonomous code generation or rigid 
 | Dimension | Autonomous Code Gen | Rigid SDLC Checklists | **Keystone Ecosystem** |
 | :--- | :--- | :--- | :--- |
 | **Primary Goal** | Ship code autonomously | Enforce process steps | **Ship fast + 100% Engineer Comprehension** |
-| **Visual Reasoning** | Walls of prose | Text templates | **Dry-Run Tables (`✅/⚠️/❌`) + `<76`c ASCII** |
+| **Visual Reasoning** | Walls of prose | Text templates | **Vertical Dry-Runs (`✅/⚠️/❌`) + `<76`c ASCII** |
 | **Review Readiness** | High Comprehension Debt | Medium | **Zero Comprehension Debt (Cognitive Gates)** |
-| **Language Routing** | Monolingual or noisy | Monolingual | **Imperative EN Source + Native Dev Output** |
+| **Language Routing** | Monolingual or noisy | Monolingual | **Imperative EN Source + Spoken Dev Output** |
 
 ---
 
 ## Installation
 
-Install Keystone for your coding agent harness:
+Install Keystone for your coding agent harness. For full lifecycle integration (automatic `SessionStart` bootstrap of `using-keystone`), use your harness's native plugin command below; or use the universal `npx skills` CLI to install skills into any workspace or global agent hub.
+
+### Universal CLI (`npx skills` — `agentskills.io` / `skills.sh`)
+
+```bash
+# List all available skills in Keystone
+npx skills add HarleySw/keystone --list
+
+# Install all Keystone skills into your project or global agent directory (-g)
+npx skills add HarleySw/keystone -g
+
+# Or install a specific skill (e.g., map, flow, craft) for specific agents
+npx skills add HarleySw/keystone --skill map -a claude-code -a cursor -a codex -a antigravity
+```
 
 ### Antigravity (`agy`)
 
@@ -65,15 +82,29 @@ In Cursor Agent chat:
 /add-plugin https://github.com/HarleySw/keystone
 ```
 
+*(Or in Cursor **Settings > Customize > Add from GitHub Repository**, enter `https://github.com/HarleySw/keystone`).*
+
 ### Gemini CLI
 
 ```bash
 gemini extensions install https://github.com/HarleySw/keystone
 ```
 
+### OpenAI Codex App & CLI
+
+```bash
+# Via Codex Plugin Marketplace CLI
+codex plugin marketplace add HarleySw/keystone
+codex plugin add keystone@keystone-dev
+
+# Or install individual skills directly
+codex skills add HarleySw/keystone/skills/map
+codex skills add HarleySw/keystone/skills/flow
+```
+
 ### OpenCode (v1 & v2)
 
-Add to your `opencode.json` (see [.opencode/INSTALL.md](.opencode/INSTALL.md)):
+Add to your `opencode.json` (see [.opencode/INSTALL.md](.opencode/INSTALL.md) and [docs/README.opencode.md](docs/README.opencode.md)):
 
 ```json
 {
@@ -81,9 +112,15 @@ Add to your `opencode.json` (see [.opencode/INSTALL.md](.opencode/INSTALL.md)):
 }
 ```
 
-### Codex App / CLI
+### Other Supported Harnesses
 
-Install via the `.codex-plugin/plugin.json` manifest or `/plugins` search in Codex CLI.
+- **Kimi Code:** Run `/plugins install https://github.com/HarleySw/keystone` inside Kimi Code (see [docs/README.kimi.md](docs/README.kimi.md)).
+- **Devin CLI:** `devin plugins install HarleySw/keystone`
+- **Factory Droid:** `droid plugin marketplace add https://github.com/HarleySw/keystone && droid plugin install keystone@keystone-dev`
+- **GitHub Copilot CLI:** `copilot plugin marketplace add HarleySw/keystone && copilot plugin install keystone@keystone-dev`
+- **Qwen Code:** `qwen extensions install HarleySw/keystone`
+- **Pi Coding Agent:** `pi install git:github.com/HarleySw/keystone`
+- **Hermes Agent:** `hermes plugins install HarleySw/keystone --enable`
 
 ---
 
@@ -91,16 +128,17 @@ Install via the `.codex-plugin/plugin.json` manifest or `/plugins` search in Cod
 
 | Skill | Category | Purpose |
 | :--- | :--- | :--- |
-| **`using-keystone`** | Bootstrap | Loaded automatically at `SessionStart`. Establishes skill invocation rules, the **Visual Comprehension Core**, **Cognitive Verification Gates**, and **Hybrid Language Rules**. |
-| **`map`** | Architecture Recon | Multi-graph codebase dissection (`recon-graphs.sh` + `validate-atlas.sh`), 6-Phase PageRank ~1K token skeletonizer, and 6-Tier C4 + arc42 + RAD-AI Architecture Atlas with $100\%$ coverage auditing. |
-| **`craft`** | Meta | TDD-adapted guide for creating, pressure-testing, and validating new Keystone skills using Imperative English and zero zombie nouns. |
+| **[`using-keystone`](skills/using-keystone/SKILL.md)** | Bootstrap | Loaded automatically at `SessionStart`. Establishes scale-based skill routing, the **Visual Comprehension Core**, **Two-Tier File Storage**, **Cognitive Verification Gates**, and **Hybrid Language Rules**. |
+| **[`map`](skills/map/SKILL.md)** | Architecture Recon | Whole-repository onboarding and architecture mapping (`recon-graphs.sh` + `validate-atlas.sh`). Locates Composition Roots, audits $100\%$ file coverage in `.keystone/map/01-coverage-ledger.md`, writes `docs/keystone/map/`, and exports `./AGENTS.md` / `.cursor/rules/*.mdc`. |
+| **[`flow`](skills/flow/SKILL.md)** | Business Flow Anatomy | End-to-end feature and pipeline dissector. Traces a concrete user/system trigger from High-Level entry down to Low-Level code steps (`Contrastive Why` + `Vertical Dry-Run`) with a `"Where to Touch"` modification playbook saved to `docs/keystone/flows/`. |
+| **[`craft`](skills/craft/SKILL.md)** | Meta-Skill | 5-Stage TDD pipeline for designing, writing, upgrading, and pressure-testing Keystone skills with embedded 3-layer Clarity Engine enforcement and TF-IDF routing validation (`evals.json`). |
 
 ---
 
 ## Hybrid Language & Token Efficiency Strategy
 
 1. **Skill Source (`SKILL.md`, `AGENTS.md`, YAML):** Written strictly in **Imperative English** (`MUST`, `NEVER`, active verbs, zero zombie nouns). This maximizes TF-IDF / Semantic Routing precision across agent harnesses and saves ~25% context window tokens.
-2. **Engineer Communication Output:** Governed by `using-keystone` to respond in the engineer's language. When communicating in Vietnamese, Keystone enforces natural senior-engineer terminology and strictly forbids awkward machine translation.
+2. **Engineer Communication Output:** Governed by `using-keystone` and embedded directly in every skill (`map`, `flow`, `craft`) via a 3-layer Clarity Engine check to respond in the engineer's active language. When communicating in Vietnamese, Keystone enforces natural spoken senior-engineer phrasing (`learn-from-code` register) and strictly forbids awkward machine translation.
 3. **Repository Documentation:** Bilingual ([README.md](README.md) in English and [README.vi.md](README.vi.md) in Vietnamese).
 
 ---
@@ -109,15 +147,20 @@ Install via the `.codex-plugin/plugin.json` manifest or `/plugins` search in Cod
 
 ```text
 keystone/
-├── .claude-plugin/          # Claude Code manifest & dev marketplace
+├── .agents/plugins/         # Portable Agent Plugins & Codex marketplace catalog
+├── .claude-plugin/          # Claude Code manifest & marketplace catalog
 ├── .codex-plugin/           # OpenAI Codex App/CLI manifest
-├── .cursor-plugin/          # Cursor Agent manifest
+├── .cursor-plugin/          # Cursor Agent manifest & marketplace catalog
+├── .devin-plugin/           # Devin CLI plugin manifest
+├── .hermes-plugin/          # Hermes Agent plugin manifest & bootstrap hook
+├── .kimi-plugin/            # Kimi Code plugin manifest & tool mapping
 ├── .opencode/               # OpenCode V1/V2 plugin & install guide
+├── .pi/extensions/          # Pi Coding Agent extension
 ├── assets/                  # Plugin icons (SVG & PNG)
 ├── hooks/                   # Cross-platform SessionStart polyglot hooks
 ├── scripts/                 # Version synchronization & shell linting
 ├── skills/                  # Core Keystone skills (using-keystone, map, flow, craft)
-└── tests/                   # Automated skill & hook verification suites
+└── tests/                   # Automated skill, routing & hook verification suites
 ```
 
 ---
@@ -127,16 +170,22 @@ keystone/
 Run the built-in test and verification suite before submitting pull requests:
 
 ```bash
-# Validate skill frontmatter and structure
+# 1. Validate skill frontmatter, references, and structure
 bash tests/validate-skills.sh
 
-# Test SessionStart JSON output across harnesses
+# 2. Validate TF-IDF semantic routing and negative boundaries (Rank-1 = 100%)
+bash tests/validate-routing.sh
+
+# 3. Test map recon-graphs.sh and validate-atlas.sh scripts
+bash tests/map/test-map-scripts.sh
+
+# 4. Test SessionStart JSON output across harnesses
 bash tests/hooks/test-session-start.sh
 
-# Check version sync across all 7 manifests
+# 5. Check version sync across all 18 manifests & skill files
 bash scripts/bump-version.sh --check
 
-# Lint shell scripts
+# 6. Lint shell scripts
 bash scripts/lint-shell.sh
 ```
 

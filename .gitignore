@@ -6,10 +6,12 @@
 .codex/
 .gemini/
 .keystone/
-.agents/
+.agents/skills/
+.agents/rules/
 
-# Local docs, specs, plans, and scratch notes
-docs/
+# Local generated Keystone docs, specs, plans, and scratch notes
+docs/keystone/
+docs/keystone-map/
 specs/
 plans/
 scratch/

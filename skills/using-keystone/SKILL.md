@@ -170,6 +170,6 @@ Because Keystone skills run across both 80-column Terminal CLI/TUI tools (e.g., 
 ## 7. Platform Adaptation & Instruction Priority
 
 If your harness appears below, read its reference file for tool mappings:
-- Claude Code: `references/claude-code-tools.md` | Antigravity: `references/antigravity-tools.md` | Codex: `references/codex-tools.md` | Gemini CLI: `references/gemini-tools.md`
+- Claude Code: `references/claude-code-tools.md` | Antigravity: `references/antigravity-tools.md` | Codex: `references/codex-tools.md` | Gemini CLI: `references/gemini-tools.md` | Hermes: `references/hermes-tools.md`
 
 Direct user instructions (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, or explicit chat directives) take highest priority, followed by Keystone skills, which override default model behavior.

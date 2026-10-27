@@ -1,0 +1,6 @@
+name: keystone
+version: "0.1.0"
+description: Keystone skills and workflow bootstrap for Hermes Agent
+author: HarleySw
+provides_hooks:
+  - pre_llm_call

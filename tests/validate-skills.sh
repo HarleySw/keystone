@@ -53,6 +53,46 @@ for skill_md in "$REPO_ROOT"/skills/*/SKILL.md; do
   echo "  [PASS] $rel ($line_count lines)"
 done
 
+echo ""
+echo "Validating multi-harness plugin & marketplace manifests..."
+JSON_MANIFESTS=(
+  "plugin.json"
+  "package.json"
+  "gemini-extension.json"
+  "hooks.json"
+  "hooks/hooks.json"
+  "hooks/hooks-cursor.json"
+  ".claude-plugin/plugin.json"
+  ".claude-plugin/marketplace.json"
+  ".cursor-plugin/plugin.json"
+  ".cursor-plugin/marketplace.json"
+  ".codex-plugin/plugin.json"
+  ".agents/plugins/marketplace.json"
+  ".kimi-plugin/plugin.json"
+  ".devin-plugin/plugin.json"
+)
+
+for manifest in "${JSON_MANIFESTS[@]}"; do
+  if [[ ! -f "$REPO_ROOT/$manifest" ]]; then
+    echo "  [FAIL] Missing manifest: $manifest"
+    FAILURES=$((FAILURES + 1))
+  elif ! jq empty "$REPO_ROOT/$manifest" >/dev/null 2>&1; then
+    echo "  [FAIL] Invalid JSON in manifest: $manifest"
+    FAILURES=$((FAILURES + 1))
+  else
+    echo "  [PASS] $manifest"
+  fi
+done
+
+for extra_file in ".hermes-plugin/plugin.yaml" ".hermes-plugin/__init__.py" ".pi/extensions/keystone.ts" ".opencode/plugins/keystone.js" "index.js"; do
+  if [[ ! -f "$REPO_ROOT/$extra_file" ]]; then
+    echo "  [FAIL] Missing harness entrypoint: $extra_file"
+    FAILURES=$((FAILURES + 1))
+  else
+    echo "  [PASS] $extra_file"
+  fi
+done
+
 if [[ "$FAILURES" -gt 0 ]]; then
   echo "STATUS: FAILED ($FAILURES failure(s))"
   exit 1
