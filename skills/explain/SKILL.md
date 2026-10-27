@@ -1,6 +1,6 @@
 ---
 name: explain
-description: Use when explaining any code snippet, function, algorithm, callback, hook, SQL query, TypeScript generic, architectural concept, or technical question in chat with 3-second visual comprehension and natural senior-developer spoken language while freely adapting the response structure and length to the user's exact question without forcing a rigid multi-section template.
+description: Use when explaining any code snippet, function, algorithm, callback, hook, state reducer, SQL query, TypeScript generic, architectural concept, or technical question in chat with 3-second visual comprehension and natural senior-developer spoken language while freely adapting the response structure and length to the user's exact question without forcing a rigid multi-section template.
 license: MIT
 metadata:
   author: keystone-ecosystem
@@ -21,7 +21,7 @@ Deliver crystal-clear code and technical explanations that a developer can grasp
 **Violating the letter of the rules is violating the spirit of the rules.**
 1. **Load `using-keystone` First:** If `skills/using-keystone/SKILL.md` is not already loaded in your current context (e.g., standalone `/explain` invocation or subagent run), call `read_file` on `skills/using-keystone/SKILL.md` before drafting any explanation.
 2. **Read Actual Source Before Explaining (Zero Hallucinated Code or Line Numbers):** Whenever the user asks about a function, file, config, or behavior in the current repository without pasting the full snippet in chat, locate and read the actual source file (and immediate caller/callee context) first. Never guess implementation details or invent `filename:line` coordinates from memory.
-3. **Adaptive Structure, Strict Clarity Discipline:** Shape your headers and sections freely to fit the user's question (never pad a simple question with unnecessary boilerplate sections, and never truncate a complex mechanism to hit an arbitrary line limit), but strictly enforce 100% natural spoken user-language output (`learn-from-code` register), zero over-translation of developer terms, `< 76`-character code/comment/ASCII width, and the Pre-Output Clarity Verification Gate below.
+3. **Adaptive Structure, Strict Clarity Discipline (Zero Boilerplate `Big Picture` Section):** Shape your headers and sections freely to fit the user's question—never copy the fixed `Big Picture` / `Bức tranh toàn cảnh` 4-bullet template (`Goal / Key design challenge / Core approach / Concrete example`) from structured report skills, never pad a simple question with unnecessary boilerplate sections, and never truncate a complex mechanism to hit an arbitrary line limit—while strictly enforcing 100% natural spoken user-language output (`learn-from-code` register), zero over-translation of developer terms, `< 76`-character code/comment/ASCII width, and the Pre-Output Clarity Verification Gate below.
 </HARD-GATE>
 
 ## When to Use (Scale-Based Routing)
@@ -43,8 +43,8 @@ Deliver crystal-clear code and technical explanations that a developer can grasp
 
 Never pad a simple question with unnecessary sections, and never truncate a complex mechanism to hit an arbitrary length limit (`Micro-Cap, Not Macro-Cap`). Assemble your explanation dynamically from these building blocks based on what the user is asking:
 
-### 1.1 Always Open With Plain-Language Concepts Before Code Symbols
-- **Plain-Language Opening:** In your opening sentences or first bullet, explain *what problem the code solves*, *what happens on screen/in the system*, or *the core idea* using **100% plain everyday domain words** before mentioning file paths, function names, or local variable identifiers.
+### 1.1 Always Open With Natural Plain-Language Sentences Before Code Symbols (No Rigid `Big Picture` Header)
+- **Conversational Plain-Language Opening (Zero Boilerplate `Big Picture` / `Bức tranh toàn cảnh` Section):** Open directly with 1–3 natural spoken sentences explaining *what problem the code solves*, *what happens on screen/in the system*, or *the core idea* using **100% plain everyday domain words** before mentioning file paths, function names, or local variable identifiers. Do NOT create a rigid `### Big Picture` / `### Bức tranh toàn cảnh` section with `Goal / Key design challenge / Core approach` bullets—organize your headings directly around the user's question.
 - **Name Real Tools & Platforms Directly (Zero Riddle Circumlocutions):** Always name real tools, frameworks, and everyday developer concepts (`Bazel`, `Buildkite`, `Git`, `Python`, `React`, `PostgreSQL`, `CI pipeline`, `monorepo`, `package`, `wheel`, `commit`, `unit test`) directly—never replace tool names with riddle-like circumlocutions (*"a specialized compilation utility"*, *"a cloud orchestration platform"*).
 - **Optional Concrete Contrast (`Before -> After` or `Input -> Output`):** When a concrete contrast helps clarify the concept in 3 seconds, show a compact `< 76-char` snippet with `❌` and `✅` using vivid sample values:
   ```text
