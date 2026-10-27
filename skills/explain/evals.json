@@ -1,0 +1,74 @@
+{
+  "skill": "explain",
+  "version": "0.1.0",
+  "positive": [
+    {
+      "prompt": "Explain how this callback hook and state reducer snippet works in plain developer language with a quick adaptive explanation in chat.",
+      "top_k": 1
+    },
+    {
+      "prompt": "Can you explain this string slicing algorithm and why those guard branches are written this way without forcing a rigid multi-section report?",
+      "top_k": 1
+    },
+    {
+      "prompt": "Give me a clear structure-free explanation of this middleware function and pre-decode the unfamiliar framework hook options.",
+      "top_k": 1
+    },
+    {
+      "prompt": "Explain this architectural concept and code block in chat with numbered subgoal comments and a vertical dry-run walkthrough.",
+      "top_k": 1
+    },
+    {
+      "prompt": "Help me understand what this code snippet does and why the fallback expression is needed using an adaptive explanation.",
+      "top_k": 1
+    },
+    {
+      "prompt": "Answer my technical question about how this buffer offset slice calculation works with an ASCII ruler and plain-language summary.",
+      "top_k": 1
+    }
+  ],
+  "negative": [
+    {
+      "prompt": "Dissect and map this entire monorepo into a C4 and arc42 architecture atlas with 100% coverage ledger and git hotspots.",
+      "owner": "map"
+    },
+    {
+      "prompt": "Trace how the payment webhook checkout business flow works step-by-step end-to-end across files and show the where to touch modification playbook.",
+      "owner": "flow"
+    },
+    {
+      "prompt": "Debug this NullPointerException panic stacktrace crashing at line 42 due to a race condition and deadlock.",
+      "owner": "trace"
+    },
+    {
+      "prompt": "Review this git diff commit patch across a 2-turn interactive quiz gate.",
+      "owner": "decode"
+    },
+    {
+      "prompt": "Write an implementation spec RFC and API schema proposal before coding our new webhook retry feature.",
+      "owner": "design"
+    },
+    {
+      "prompt": "Refactor and rescue this tangled 800-line legacy god function using characterization tests and strangler fig seams.",
+      "owner": "rescue"
+    },
+    {
+      "prompt": "Audit this pull request diff for OWASP SQL injection vulnerabilities, hardcoded secrets, and auth bypasses.",
+      "owner": "guard"
+    },
+    {
+      "prompt": "Execute the approved implementation plan task by task using strict red-green-refactor unit tests.",
+      "owner": "forge"
+    },
+    {
+      "prompt": "Create a new Keystone SKILL.md file following TDD RED GREEN REFACTOR skill authoring rules.",
+      "owner": "craft"
+    }
+  ],
+  "expectations": [
+    "Adapts the response structure and length freely to match the user's specific question without forcing a rigid multi-section template",
+    "Opens with 100% plain-language domain concepts before mentioning file paths, function names, or local variable identifiers",
+    "Pre-decodes unfamiliar APIs, hooks, callbacks, or config options right above the code block and keeps enclosing signatures",
+    "Uses <76-char numbered Subgoal Comments (// 1., // 2a.), ASCII rulers for spatial/slice math, Contrastive Why, and Vertical Case Walkthrough cards"
+  ]
+}

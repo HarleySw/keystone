@@ -28,7 +28,8 @@ If there is even a 1% chance a skill applies to your task, you MUST invoke the s
 1. Check installed skills against the current request:
    - **Whole-Repository Onboarding & Architecture Atlas (`keystone:map`):** Mapping an entire repository/monorepo, locating Composition Roots, auditing `.keystone/map/01-coverage-ledger.md` ($100\%$ denominator coverage), generating `docs/keystone/map/`, or exporting `AGENTS.md` / `.cursor/rules/*.mdc`.
    - **End-to-End Business Flow Anatomy (`keystone:flow`):** Tracing how one specific feature, business flow, webhook, or request pipeline works end-to-end across files (`docs/keystone/flows/YYYY-MM-DD-<flow-slug>.md` or `docs/keystone/map/flows/flow-XX-<name>.md`) with `"Where to Touch"` modification playbooks.
-   - **Micro Function / Commit Diff Decoder (`keystone:decode`):** Explaining an isolated `< 30`-line function/regex/bitwise expression line-by-line or reviewing a `git diff` / commit with a 2-turn Quiz Gate (`Sections 1–5` in Turn 1, `Sections 6–8` in Turn 2).
+   - **Adaptive Structure-Free Code & Concept Explanation (`keystone:explain`):** Explaining any code snippet, function, algorithm, callback, hook, architectural concept, or technical question directly in chat with 3-second visual comprehension while freely adapting the response structure and length to the user's exact question.
+   - **Micro Function / Commit Diff Decoder (`keystone:decode`):** Reviewing a `git diff` / commit or explaining an isolated snippet with a mandatory 2-turn Quiz Gate (`Sections 1–5` in Turn 1, `Sections 6–8` in Turn 2).
 2. Load the matching skill via your platform's skill mechanism (or `read_file` on `SKILL.md` where native `Skill` tool is absent).
 3. Announce `"Using [skill-name] to [purpose]"` and follow its checklist in order.
 
