@@ -6,18 +6,12 @@
   "main": ".opencode/plugins/keystone.js",
   "keywords": [
     "keystone",
-    "pi-package",
     "skills",
+    "claude-code",
+    "antigravity",
+    "codex",
+    "opencode",
     "human-in-command",
-    "comprehension-debt",
-    "workflow"
-  ],
-  "pi": {
-    "extensions": [
-      "./.pi/extensions/keystone.ts"
-    ],
-    "skills": [
-      "./skills"
-    ]
-  }
+    "comprehension-debt"
+  ]
 }

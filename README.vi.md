@@ -46,11 +46,11 @@ Nếu các bộ công cụ lập trình thông thường chỉ tập trung để
 
 ---
 
-## Hướng dẫn Cài đặt (Multi-Harness Installation)
+## Hướng dẫn Cài đặt (Claude Code, Antigravity, Codex, OpenCode)
 
-Bạn có thể cài đặt Keystone dưới dạng **Plugin đầy đủ** (tự động nạp `using-keystone` ngay khi mở phiên chat qua `SessionStart` hook) hoặc cài nhanh qua công cụ dòng lệnh chuẩn quốc tế **`npx skills`**.
+Bạn có thể cài đặt Keystone dưới dạng **Plugin đầy đủ** (tự động nạp `using-keystone` ngay khi mở phiên chat qua `SessionStart` hook) hoặc cài nhanh qua công cụ dòng lệnh **`npx skills`**.
 
-### 1. Cài đặt đa nền tảng qua `npx skills` (`agentskills.io` / `skills.sh`)
+### 1. Cài đặt qua `npx skills` (`agentskills.io` / `skills.sh`)
 
 ```bash
 # Xem danh sách các skill có trong Keystone
@@ -59,40 +59,28 @@ npx skills add HarleySw/keystone --list
 # Cài toàn bộ skill Keystone vào máy (-g) hoặc vào dự án hiện tại
 npx skills add HarleySw/keystone -g
 
-# Hoặc chọn cài lẻ từng skill (map, flow, craft) cho các IDE/CLI cụ thể
-npx skills add HarleySw/keystone --skill flow -a claude-code -a cursor -a codex -a antigravity
+# Hoặc chọn cài lẻ từng skill (map, flow, explain, craft) cho các nền tảng hỗ trợ
+npx skills add HarleySw/keystone --skill explain -a claude-code -a antigravity -a codex -a opencode
 ```
 
-### 2. Antigravity (`agy`)
-
-```bash
-agy plugin install https://github.com/HarleySw/keystone
-```
-
-### 3. Claude Code
+### 2. Claude Code
 
 ```bash
 /plugin marketplace add HarleySw/keystone
 /plugin install keystone@keystone-dev
 ```
 
-### 4. Cursor
-
-Gõ trực tiếp trong khung chat của Cursor Agent:
-
-```text
-/add-plugin https://github.com/HarleySw/keystone
-```
-
-*(Hoặc vào **Cursor Settings > Customize > Add from GitHub Repository** và dán `https://github.com/HarleySw/keystone`).*
-
-### 5. Gemini CLI
+### 3. Antigravity (IDE & CLI / GUI)
 
 ```bash
-gemini extensions install https://github.com/HarleySw/keystone
+# Cài qua Antigravity CLI (agy)
+agy plugin install https://github.com/HarleySw/keystone
+
+# Hoặc cài trực tiếp bộ skill vào Antigravity IDE / GUI qua npx skills
+npx skills add HarleySw/keystone -a antigravity -g
 ```
 
-### 6. OpenAI Codex App & CLI
+### 4. OpenAI Codex App & CLI
 
 ```bash
 # Cài qua Codex Plugin Marketplace CLI
@@ -102,9 +90,10 @@ codex plugin add keystone@keystone-dev
 # Hoặc cài trực tiếp từng skill
 codex skills add HarleySw/keystone/skills/map
 codex skills add HarleySw/keystone/skills/flow
+codex skills add HarleySw/keystone/skills/explain
 ```
 
-### 7. OpenCode (v1 & v2)
+### 5. OpenCode (v1 & v2)
 
 Thêm vào file `opencode.json` (xem chi tiết tại [.opencode/INSTALL.md](.opencode/INSTALL.md) và [docs/README.opencode.md](docs/README.opencode.md)):
 
@@ -113,16 +102,6 @@ Thêm vào file `opencode.json` (xem chi tiết tại [.opencode/INSTALL.md](.op
   "plugins": ["keystone@git+https://github.com/HarleySw/keystone.git"]
 }
 ```
-
-### 8. Các Công cụ Agent Khác (Kimi, Devin, Droid, Copilot, Qwen, Pi, Hermes)
-
-- **Kimi Code:** Gõ `/plugins install https://github.com/HarleySw/keystone` trong Kimi Code (xem [docs/README.kimi.md](docs/README.kimi.md)).
-- **Devin CLI:** `devin plugins install HarleySw/keystone`
-- **Factory Droid:** `droid plugin marketplace add https://github.com/HarleySw/keystone && droid plugin install keystone@keystone-dev`
-- **GitHub Copilot CLI:** `copilot plugin marketplace add HarleySw/keystone && copilot plugin install keystone@keystone-dev`
-- **Qwen Code:** `qwen extensions install HarleySw/keystone`
-- **Pi Coding Agent:** `pi install git:github.com/HarleySw/keystone`
-- **Hermes Agent:** `hermes plugins install HarleySw/keystone --enable`
 
 ---
 

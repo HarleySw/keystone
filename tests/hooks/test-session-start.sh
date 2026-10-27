@@ -42,11 +42,6 @@ assert_json_key \
   env CLAUDE_PLUGIN_ROOT="$REPO_ROOT" bash "$WRAPPER_UNDER_TEST" session-start
 
 assert_json_key \
-  "Cursor emits top-level additional_context" \
-  'has("additional_context") and (.additional_context | contains("using-keystone"))' \
-  env CURSOR_PLUGIN_ROOT="$REPO_ROOT" CLAUDE_PLUGIN_ROOT="$REPO_ROOT" bash "$HOOK_UNDER_TEST"
-
-assert_json_key \
   "Generic SDK / Antigravity emits top-level additionalContext" \
   'has("additionalContext") and (.additionalContext | contains("using-keystone"))' \
   env COPILOT_CLI=1 CLAUDE_PLUGIN_ROOT="$REPO_ROOT" bash "$HOOK_UNDER_TEST"

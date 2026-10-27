@@ -25,9 +25,7 @@ using_keystone_escaped=$(escape_for_json "$using_keystone_content")
 session_context="<EXTREMELY_IMPORTANT>\nYou are operating with Keystone.\n\n**Below is the full content of your 'keystone:using-keystone' skill - your introduction to using skills, Visual Comprehension Core, and Cognitive Verification Gates. For all other skills, use the 'Skill' tool:**\n\n${using_keystone_escaped}\n</EXTREMELY_IMPORTANT>"
 
 # Output context injection as JSON per platform contract.
-if [ -n "${CURSOR_PLUGIN_ROOT:-}" ]; then
-  printf '{\n  "additional_context": "%s"\n}\n' "$session_context" | cat
-elif [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -z "${COPILOT_CLI:-}" ]; then
+if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -z "${COPILOT_CLI:-}" ]; then
   printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$session_context" | cat
 else
   printf '{\n  "additionalContext": "%s"\n}\n' "$session_context" | cat

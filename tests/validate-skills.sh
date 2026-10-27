@@ -58,18 +58,12 @@ echo "Validating multi-harness plugin & marketplace manifests..."
 JSON_MANIFESTS=(
   "plugin.json"
   "package.json"
-  "gemini-extension.json"
   "hooks.json"
   "hooks/hooks.json"
-  "hooks/hooks-cursor.json"
   ".claude-plugin/plugin.json"
   ".claude-plugin/marketplace.json"
-  ".cursor-plugin/plugin.json"
-  ".cursor-plugin/marketplace.json"
   ".codex-plugin/plugin.json"
   ".agents/plugins/marketplace.json"
-  ".kimi-plugin/plugin.json"
-  ".devin-plugin/plugin.json"
 )
 
 for manifest in "${JSON_MANIFESTS[@]}"; do
@@ -84,7 +78,7 @@ for manifest in "${JSON_MANIFESTS[@]}"; do
   fi
 done
 
-for extra_file in ".hermes-plugin/plugin.yaml" ".hermes-plugin/__init__.py" ".pi/extensions/keystone.ts" ".opencode/plugins/keystone.js" "index.js"; do
+for extra_file in ".opencode/plugins/keystone.js" "index.js"; do
   if [[ ! -f "$REPO_ROOT/$extra_file" ]]; then
     echo "  [FAIL] Missing harness entrypoint: $extra_file"
     FAILURES=$((FAILURES + 1))

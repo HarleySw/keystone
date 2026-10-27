@@ -46,9 +46,9 @@ While traditional agent frameworks focus on autonomous code generation or rigid 
 
 ## Installation
 
-Install Keystone for your coding agent harness. For full lifecycle integration (automatic `SessionStart` bootstrap of `using-keystone`), use your harness's native plugin command below; or use the universal `npx skills` CLI to install skills into any workspace or global agent hub.
+Install Keystone for **Claude Code**, **Antigravity (IDE & CLI)**, **OpenAI Codex**, or **OpenCode**. You can also use the universal `npx skills` CLI to install skills directly.
 
-### Universal CLI (`npx skills` — `agentskills.io` / `skills.sh`)
+### 1. Universal CLI (`npx skills` — `agentskills.io` / `skills.sh`)
 
 ```bash
 # List all available skills in Keystone
@@ -57,40 +57,28 @@ npx skills add HarleySw/keystone --list
 # Install all Keystone skills into your project or global agent directory (-g)
 npx skills add HarleySw/keystone -g
 
-# Or install a specific skill (e.g., map, flow, craft) for specific agents
-npx skills add HarleySw/keystone --skill map -a claude-code -a cursor -a codex -a antigravity
+# Or install a specific skill (e.g., map, flow, explain, craft) for your agents
+npx skills add HarleySw/keystone --skill explain -a claude-code -a antigravity -a codex -a opencode
 ```
 
-### Antigravity (`agy`)
-
-```bash
-agy plugin install https://github.com/HarleySw/keystone
-```
-
-### Claude Code
+### 2. Claude Code
 
 ```bash
 /plugin marketplace add HarleySw/keystone
 /plugin install keystone@keystone-dev
 ```
 
-### Cursor
-
-In Cursor Agent chat:
-
-```text
-/add-plugin https://github.com/HarleySw/keystone
-```
-
-*(Or in Cursor **Settings > Customize > Add from GitHub Repository**, enter `https://github.com/HarleySw/keystone`).*
-
-### Gemini CLI
+### 3. Antigravity (IDE & CLI)
 
 ```bash
-gemini extensions install https://github.com/HarleySw/keystone
+# Via Antigravity CLI (agy)
+agy plugin install https://github.com/HarleySw/keystone
+
+# Or install skills directly via npx skills for Antigravity IDE / GUI
+npx skills add HarleySw/keystone -a antigravity -g
 ```
 
-### OpenAI Codex App & CLI
+### 4. OpenAI Codex App & CLI
 
 ```bash
 # Via Codex Plugin Marketplace CLI
@@ -100,9 +88,10 @@ codex plugin add keystone@keystone-dev
 # Or install individual skills directly
 codex skills add HarleySw/keystone/skills/map
 codex skills add HarleySw/keystone/skills/flow
+codex skills add HarleySw/keystone/skills/explain
 ```
 
-### OpenCode (v1 & v2)
+### 5. OpenCode (v1 & v2)
 
 Add to your `opencode.json` (see [.opencode/INSTALL.md](.opencode/INSTALL.md) and [docs/README.opencode.md](docs/README.opencode.md)):
 
@@ -111,16 +100,6 @@ Add to your `opencode.json` (see [.opencode/INSTALL.md](.opencode/INSTALL.md) an
   "plugins": ["keystone@git+https://github.com/HarleySw/keystone.git"]
 }
 ```
-
-### Other Supported Harnesses
-
-- **Kimi Code:** Run `/plugins install https://github.com/HarleySw/keystone` inside Kimi Code (see [docs/README.kimi.md](docs/README.kimi.md)).
-- **Devin CLI:** `devin plugins install HarleySw/keystone`
-- **Factory Droid:** `droid plugin marketplace add https://github.com/HarleySw/keystone && droid plugin install keystone@keystone-dev`
-- **GitHub Copilot CLI:** `copilot plugin marketplace add HarleySw/keystone && copilot plugin install keystone@keystone-dev`
-- **Qwen Code:** `qwen extensions install HarleySw/keystone`
-- **Pi Coding Agent:** `pi install git:github.com/HarleySw/keystone`
-- **Hermes Agent:** `hermes plugins install HarleySw/keystone --enable`
 
 ---
 
@@ -151,16 +130,11 @@ keystone/
 ├── .agents/plugins/         # Portable Agent Plugins & Codex marketplace catalog
 ├── .claude-plugin/          # Claude Code manifest & marketplace catalog
 ├── .codex-plugin/           # OpenAI Codex App/CLI manifest
-├── .cursor-plugin/          # Cursor Agent manifest & marketplace catalog
-├── .devin-plugin/           # Devin CLI plugin manifest
-├── .hermes-plugin/          # Hermes Agent plugin manifest & bootstrap hook
-├── .kimi-plugin/            # Kimi Code plugin manifest & tool mapping
 ├── .opencode/               # OpenCode V1/V2 plugin & install guide
-├── .pi/extensions/          # Pi Coding Agent extension
 ├── assets/                  # Plugin icons (SVG & PNG)
 ├── hooks/                   # Cross-platform SessionStart polyglot hooks
 ├── scripts/                 # Version synchronization & shell linting
-├── skills/                  # Core Keystone skills (using-keystone, map, flow, craft)
+├── skills/                  # Core Keystone skills (using-keystone, map, flow, explain, craft)
 └── tests/                   # Automated skill, routing & hook verification suites
 ```
 
