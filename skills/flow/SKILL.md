@@ -17,7 +17,7 @@ Build codebase mental models and debugging intuition for any cohesive end-to-end
 
 **REQUIRED BACKGROUND:** You MUST obey the Shared Language, Plain-Language Syntax, Code-Explanation, and Visual Comprehension Core in `keystone:using-keystone` across both chat output and any generated `.md` flow file.
 
-**Announce at start (Localized to the user's language):** Briefly state in the user's active language that you are using `keystone:flow` (e.g., *"Using `keystone:flow` to trace and explain [target workflow / pipeline] end-to-end."* in English, or *"Dùng `keystone:flow` để giải phẫu luồng [tính năng / pipeline]."* in Vietnamese).
+**Announce at start (Localized to the user's language):** Briefly state in the user's active language that you are using `keystone:flow` (e.g., *"Using `keystone:flow` to trace and explain [target workflow / pipeline] end-to-end."*, translated naturally into the user's active language).
 
 <HARD-GATE>
 **Violating the letter of the rules is violating the spirit of the rules.**
