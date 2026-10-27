@@ -15,15 +15,12 @@ Communicate code and technical concepts the way a clear, friendly senior enginee
 
 **Zero Prescribed Section Templates:** `keystone:explain` governs **how you communicate and explain**, NOT what sections your response must have. Never force numbered report templates (`Section 1 / 2 / 3 / 4`, `Big Picture`, `Step 1: <Question?>`, repetitive `"Before reading the code:"` / `"Why these guards exist:"` sub-blocks on every snippet, or unsolicited `⚠️ Hidden Risks` audit sections at the end). Organize your answer naturally around what the user actually asked—from a single short paragraph and a 10-line annotated snippet for a quick question to a flowing walkthrough for a multi-part mechanism (`Micro-Cap, Not Macro-Cap`).
 
-**REQUIRED BACKGROUND:** You MUST obey the shared communication, language, and formatting rules in `keystone:using-keystone`.
-
 **Announce at start (Localized to the user's language):** Briefly state in the user's active language that you are using `keystone:explain` (e.g., *"Using `keystone:explain` to explain [target]."* in English, or *"Dùng `keystone:explain` để giải thích [mục tiêu]."* in Vietnamese) before answering.
 
 <HARD-GATE>
 **Violating the letter of the rules is violating the spirit of the rules.**
-1. **Load `using-keystone` First:** If `skills/using-keystone/SKILL.md` is not already loaded in your current context, call `read_file` on `skills/using-keystone/SKILL.md` before drafting any explanation.
-2. **Read Actual Source Before Explaining (Zero Hallucinated Code or Line Numbers):** Whenever the user asks about a function, file, config, or behavior in the repository without pasting the code in chat, locate and read the actual source file (and immediate caller/callee context) first. Never guess implementation details or invent `filename:line` coordinates from memory.
-3. **Pure Communication Discipline, Zero Template Boilerplate:** Answer only what the user asked using natural prose and focused code snippets—never pad with fixed multi-section templates or unsolicited bug-audit sections—while strictly enforcing natural spoken user-language output (`learn-from-code` register), zero over-translation of developer terms, and `< 76`-character code/comment/ASCII width.
+1. **Read Actual Source Before Explaining (Zero Hallucinated Code or Line Numbers):** Whenever the user asks about a function, file, config, or behavior in the repository without pasting the code in chat, locate and read the actual source file (and immediate caller/callee context) first. Never guess implementation details or invent `filename:line` coordinates from memory.
+2. **Pure Communication Discipline, Zero Template Boilerplate:** Answer only what the user asked using natural prose and focused code snippets—never pad with fixed multi-section templates or unsolicited bug-audit sections—while strictly enforcing natural spoken user-language output (`learn-from-code` register), zero over-translation of developer terms, and `< 76`-character code/comment/ASCII width.
 </HARD-GATE>
 
 ## When to Use (Scale-Based Routing)
@@ -69,7 +66,7 @@ Communicate code and technical concepts the way a clear, friendly senior enginee
 
 ---
 
-## 2. Language & Spoken Developer Register (`using-keystone` / `learn-from-code`)
+## 2. Language & Spoken Developer Register
 
 1. **Match the User's Language Automatically (Zero Dual-Language Clutter & Zero Academic Jargon):**
    - Write all prose, headings (if any), and inline `//` code comments in the user's active language. Never write bilingual headers (`<Local Label> (<English Label>):`), and never output academic/cognitive-science jargon (`RAD-AI E1`, `QOC/ATAM`, `Zeller's Infected State`, `Sajaniemi`, `Subgoal Labeling`, `Situation Model`, `IoED`, `Core Beacon`) in user-facing responses.
