@@ -108,9 +108,9 @@ Add to your `opencode.json` (see [.opencode/INSTALL.md](.opencode/INSTALL.md) an
 | Skill | Category | Purpose |
 | :--- | :--- | :--- |
 | **[`using-keystone`](skills/using-keystone/SKILL.md)** | Bootstrap | Loaded automatically at `SessionStart`. Establishes scale-based skill routing, the **Visual Comprehension Core**, **Two-Tier File Storage**, **Cognitive Verification Gates**, and **Hybrid Language Rules**. |
-| **[`map`](skills/map/SKILL.md)** | Architecture Recon | Whole-repository onboarding and architecture mapping (`recon-graphs.sh` + `validate-atlas.sh`). Locates Composition Roots, audits $100\%$ file coverage in `.keystone/map/01-coverage-ledger.md`, writes `docs/keystone/map/`, and exports `./AGENTS.md` / `.cursor/rules/*.mdc`. |
+| **[`map`](skills/map/SKILL.md)** | Architecture Recon | Whole-repository onboarding and architecture mapping (`recon-graphs.sh` + `validate-atlas.sh`). Locates Composition Roots, audits $100\%$ file coverage in `.keystone/map/01-coverage-ledger.md`, writes `docs/keystone/map/`, and updates `./AGENTS.md`. |
 | **[`flow`](skills/flow/SKILL.md)** | Business Flow Anatomy | End-to-end feature and pipeline dissector. Traces a concrete user/system trigger from High-Level entry down to Low-Level code steps (`Contrastive Why` + `Vertical Dry-Run`) with a `"Where to Touch"` modification playbook saved to `docs/keystone/flows/`. |
-| **[`explain`](skills/explain/SKILL.md)** | Code & Concept Explanation | Adaptive, structure-free code and technical explanation in chat. Inherits all `learn-from-code` clarity rules (plain-language opening, `<76`-char subgoal comments & ASCII rulers, pre-decoded APIs, `Contrastive Why`, `Vertical Dry-Run`) while scaling freely to match the user's exact question. |
+| **[`explain`](skills/explain/SKILL.md)** | Code & Concept Explanation | Human-centric, structure-free code and technical explanation in chat. Enforces `learn-from-code` communication rules (plain-language opening, `<76`-char inline comments & ASCII rulers, natural "Why" & API explanations, zero section boilerplate) while adapting freely to the user's question. |
 | **[`craft`](skills/craft/SKILL.md)** | Meta-Skill | 5-Stage TDD pipeline for designing, writing, upgrading, and pressure-testing Keystone skills with embedded 3-layer Clarity Engine enforcement and TF-IDF routing validation (`evals.json`). |
 
 ---
@@ -118,7 +118,7 @@ Add to your `opencode.json` (see [.opencode/INSTALL.md](.opencode/INSTALL.md) an
 ## Hybrid Language & Token Efficiency Strategy
 
 1. **Skill Source (`SKILL.md`, `AGENTS.md`, YAML):** Written strictly in **Imperative English** (`MUST`, `NEVER`, active verbs, zero zombie nouns). This maximizes TF-IDF / Semantic Routing precision across agent harnesses and saves ~25% context window tokens.
-2. **Engineer Communication Output:** Governed by `using-keystone` and embedded directly in every skill (`map`, `flow`, `craft`) via a 3-layer Clarity Engine check to respond in the engineer's active language. When communicating in Vietnamese, Keystone enforces natural spoken senior-engineer phrasing (`learn-from-code` register) and strictly forbids awkward machine translation.
+2. **Engineer Communication Output:** Governed by `using-keystone` and embedded directly in every skill (`map`, `flow`, `explain`, `craft`) via a 3-layer Clarity Engine check to respond in the engineer's active language. When communicating in Vietnamese, Keystone enforces natural spoken senior-engineer phrasing (`learn-from-code` register) and strictly forbids awkward machine translation.
 3. **Repository Documentation:** Bilingual ([README.md](README.md) in English and [README.vi.md](README.vi.md) in Vietnamese).
 
 ---
@@ -154,10 +154,10 @@ bash tests/validate-routing.sh
 # 3. Test map recon-graphs.sh and validate-atlas.sh scripts
 bash tests/map/test-map-scripts.sh
 
-# 4. Test SessionStart JSON output across harnesses
+# 4. Test SessionStart JSON output across Claude Code and Antigravity / SDK harnesses
 bash tests/hooks/test-session-start.sh
 
-# 5. Check version sync across all 18 manifests & skill files
+# 5. Check version sync across all 14 manifests & skill files
 bash scripts/bump-version.sh --check
 
 # 6. Lint shell scripts

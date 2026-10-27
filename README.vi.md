@@ -110,9 +110,9 @@ Thêm vào file `opencode.json` (xem chi tiết tại [.opencode/INSTALL.md](.op
 | Tên Skill | Nhóm | Vai trò |
 | :--- | :--- | :--- |
 | **[`using-keystone`](skills/using-keystone/SKILL.md)** | Bootstrap | Tự động kích hoạt ở đầu mỗi phiên (`SessionStart`). Thiết lập luật định tuyến theo quy mô, **Lõi Hiển thị Trực quan**, **Lưu trữ 2 tầng (`docs/keystone/` & `.keystone/`)**, **Cổng Kiểm chứng Nhận thức**, và **Luật Ngôn ngữ**. |
-| **[`map`](skills/map/SKILL.md)** | Architecture Recon | Khảo sát toàn bộ codebase/monorepo mới khi onboard (`recon-graphs.sh` + `validate-atlas.sh`), dò Điểm Đấu Nối (Wiring Root), kiểm toán độ phủ $100\%$ tại `.keystone/map/01-coverage-ledger.md`, xuất bản đồ vào `docs/keystone/map/` và cập nhật `./AGENTS.md` / `.cursor/rules/*.mdc`. |
+| **[`map`](skills/map/SKILL.md)** | Architecture Recon | Khảo sát toàn bộ codebase/monorepo mới khi onboard (`recon-graphs.sh` + `validate-atlas.sh`), dò Điểm Đấu Nối (Wiring Root), kiểm toán độ phủ $100\%$ tại `.keystone/map/01-coverage-ledger.md`, xuất bản đồ vào `docs/keystone/map/` và cập nhật `./AGENTS.md`. |
 | **[`flow`](skills/flow/SKILL.md)** | Business Flow Anatomy | Giải phẫu một luồng tính năng hoặc pipeline từ đầu đến cuối (End-to-End): đi từ Bức tranh toàn cảnh (Big Picture), sơ đồ luồng ASCII `<76` ký tự, giải phẫu từng bước code kèm kịch bản chạy thử xếp dọc và cẩm nang *"Muốn sửa X thì chạm vào đâu?"* lưu tại `docs/keystone/flows/`. |
-| **[`explain`](skills/explain/SKILL.md)** | Code & Concept Explanation | Giải thích linh hoạt mọi đoạn code, hàm, thuật toán, regex hoặc câu hỏi kỹ thuật ngay trên khung chat: kế thừa trọn bộ quy tắc ngôn từ và trực quan của `learn-from-code` (mở đầu bằng ngôn ngữ đời thường, giải mã API lạ trước code, chú thích `<76` ký tự, thước đo ASCII, `Contrastive Why`, kịch bản chạy thử xếp dọc) nhưng tự do co giãn bố cục theo đúng câu hỏi của dev. |
+| **[`explain`](skills/explain/SKILL.md)** | Code & Concept Explanation | Bộ quy tắc giao tiếp và giải thích code/kỹ thuật giữa Agent và Human trên khung chat: kế thừa trọn vẹn văn phong dev đời thường của `learn-from-code` (mở đầu bằng ngôn ngữ tự nhiên, chú thích `<76` ký tự, thước đo ASCII khi cần, giải thích rõ lý do & API lạ ngay trong mạch văn) mà không ép chia mục 1-2-3-4 máy móc. |
 | **[`craft`](skills/craft/SKILL.md)** | Meta-Skill | Quy trình TDD 5 giai đoạn để thiết kế, tạo mới, nâng cấp và kiểm thử áp lực (pressure-test) các skill trong hệ sinh thái Keystone, tích hợp sẵn 3 lớp kiểm soát văn phong và kiểm định định tuyến TF-IDF (`evals.json`). |
 
 ---
@@ -123,7 +123,7 @@ Thêm vào file `opencode.json` (xem chi tiết tại [.opencode/INSTALL.md](.op
    - Dùng **Tiếng Anh (English) mệnh lệnh, súc tích** (`MUST`, `NEVER`, không dùng *Zombie Nouns* như *"the implementation of..."*).
    - **Lý do:** Giúp bộ định tuyến của AI (TF-IDF / Semantic Routing) bắt từ khóa chính xác nhất, tiết kiệm ~25% token ngữ cảnh và đóng gói chuẩn quốc tế trên mọi IDE/CLI.
 2. **Ngôn ngữ giao tiếp với Dev (Output của AI & 100% file `.md` sinh ra):**
-   - Quy định cứng trong [`using-keystone`](skills/using-keystone/SKILL.md) và nhúng trực tiếp 3 lớp vào từng skill (`map`, `flow`, `craft`) để **phản hồi theo đúng ngôn ngữ của người dùng** (cả trên khung chat lẫn 100% file tài liệu trong `docs/keystone/`).
+   - Quy định cứng trong [`using-keystone`](skills/using-keystone/SKILL.md) và nhúng trực tiếp 3 lớp vào từng skill (`map`, `flow`, `explain`, `craft`) để **phản hồi theo đúng ngôn ngữ của người dùng** (cả trên khung chat lẫn 100% file tài liệu trong `docs/keystone/`).
    - Khi dev dùng tiếng Việt, AI viết như anh em dev có kinh nghiệm ngồi giảng bài trực tiếp (`learn-from-code` register): giữ nguyên thuật ngữ kỹ thuật quen thuộc (`CI`, `pipeline`, `monorepo`, `package`, `target`, `wheel`, `script`, `dict`, `shell`, `CLI`, `terminal`, `agent`, `build`, `test`, `unit test`, `commit`, `race condition`, `hook`...), **cấm tuyệt đối văn dịch máy và tiêu đề song ngữ**.
 3. **Tài liệu Repo (`README`):**
    - Song ngữ: [README.md](README.md) tiếng Anh cho cộng đồng mã nguồn mở quốc tế và [README.vi.md](README.vi.md) tiếng Việt chi tiết.
@@ -144,10 +144,10 @@ bash tests/validate-routing.sh
 # 3. Kiểm tra các script phân tích đồ thị và kiểm toán của skill map
 bash tests/map/test-map-scripts.sh
 
-# 4. Kiểm tra đầu ra JSON của hook SessionStart trên Claude, Cursor, Antigravity
+# 4. Kiểm tra đầu ra JSON của hook SessionStart trên Claude Code và Antigravity / SDK
 bash tests/hooks/test-session-start.sh
 
-# 5. Kiểm tra đồng bộ version trên toàn bộ 18 file manifest và skill
+# 5. Kiểm tra đồng bộ version trên toàn bộ 14 file manifest và skill
 bash scripts/bump-version.sh --check
 
 # 6. Kiểm tra cú pháp toàn bộ shell script
